@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -291,6 +292,52 @@
             max-width: 650px;
         }
 
+        /* Horizontal Helper Carousel */
+        .helper-carousel {
+            display: flex;
+            overflow-x: auto;
+            gap: 1.2rem;
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+            scrollbar-width: none; /* Firefox */
+        }
+        .helper-carousel::-webkit-scrollbar {
+            display: none; /* Chrome/Safari */
+        }
+        .helper-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            min-width: 75px;
+            transition: transform 0.2s ease;
+        }
+        .helper-card:hover {
+            transform: translateY(-3px);
+        }
+        .helper-card .helper-avatar {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--light-pink), var(--primary-pink));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 800;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            border: 3px solid var(--white);
+            box-shadow: 0 4px 10px rgba(255, 143, 163, 0.2);
+        }
+        .helper-card .helper-name {
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            text-align: center;
+            white-space: nowrap;
+        }
+
         /* Toolbar Dropdown Modals (Search & Wallet) */
         .dropdown-modal {
             position: fixed;
@@ -524,57 +571,33 @@
             border-radius: 10px;
         }
 
-        /* Friend Profile Slide-Out Modal (Direct Message specific) */
-        .friend-modal-overlay {
-            position: fixed;
-            top: 105px;
-            left: 0;
+        /* Global Button Style used inside modals */
+        .btn-modal-action {
             width: 100%;
-            height: calc(100vh - 105px);
-            background: rgba(89, 13, 34, 0.1);
-            z-index: 950;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
+            padding: 0.8rem;
+            border-radius: 50px;
+            background: var(--primary-pink);
+            color: var(--white);
+            border: none;
+            font-weight: 800;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 143, 163, 0.4);
+            text-align: center;
         }
 
-        .friend-modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .friend-modal {
-            position: fixed;
-            top: 105px;
-            left: -400px;
-            width: 350px;
-            height: calc(100vh - 105px);
-            background: var(--white);
-            box-shadow: 10px 0 25px rgba(255, 143, 163, 0.15);
-            z-index: 1000;
-            transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            flex-direction: column;
-            border-right: 1px solid var(--border-color);
-        }
-
-        .friend-modal.active {
-            left: 0;
-        }
-
-        .modal-header {
-            padding: 1.5rem;
-            display: flex;
-            justify-content: flex-end;
-            border-bottom: 1px solid var(--bg-color);
+        .btn-modal-action:hover {
+            background: var(--dark-pink);
+            transform: translateY(-2px);
         }
 
         .btn-close-modal {
             background: var(--light-pink);
             color: var(--white);
             border: none;
-            width: 30px;
-            height: 30px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -588,75 +611,6 @@
         .btn-close-modal:hover {
             background: var(--primary-pink);
             transform: scale(1.1);
-        }
-
-        .modal-body {
-            padding: 2rem 1.5rem;
-            flex: 1;
-            overflow-y: auto;
-            text-align: center;
-        }
-
-        .modal-avatar {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--light-pink), var(--primary-pink));
-            margin: 0 auto 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--white);
-            font-weight: 800;
-            font-size: 2.5rem;
-        }
-
-        .modal-name {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--text-dark);
-            margin-bottom: 0.5rem;
-        }
-
-        .modal-details {
-            font-size: 1rem;
-            color: var(--text-muted);
-            margin-bottom: 1.5rem;
-        }
-        
-        .modal-bio {
-            background: var(--bg-color);
-            padding: 1rem;
-            border-radius: 15px;
-            text-align: left;
-            font-size: 0.95rem;
-            line-height: 1.6;
-            color: var(--text-dark);
-            border: 1px solid var(--border-color);
-        }
-
-        .modal-footer {
-            padding: 1.5rem;
-            border-top: 1px solid var(--bg-color);
-        }
-
-        .btn-modal-action {
-            width: 100%;
-            padding: 0.8rem;
-            border-radius: 50px;
-            background: var(--primary-pink);
-            color: var(--white);
-            border: none;
-            font-weight: 800;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(255, 143, 163, 0.4);
-        }
-
-        .btn-modal-action:hover {
-            background: var(--dark-pink);
-            transform: translateY(-2px);
         }
 
         /* 90x90 User Profile Modal Overlay */
@@ -743,6 +697,64 @@
             color: var(--dark-pink);
             border-bottom: 3px solid var(--dark-pink);
         }
+        
+        /* Avatar Upload Feature inside Profile */
+        .avatar-upload-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .avatar-edit-wrapper {
+            position: relative;
+            width: 110px;
+            height: 110px;
+        }
+        
+        .avatar-preview {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--light-pink), var(--primary-pink));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 3rem;
+            font-weight: 800;
+            overflow: hidden;
+            border: 4px solid var(--white);
+            box-shadow: 0 4px 15px rgba(255, 143, 163, 0.3);
+        }
+        
+        .avatar-edit-badge {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 36px;
+            height: 36px;
+            background: var(--dark-pink);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            cursor: pointer;
+            border: 3px solid var(--white);
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+        
+        .avatar-edit-badge:hover {
+            transform: scale(1.1);
+            background: var(--primary-pink);
+        }
+        
+        .hidden-file-input {
+            display: none;
+        }
 
         .upm-form-group {
             margin-bottom: 1.5rem;
@@ -774,14 +786,154 @@
             border-color: var(--primary-pink);
         }
 
+        /* Unified 90x90 Friend/Helper Profile Modal */
+        .friend-modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(89, 13, 34, 0.3);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            z-index: 1999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .friend-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .friend-modal {
+            position: fixed;
+            top: 5%;
+            left: 5%;
+            width: 90%;
+            height: 90%;
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--border-color);
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(0.95);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .friend-modal.active {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
+        }
+
+        .friend-modal-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--white);
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+
+        .fm-header-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .fm-header-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--light-pink), var(--primary-pink));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 800;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 10px rgba(255, 143, 163, 0.2);
+        }
+
+        .fm-header-name {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin: 0;
+        }
+
+        .friend-modal-body {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+            background: var(--bg-color);
+        }
+
+        .modal-details {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-bio {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 15px;
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--text-dark);
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+
+        .personal-feed-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--dark-pink);
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .friend-modal-footer {
+            padding: 1.5rem 2rem;
+            border-top: 1px solid var(--border-color);
+            background: var(--white);
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .friend-modal-footer .btn-modal-action {
+            flex: 1;
+            min-width: 150px;
+        }
+
         /* Responsive Fixes */
         @media (max-width: 768px) {
             .main-content {
                 padding: 1rem;
             }
-            .friend-modal {
-                width: 100%;
-                left: -100%;
+            .user-profile-modal, .friend-modal {
+                width: 95%;
+                height: 95%;
+                top: 2.5%;
+                left: 2.5%;
+            }
+            .friend-modal-footer {
+                padding: 1rem;
+                gap: 10px;
+            }
+            .upm-header, .friend-modal-header, .upm-body, .friend-modal-body {
+                padding: 1rem;
             }
         }
     </style>
@@ -868,7 +1020,7 @@
         </div>
     </div>
 
-    <!-- 90x90 User Profile Overlay -->
+    <!-- 90x90 User Profile Overlay with Avatar Upload -->
     <div class="user-profile-backdrop" id="user-profile-backdrop"></div>
     <div class="user-profile-modal" id="user-profile-modal">
         <div class="upm-header">
@@ -880,6 +1032,15 @@
                 <div class="upm-tab active">Household Details</div>
                 <div class="upm-tab">Account</div>
                 <div class="upm-tab">Helper Payouts</div>
+            </div>
+            
+            <!-- Avatar Upload Feature -->
+            <div class="avatar-upload-container">
+                <div class="avatar-edit-wrapper">
+                    <div class="avatar-preview" id="user-avatar-preview">M</div>
+                    <label for="profile-image-upload" class="avatar-edit-badge">+</label>
+                    <input type="file" id="profile-image-upload" class="hidden-file-input" accept="image/*">
+                </div>
             </div>
             
             <div class="upm-form-group">
@@ -903,23 +1064,58 @@
         </div>
     </div>
 
-    <!-- Slide-Out Friend Details Modal -->
+    <!-- Unified 90x90 Friend/Helper Profile Modal -->
     <div class="friend-modal-overlay" id="friend-modal-overlay"></div>
     <div class="friend-modal" id="friend-modal">
-        <div class="modal-header">
+        <!-- Fixed Header -->
+        <div class="friend-modal-header">
+            <div class="fm-header-info">
+                <div class="fm-header-avatar" id="modal-avatar-disp">S</div>
+                <h2 class="fm-header-name" id="modal-name-disp">Sarah Jenkins</h2>
+            </div>
             <button class="btn-close-modal" id="close-friend-modal-btn">✕</button>
         </div>
-        <div class="modal-body">
-            <div class="modal-avatar" id="modal-avatar-disp">S</div>
-            <h2 class="modal-name" id="modal-name-disp">Sarah Jenkins</h2>
-            <div class="modal-details">Mother of 2 (Ages 3, 5)</div>
-            <div class="modal-bio">
+        
+        <!-- Scrollable Body with Details and Personal Feed -->
+        <div class="friend-modal-body">
+            <div class="modal-details" id="modal-details-disp">Mother of 2 (Ages 3, 5)</div>
+            <div class="modal-bio" id="modal-bio-disp">
                 <strong>Bio & Needs:</strong><br>
                 Navigating the chaos of toddlerhood! My oldest has mild sensory processing needs. Always looking to connect with other moms who understand the overwhelmed days.
             </div>
+            
+            <div class="personal-feed-title">Recent Posts</div>
+            
+            <!-- Personal Feed Post (TikTok/Instagram style) -->
+            <div class="post-card">
+                <div class="post-header">
+                    <div class="post-avatar" id="personal-feed-avatar">S</div>
+                    <div class="post-author-info">
+                        <div class="post-author" id="personal-feed-name">Sarah Jenkins</div>
+                        <div class="post-time">1 day ago</div>
+                    </div>
+                </div>
+                <div class="post-content">
+                    Found an amazing sensory-friendly park in the west end! The kids played for 2 hours straight without getting overwhelmed. Highly recommend for any moms dealing with SPD.
+                </div>
+                <div class="post-actions">
+                    <button class="action-btn" onclick="toggleHeart(this)">
+                        <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        <span>32</span>
+                    </button>
+                    <button class="action-btn">
+                        <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+                        <span>5</span>
+                    </button>
+                </div>
+            </div>
         </div>
-        <div class="modal-footer">
-            <button class="btn-modal-action">💬 Message (10 Tokens)</button>
+        
+        <!-- Fixed Footer Actions -->
+        <div class="friend-modal-footer">
+            <button class="btn-modal-action" id="btn-add-friend" style="background: var(--text-dark); color: var(--white);">➕ Add Friend</button>
+            <button class="btn-modal-action">💬 Message (10 🪙)</button>
+            <button class="btn-modal-action">📞 Live Call (60 🪙)</button>
         </div>
     </div>
 
@@ -928,7 +1124,8 @@
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-title">Direct Messages</div>
             
-            <div class="friend-item" onclick="openFriendModal('S', 'Sarah Jenkins', 'Mother of 2 (Ages 3, 5)', 'Navigating the chaos of toddlerhood! My oldest has mild sensory processing needs. Always looking to connect with other moms who understand the overwhelmed days.')">
+            <!-- isFriend = true -->
+            <div class="friend-item" onclick="openFriendModal('S', 'Sarah Jenkins', 'Mother of 2 (Ages 3, 5)', 'Navigating the chaos of toddlerhood! My oldest has mild sensory processing needs. Always looking to connect with other moms who understand the overwhelmed days.', true)">
                 <div class="friend-avatar">S</div>
                 <div class="friend-info">
                     <span class="friend-name">Sarah Jenkins</span>
@@ -936,7 +1133,7 @@
                 </div>
             </div>
 
-            <div class="friend-item" onclick="openFriendModal('E', 'Emily R.', 'Mother of 1 (Age 8)', 'Working full time and trying to keep up. Looking for local playdates and homework tips.')">
+            <div class="friend-item" onclick="openFriendModal('E', 'Emily R.', 'Mother of 1 (Age 8)', 'Working full time and trying to keep up. Looking for local playdates and homework tips.', true)">
                 <div class="friend-avatar" style="background: linear-gradient(135deg, #a2d2ff, #bde0fe);">E</div>
                 <div class="friend-info">
                     <span class="friend-name">Emily R.</span>
@@ -944,7 +1141,7 @@
                 </div>
             </div>
 
-            <div class="friend-item" onclick="openFriendModal('J', 'Jessica Miller', 'Mother of 3', 'Just moved to the area. I love crafting and baking with my kids. Let\'s chat!')">
+            <div class="friend-item" onclick="openFriendModal('J', 'Jessica Miller', 'Mother of 3', 'Just moved to the area. I love crafting and baking with my kids. Let\'s chat!', true)">
                 <div class="friend-avatar" style="background: linear-gradient(135deg, #ffd6a5, #fdffb6);">J</div>
                 <div class="friend-info">
                     <span class="friend-name">Jessica Miller</span>
@@ -957,6 +1154,27 @@
         <main class="main-content">
             <div class="feed-container">
                 
+                <!-- Horizontal Helper Carousel -->
+                <div class="helper-carousel">
+                    <!-- isFriend = false (Helpers) -->
+                    <div class="helper-card" onclick="openFriendModal('A', 'Amanda T.', 'Mother of 2 • Certified Doula', 'Passionate about helping new moms navigate postpartum challenges. Let\'s chat!', false)">
+                        <div class="helper-avatar" style="background: linear-gradient(135deg, #ff9a9e, #fecfef);">A</div>
+                        <div class="helper-name">Amanda T.</div>
+                    </div>
+                    <div class="helper-card" onclick="openFriendModal('K', 'Katie W.', 'Mother of 3 • Sleep Specialist', 'I specialize in gentle sleep training and toddler routines. Always here to listen.', false)">
+                        <div class="helper-avatar" style="background: linear-gradient(135deg, #a18cd1, #fbc2eb);">K</div>
+                        <div class="helper-name">Katie W.</div>
+                    </div>
+                    <div class="helper-card" onclick="openFriendModal('R', 'Rachel G.', 'Mother of 1 (Special Needs)', 'Navigating autism and sensory processing. Happy to share resources and support.', false)">
+                        <div class="helper-avatar" style="background: linear-gradient(135deg, #84fab0, #8fd3f4);">R</div>
+                        <div class="helper-name">Rachel G.</div>
+                    </div>
+                    <div class="helper-card" onclick="openFriendModal('L', 'Lauren M.', 'Mother of Twins', 'Twin mom survivalist! If you are feeling overwhelmed, you are not alone.', false)">
+                        <div class="helper-avatar" style="background: linear-gradient(135deg, #fccb90, #d57eeb);">L</div>
+                        <div class="helper-name">Lauren M.</div>
+                    </div>
+                </div>
+
                 <!-- Create Post Box -->
                 <div class="create-post">
                     <textarea id="post-input" placeholder="How are you doing today, Mama? Share what's on your mind..."></textarea>
@@ -1091,7 +1309,22 @@
             walletView.style.display = 'block';
         });
 
-        // 4. 90x90 User Profile Modal Logic
+        // 4. User Profile Avatar Upload Logic
+        const profileImageUpload = document.getElementById('profile-image-upload');
+        const userAvatarPreview = document.getElementById('user-avatar-preview');
+        
+        profileImageUpload.addEventListener('change', function(event) {
+            if (event.target.files && event.target.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // Replace the "M" text with the uploaded image
+                    userAvatarPreview.innerHTML = `<img src="${e.target.result}" style="width: 100%; height: 100%; object-fit: cover;">`;
+                }
+                reader.readAsDataURL(event.target.files[0]);
+            }
+        });
+
+        // 5. 90x90 User Profile Modal Logic
         const userProfileModal = document.getElementById('user-profile-modal');
         const userProfileBackdrop = document.getElementById('user-profile-backdrop');
         const profileToggleBtn = document.getElementById('profile-toggle');
@@ -1114,18 +1347,34 @@
         closeProfileBtn.addEventListener('click', closeUserProfile);
 
 
-        // 5. Friend Slide-Out Modal Logic
+        // 6. Unified Friend/Helper Profile Modal Logic
         const friendModal = document.getElementById('friend-modal');
         const friendModalOverlay = document.getElementById('friend-modal-overlay');
         const closeFriendModalBtn = document.getElementById('close-friend-modal-btn');
         const modalAvatar = document.getElementById('modal-avatar-disp');
         const modalName = document.getElementById('modal-name-disp');
+        const btnAddFriend = document.getElementById('btn-add-friend');
+        
+        // Personal Feed elements to sync with opened profile
+        const personalFeedAvatar = document.getElementById('personal-feed-avatar');
+        const personalFeedName = document.getElementById('personal-feed-name');
 
-        function openFriendModal(avatarLetter, name, details, bio) {
+        function openFriendModal(avatarLetter, name, details, bio, isFriend) {
             modalAvatar.innerText = avatarLetter;
             modalName.innerText = name;
-            document.querySelector('.modal-details').innerText = details;
-            document.querySelector('.modal-bio').innerHTML = `<strong>Bio & Needs:</strong><br>${bio}`;
+            document.getElementById('modal-details-disp').innerText = details;
+            document.getElementById('modal-bio-disp').innerHTML = `<strong>Bio & Needs:</strong><br>${bio}`;
+            
+            // Sync Personal Feed Author
+            personalFeedAvatar.innerText = avatarLetter;
+            personalFeedName.innerText = name;
+
+            // Handle Add Friend Button visibility
+            if (isFriend === true) {
+                btnAddFriend.style.display = 'none';
+            } else {
+                btnAddFriend.style.display = 'block';
+            }
             
             friendModal.classList.add('active');
             friendModalOverlay.classList.add('active');
@@ -1139,7 +1388,7 @@
 
         closeFriendModalBtn.addEventListener('click', closeFriendModal);
         
-        // 6. Global Outside Click Detection
+        // 7. Global Outside Click Detection
         document.addEventListener('click', (event) => {
             // Close Sidebar if clicked outside
             if (sidebar.classList.contains('expanded') && !sidebar.contains(event.target)) {
@@ -1170,7 +1419,7 @@
         friendModal.addEventListener('click', e => e.stopPropagation());
 
 
-        // 7. Heart Like Toggle Function
+        // 8. Heart Like Toggle Function
         function toggleHeart(button) {
             button.classList.toggle('liked');
             let span = button.querySelector('span');
@@ -1183,7 +1432,7 @@
             }
         }
 
-        // 8. Create Post Logic
+        // 9. Create Post Logic
         const publishBtn = document.getElementById('publish-btn');
         const postInput = document.getElementById('post-input');
         const feedPosts = document.getElementById('feed-posts');
@@ -1238,3 +1487,4 @@
     </script>
 </body>
 </html>
+```
