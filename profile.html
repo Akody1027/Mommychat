@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -148,10 +149,16 @@
 
         /* Collapsible Sidebar */
         .sidebar {
-            width: 80px;
-            background: var(--white);
+            position: fixed;
+            left: 0;
+            top: 70px;
+            height: calc(100vh - 70px);
+            width: 45px;
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             border-right: 1px solid var(--border-color);
-            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1), background 0.4s ease;
             overflow-y: auto;
             overflow-x: hidden;
             display: flex;
@@ -162,6 +169,7 @@
 
         .sidebar.expanded {
             width: 260px;
+            background: var(--glass-bg);
         }
 
         .sidebar-title {
@@ -243,6 +251,7 @@
         /* Main Feed Area */
         .main-content {
             flex: 1;
+            margin-left: 45px;
             overflow-y: auto;
             padding: 2rem;
             display: flex;
@@ -413,10 +422,145 @@
             border-radius: 10px;
         }
 
+        /* Friend Profile Modal */
+        .friend-modal-overlay {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            width: 100%;
+            height: calc(100vh - 70px);
+            background: rgba(89, 13, 34, 0.1);
+            z-index: 950;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .friend-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .friend-modal {
+            position: fixed;
+            top: 70px;
+            left: -400px;
+            width: 350px;
+            height: calc(100vh - 70px);
+            background: var(--white);
+            box-shadow: 10px 0 25px rgba(255, 143, 163, 0.15);
+            z-index: 1000;
+            transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid var(--border-color);
+        }
+
+        .friend-modal.active {
+            left: 0;
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            display: flex;
+            justify-content: flex-end;
+            border-bottom: 1px solid var(--bg-color);
+        }
+
+        .btn-close-modal {
+            background: var(--light-pink);
+            color: var(--white);
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+
+        .btn-close-modal:hover {
+            background: var(--primary-pink);
+            transform: scale(1.1);
+        }
+
+        .modal-body {
+            padding: 2rem 1.5rem;
+            flex: 1;
+            overflow-y: auto;
+            text-align: center;
+        }
+
+        .modal-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--light-pink), var(--primary-pink));
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 800;
+            font-size: 2.5rem;
+        }
+
+        .modal-name {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-details {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-bio {
+            background: var(--bg-color);
+            padding: 1rem;
+            border-radius: 15px;
+            text-align: left;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text-dark);
+            border: 1px solid var(--border-color);
+        }
+
+        .modal-footer {
+            padding: 1.5rem;
+            border-top: 1px solid var(--bg-color);
+        }
+
+        .btn-modal-action {
+            width: 100%;
+            padding: 0.8rem;
+            border-radius: 50px;
+            background: var(--primary-pink);
+            color: var(--white);
+            border: none;
+            font-weight: 800;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 143, 163, 0.4);
+        }
+
+        .btn-modal-action:hover {
+            background: var(--dark-pink);
+            transform: translateY(-2px);
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .sidebar {
-                position: absolute;
+                position: fixed;
                 height: calc(100vh - 70px);
                 transform: translateX(-100%);
             }
@@ -426,6 +570,7 @@
             }
             .main-content {
                 padding: 1rem;
+                margin-left: 0;
             }
         }
     </style>
@@ -442,7 +587,7 @@
         <div class="nav-logo">
             <button class="toggle-btn" id="sidebar-toggle">
                 <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
-                    <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                    <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
                 </svg>
             </button>
             Mommychat.
@@ -457,12 +602,32 @@
         </div>
     </nav>
 
+    <!-- Friend Profile Modal -->
+    <div class="friend-modal-overlay" id="modal-overlay"></div>
+    <div class="friend-modal" id="friend-modal">
+        <div class="modal-header">
+            <button class="btn-close-modal" id="close-modal-btn">✕</button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-avatar" id="modal-avatar-disp">S</div>
+            <h2 class="modal-name" id="modal-name-disp">Sarah Jenkins</h2>
+            <div class="modal-details">Mother of 2 (Ages 3, 5)</div>
+            <div class="modal-bio">
+                <strong>Bio & Needs:</strong><br>
+                Navigating the chaos of toddlerhood! My oldest has mild sensory processing needs. Always looking to connect with other moms who understand the overwhelmed days.
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-modal-action">💬 Message</button>
+        </div>
+    </div>
+
     <div class="app-container">
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-title">Direct Messages</div>
             
-            <div class="friend-item">
+            <div class="friend-item" onclick="openFriendModal('S', 'Sarah Jenkins', 'Mother of 2 (Ages 3, 5)', 'Navigating the chaos of toddlerhood! My oldest has mild sensory processing needs. Always looking to connect with other moms who understand the overwhelmed days.')">
                 <div class="friend-avatar">S</div>
                 <div class="friend-info">
                     <span class="friend-name">Sarah Jenkins</span>
@@ -470,7 +635,7 @@
                 </div>
             </div>
 
-            <div class="friend-item">
+            <div class="friend-item" onclick="openFriendModal('E', 'Emily R.', 'Mother of 1 (Age 8)', 'Working full time and trying to keep up. Looking for local playdates and homework tips.')">
                 <div class="friend-avatar" style="background: linear-gradient(135deg, #a2d2ff, #bde0fe);">E</div>
                 <div class="friend-info">
                     <span class="friend-name">Emily R.</span>
@@ -478,7 +643,7 @@
                 </div>
             </div>
 
-            <div class="friend-item">
+            <div class="friend-item" onclick="openFriendModal('J', 'Jessica Miller', 'Mother of 3', 'Just moved to the area. I love crafting and baking with my kids. Let\'s chat!')">
                 <div class="friend-avatar" style="background: linear-gradient(135deg, #ffd6a5, #fdffb6);">J</div>
                 <div class="friend-info">
                     <span class="friend-name">Jessica Miller</span>
@@ -581,6 +746,41 @@
 
         sidebarToggleBtn.addEventListener('click', () => {
             sidebar.classList.toggle('expanded');
+        });
+
+        // Friend Modal Logic
+        const friendModal = document.getElementById('friend-modal');
+        const modalOverlay = document.getElementById('modal-overlay');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        const modalAvatar = document.getElementById('modal-avatar-disp');
+        const modalName = document.getElementById('modal-name-disp');
+
+        function openFriendModal(avatarLetter, name, details, bio) {
+            modalAvatar.innerText = avatarLetter;
+            modalName.innerText = name;
+            document.querySelector('.modal-details').innerText = details;
+            document.querySelector('.modal-bio').innerHTML = `<strong>Bio & Needs:</strong><br>${bio}`;
+            
+            friendModal.classList.add('active');
+            modalOverlay.classList.add('active');
+            sidebar.classList.remove('expanded'); // Auto-close sidebar
+        }
+
+        function closeFriendModal() {
+            friendModal.classList.remove('active');
+            modalOverlay.classList.remove('active');
+        }
+
+        closeModalBtn.addEventListener('click', closeFriendModal);
+        
+        // Global Outside Click Detection
+        document.addEventListener('click', (event) => {
+            if (sidebar.classList.contains('expanded') && !sidebar.contains(event.target) && !sidebarToggleBtn.contains(event.target)) {
+                sidebar.classList.remove('expanded');
+            }
+            if (event.target === modalOverlay) {
+                closeFriendModal();
+            }
         });
 
         // Heart Like Toggle Function
