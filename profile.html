@@ -945,6 +945,15 @@
             }
         }
     </style>
+  
+  <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
+  
+  
+  
 </head>
 <body>
 
@@ -1053,24 +1062,26 @@
                 </div>
             </div>
             
-            <div class="upm-form-group">
+          
+          <div class="upm-form-group">
                 <label>Your Display Name</label>
-                <input type="text" value="Mommy User">
+                <input type="text" id="upm-display-name" value="">
             </div>
             
             <div class="upm-form-group">
                 <label>Children (Ages & Context)</label>
-                <textarea rows="3">Mother of 2 (Ages 3, 5). Navigating the chaos of toddlerhood!</textarea>
+                <textarea id="upm-children-context" rows="3"></textarea>
             </div>
             
             <div class="upm-form-group">
                 <label>Special Needs / Private Notes</label>
-                <textarea rows="3" placeholder="This context is securely shared with Helpers during live calls..."></textarea>
+                <textarea id="upm-private-notes" rows="3" placeholder="This context is securely shared with Helpers during live calls..."></textarea>
             </div>
 
-            <button class="btn-modal-action" style="width: auto; padding: 0.8rem 2.5rem;">Save Changes</button>
+            <button class="btn-modal-action" id="btn-save-profile" style="width: auto; padding: 0.8rem 2.5rem;">Save Changes</button>
             <br>
-            <button class="btn-modal-action" style="width: auto; padding: 0.8rem 2.5rem; background: #e63946; margin-top: 2rem; box-shadow: none;">Log Out</button>
+            <button class="btn-modal-action" id="btn-logout" style="width: auto; padding: 0.8rem 2.5rem; background: #e63946; margin-top: 2rem; box-shadow: none;">Log Out</button>
+ 
         </div>
     </div>
 
@@ -1319,20 +1330,12 @@
             walletView.style.display = 'block';
         });
 
-        // 4. User Profile Avatar Upload Logic
-        const profileImageUpload = document.getElementById('profile-image-upload');
-        const userAvatarPreview = document.getElementById('user-avatar-preview');
-        
-        profileImageUpload.addEventListener('change', function(event) {
-            if (event.target.files && event.target.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    // Replace the "M" text with the uploaded image
-                    userAvatarPreview.innerHTML = `<img src="${e.target.result}" style="width: 100%; height: 100%; object-fit: cover;">`;
-                }
-                reader.readAsDataURL(event.target.files[0]);
-            }
-        });
+      
+      
+      
+      
+      
+
 
         // 5. 90x90 User Profile Modal Logic
         const userProfileModal = document.getElementById('user-profile-modal');
@@ -1429,60 +1432,253 @@
         friendModal.addEventListener('click', e => e.stopPropagation());
 
 
-        // 8. Heart Like Toggle Function
-        function toggleHeart(button) {
-            button.classList.toggle('liked');
-            let span = button.querySelector('span');
-            let count = parseInt(span.innerText);
-            
-            if (button.classList.contains('liked')) {
-                span.innerText = count + 1;
-            } else {
-                span.innerText = count - 1;
+      
+      // Firebase Production Backend Wiring
+        const firebaseConfig = {
+            apiKey: "AIzaSyAQLpT8HHjE_wcjo7psPvT0igkew6iMqgw",
+            authDomain: "mommychat-b6e3c.firebaseapp.com",
+            projectId: "mommychat-b6e3c",
+            storageBucket: "mommychat-b6e3c.firebasestorage.app",
+            messagingSenderId: "355234858731",
+            appId: "1:355234858731:web:9d730c1154d10102d6a0ae"
+        };
+
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        const storage = firebase.storage();
+
+        let currentUser = null;
+        let currentUserDoc = null;
+
+        // Session Protection & Real-time Profile Listener
+        auth.onAuthStateChanged((user) => {
+            if (!user) {
+                window.location.href = 'home.html';
+                return;
+            }
+            currentUser = user;
+            listenToUserProfile(user.uid);
+            listenToLiveFeed();
+        });
+
+        function listenToUserProfile(uid) {
+            db.collection('users').doc(uid).onSnapshot((doc) => {
+                if (!doc.exists) return;
+                currentUserDoc = doc.data();
+
+                // Real-time Token Sync (Toolbar + Modal)
+                const tokens = currentUserDoc.tokens ?? 0;
+                document.getElementById('wallet-toggle').innerHTML = `<img src="Mtoken.PNG" class="token-icon" alt="Token"> ${tokens}`;
+                const walletModalDisp = document.querySelector('#wallet-view div');
+                if (walletModalDisp) {
+                    walletModalDisp.innerHTML = `<img src="Mtoken.PNG" alt="Token" style="width: 32px; height: 32px;"> ${tokens}`;
+                }
+
+                // Avatar & Profile Initial Sync
+                const initial = currentUserDoc.displayName ? currentUserDoc.displayName.charAt(0).toUpperCase() : 'M';
+                const profileToggle = document.getElementById('profile-toggle');
+                const userAvatarPreview = document.getElementById('user-avatar-preview');
+
+                if (currentUserDoc.avatarUrl) {
+                    const imgTag = `<img src="${currentUserDoc.avatarUrl}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
+                    profileToggle.innerHTML = imgTag;
+                    userAvatarPreview.innerHTML = imgTag;
+                } else {
+                    profileToggle.innerText = initial;
+                    userAvatarPreview.innerText = initial;
+                }
+
+                // Form Field Sync (Only if not currently editing)
+                const nameInput = document.getElementById('upm-display-name');
+                const childrenInput = document.getElementById('upm-children-context');
+                const notesInput = document.getElementById('upm-private-notes');
+
+                if (nameInput && document.activeElement !== nameInput) {
+                    nameInput.value = currentUserDoc.displayName || '';
+                }
+                if (childrenInput && document.activeElement !== childrenInput) {
+                    childrenInput.value = currentUserDoc.childrenContext || '';
+                }
+                if (notesInput && document.activeElement !== notesInput) {
+                    notesInput.value = currentUserDoc.privateNotes || '';
+                }
+            });
+        }
+
+        // Firebase Storage Avatar Upload
+        const profileImageUpload = document.getElementById('profile-image-upload');
+        profileImageUpload.addEventListener('change', async (event) => {
+            if (event.target.files && event.target.files[0] && currentUser) {
+                const file = event.target.files[0];
+                const storageRef = storage.ref(`avatars/${currentUser.uid}/profile_${Date.now()}`);
+
+                try {
+                    const snapshot = await storageRef.put(file);
+                    const downloadUrl = await snapshot.ref.getDownloadURL();
+                    await db.collection('users').doc(currentUser.uid).update({
+                        avatarUrl: downloadUrl
+                    });
+                } catch (err) {
+                    console.error("Storage upload failed:", err);
+                }
+            }
+        });
+
+        // Save Profile Settings to Firestore
+        document.getElementById('btn-save-profile').addEventListener('click', async () => {
+            if (!currentUser) return;
+            const updatedName = document.getElementById('upm-display-name').value.trim();
+            const updatedChildren = document.getElementById('upm-children-context').value.trim();
+            const updatedNotes = document.getElementById('upm-private-notes').value.trim();
+
+            try {
+                await db.collection('users').doc(currentUser.uid).update({
+                    displayName: updatedName,
+                    childrenContext: updatedChildren,
+                    privateNotes: updatedNotes
+                });
+                await currentUser.updateProfile({ displayName: updatedName });
+                closeUserProfile();
+            } catch (err) {
+                console.error("Error updating profile:", err);
+            }
+        });
+
+        // Sign Out
+        document.getElementById('btn-logout').addEventListener('click', async () => {
+            await auth.signOut();
+            window.location.href = 'home.html';
+        });
+
+        // Live Real-Time Feed
+        const feedPosts = document.getElementById('feed-posts');
+
+        function listenToLiveFeed() {
+            db.collection('posts').orderBy('createdAt', 'desc').limit(50).onSnapshot((snapshot) => {
+                feedPosts.innerHTML = '';
+                snapshot.forEach((doc) => {
+                    const post = doc.data();
+                    const postId = doc.id;
+                    const isLiked = currentUser && post.likedBy && post.likedBy.includes(currentUser.uid);
+                    const likesCount = post.likesCount || 0;
+                    const timeString = post.createdAt ? formatRelativeTime(post.createdAt.toDate()) : 'Just now';
+
+                    const avatarMarkup = post.authorAvatarUrl 
+                        ? `<img src="${post.authorAvatarUrl}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`
+                        : (post.authorAvatarLetter || 'M');
+
+                    const postElement = `
+                        <div class="post-card" data-id="${postId}">
+                            <div class="post-header">
+                                <div class="post-avatar">${avatarMarkup}</div>
+                                <div class="post-author-info">
+                                    <div class="post-author">${escapeHTML(post.authorName || 'Mama')}</div>
+                                    <div class="post-time">${timeString} ${post.authorContext ? '• ' + escapeHTML(post.authorContext) : ''}</div>
+                                </div>
+                            </div>
+                            <div class="post-content">
+                                ${escapeHTML(post.content)}
+                            </div>
+                            <div class="post-actions">
+                                <button class="action-btn ${isLiked ? 'liked' : ''}" onclick="togglePostLike('${postId}')">
+                                    <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                                    <span>${likesCount}</span>
+                                </button>
+                                <button class="action-btn">
+                                    <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+                                    <span>${post.commentsCount || 0}</span>
+                                </button>
+                                <button class="action-btn premium-action">
+                                    💬 Message (10 <img src="Mtoken.PNG" class="token-icon" alt="Token">)
+                                </button>
+                                <button class="action-btn premium-action">
+                                    📞 Live Call (60 <img src="Mtoken.PNG" class="token-icon" alt="Token">)
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    feedPosts.insertAdjacentHTML('beforeend', postElement);
+                });
+            });
+        }
+
+        // Create Real-time Post
+        const publishBtn = document.getElementById('publish-btn');
+        const postInput = document.getElementById('post-input');
+
+        publishBtn.addEventListener('click', async () => {
+            const content = postInput.value.trim();
+            if (content === '' || !currentUser) return;
+
+            publishBtn.disabled = true;
+
+            try {
+                await db.collection('posts').add({
+                    authorUid: currentUser.uid,
+                    authorName: currentUserDoc?.displayName || currentUser.displayName || 'Mama',
+                    authorAvatarUrl: currentUserDoc?.avatarUrl || '',
+                    authorAvatarLetter: currentUserDoc?.displayName ? currentUserDoc.displayName.charAt(0).toUpperCase() : 'M',
+                    authorContext: currentUserDoc?.childrenContext || '',
+                    content: content,
+                    likesCount: 0,
+                    likedBy: [],
+                    commentsCount: 0,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                postInput.value = '';
+            } catch (err) {
+                console.error("Publishing error:", err);
+            } finally {
+                publishBtn.disabled = false;
+            }
+        });
+
+        // Atomic Post Likes via Firestore Transaction
+        async function togglePostLike(postId) {
+            if (!currentUser) return;
+            const postRef = db.collection('posts').doc(postId);
+
+            try {
+                await db.runTransaction(async (transaction) => {
+                    const postDoc = await transaction.get(postRef);
+                    if (!postDoc.exists) return;
+
+                    const data = postDoc.data();
+                    const likedBy = data.likedBy || [];
+                    const hasLiked = likedBy.includes(currentUser.uid);
+
+                    if (hasLiked) {
+                        transaction.update(postRef, {
+                            likedBy: firebase.firestore.FieldValue.arrayRemove(currentUser.uid),
+                            likesCount: firebase.firestore.FieldValue.increment(-1)
+                        });
+                    } else {
+                        transaction.update(postRef, {
+                            likedBy: firebase.firestore.FieldValue.arrayUnion(currentUser.uid),
+                            likesCount: firebase.firestore.FieldValue.increment(1)
+                        });
+                    }
+                });
+            } catch (err) {
+                console.error("Like toggle transaction failed:", err);
             }
         }
 
-        // 9. Create Post Logic
-        const publishBtn = document.getElementById('publish-btn');
-        const postInput = document.getElementById('post-input');
-        const feedPosts = document.getElementById('feed-posts');
+        // Relative Timestamp Formatter
+        function formatRelativeTime(date) {
+            const diffSeconds = Math.floor((new Date() - date) / 1000);
+            if (diffSeconds < 60) return 'Just now';
+            const diffMinutes = Math.floor(diffSeconds / 60);
+            if (diffMinutes < 60) return `${diffMinutes}m ago`;
+            const diffHours = Math.floor(diffMinutes / 60);
+            if (diffHours < 24) return `${diffHours}h ago`;
+            const diffDays = Math.floor(diffHours / 24);
+            return `${diffDays}d ago`;
+        }
 
-        publishBtn.addEventListener('click', () => {
-            const content = postInput.value.trim();
-            if (content === '') return;
-
-            // Generate HTML for new post
-            const newPostHTML = `
-                <div class="post-card">
-                    <div class="post-header">
-                        <div class="post-avatar">M</div>
-                        <div class="post-author-info">
-                            <div class="post-author">You</div>
-                            <div class="post-time">Just now</div>
-                        </div>
-                    </div>
-                    <div class="post-content">
-                        ${escapeHTML(content)}
-                    </div>
-                    <div class="post-actions">
-                        <button class="action-btn" onclick="toggleHeart(this)">
-                            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                            <span>0</span>
-                        </button>
-                        <button class="action-btn">
-                            <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
-                            <span>0</span>
-                        </button>
-                    </div>
-                </div>
-            `;
-
-            // Prepend to feed and clear input
-            feedPosts.insertAdjacentHTML('afterbegin', newPostHTML);
-            postInput.value = '';
-        });
-
-        // Utility function to prevent basic XSS from user input
         function escapeHTML(str) {
             return str.replace(/[&<>'"]/g, 
                 tag => ({
@@ -1494,6 +1690,8 @@
                 }[tag])
             );
         }
+      
+
     </script>
 </body>
 </html>
