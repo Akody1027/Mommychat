@@ -13,10 +13,10 @@
         --bg-color: #fff5f7;
         --primary-pink: #ff8fa3;
         --light-pink: #ffb3c1;
-        --dark-pink: #c9184a;
+        --dark-pink: #c9184a; 
         --text-dark: #590d22;
         --text-light: #800f2f;
-        --text-muted: #a47381;
+        --text-muted: #a47381; 
         --white: #ffffff;
         --glass-bg: rgba(255, 255, 255, 0.85);
         --border-color: #f8cdda;
@@ -1679,69 +1679,81 @@
         "profile-image-upload"
       );
 
-
-
-
       let pendingAvatarFile = null;
 
-        // Firebase Storage Avatar Upload - Local Preview
-        const profileImageUpload = document.getElementById('profile-image-upload');
-        profileImageUpload.addEventListener('change', (event) => {
-            if (event.target.files && event.target.files[0]) {
-                pendingAvatarFile = event.target.files[0];
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('user-avatar-preview').innerHTML = `<img src="${e.target.result}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
-                }
-                reader.readAsDataURL(pendingAvatarFile);
+      // Firebase Storage Avatar Upload - Local Preview
+      const profileImageUpload = document.getElementById(
+        "profile-image-upload"
+      );
+      profileImageUpload.addEventListener("change", (event) => {
+        if (event.target.files && event.target.files[0]) {
+          pendingAvatarFile = event.target.files[0];
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            document.getElementById(
+              "user-avatar-preview"
+            ).innerHTML = `<img src="${e.target.result}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
+          };
+          reader.readAsDataURL(pendingAvatarFile);
+        }
+      });
+
+      // Save Profile Settings to Firestore (Including Avatar Payload)
+      document
+        .getElementById("btn-save-profile")
+        .addEventListener("click", async () => {
+          if (!currentUser) return;
+
+          const btn = document.getElementById("btn-save-profile");
+          const originalText = btn.innerText;
+          btn.innerText = "Saving...";
+          btn.disabled = true;
+
+          const updatedName = document
+            .getElementById("upm-display-name")
+            .value.trim();
+          const updatedChildren = document
+            .getElementById("upm-children-context")
+            .value.trim();
+          const updatedNotes = document
+            .getElementById("upm-private-notes")
+            .value.trim();
+
+          let downloadUrl = currentUserDoc?.avatarUrl || "";
+
+          try {
+            // Upload to Firebase Storage ONLY if a new image was selected
+            if (pendingAvatarFile) {
+              const storageRef = storage.ref(
+                `avatars/${currentUser.uid}/profile_${Date.now()}`
+              );
+              const snapshot = await storageRef.put(pendingAvatarFile);
+              downloadUrl = await snapshot.ref.getDownloadURL();
+              pendingAvatarFile = null; // Clear pending state
             }
+
+            await db.collection("users").doc(currentUser.uid).update({
+              displayName: updatedName,
+              childrenContext: updatedChildren,
+              privateNotes: updatedNotes,
+              avatarUrl: downloadUrl,
+            });
+
+            await currentUser.updateProfile({
+              displayName: updatedName,
+              photoURL: downloadUrl || currentUser.photoURL,
+            });
+
+            closeUserProfile();
+            showCustomAlert("Profile updated successfully!");
+          } catch (err) {
+            console.error("Error updating profile:", err);
+            showCustomAlert("Failed to save profile. Please try again.");
+          } finally {
+            btn.innerText = originalText;
+            btn.disabled = false;
+          }
         });
-
-        // Save Profile Settings to Firestore (Including Avatar Payload)
-        document.getElementById('btn-save-profile').addEventListener('click', async () => {
-            if (!currentUser) return;
-
-            const btn = document.getElementById('btn-save-profile');
-            const originalText = btn.innerText;
-            btn.innerText = "Saving...";
-            btn.disabled = true;
-
-            const updatedName = document.getElementById('upm-display-name').value.trim();
-            const updatedChildren = document.getElementById('upm-children-context').value.trim();
-            const updatedNotes = document.getElementById('upm-private-notes').value.trim();
-
-            let downloadUrl = currentUserDoc?.avatarUrl || '';
-
-            try {
-                // Upload to Firebase Storage ONLY if a new image was selected
-                if (pendingAvatarFile) {
-                    const storageRef = storage.ref(`avatars/${currentUser.uid}/profile_${Date.now()}`);
-                    const snapshot = await storageRef.put(pendingAvatarFile);
-                    downloadUrl = await snapshot.ref.getDownloadURL();
-                    pendingAvatarFile = null; // Clear pending state
-                }
-
-                await db.collection('users').doc(currentUser.uid).update({
-                    displayName: updatedName,
-                    childrenContext: updatedChildren,
-                    privateNotes: updatedNotes,
-                    avatarUrl: downloadUrl
-                });
-
-                await currentUser.updateProfile({ displayName: updatedName, photoURL: downloadUrl || currentUser.photoURL });
-
-                closeUserProfile();
-                showCustomAlert("Profile updated successfully!");
-            } catch (err) {
-                console.error("Error updating profile:", err);
-                showCustomAlert("Failed to save profile. Please try again.");
-            } finally {
-                btn.innerText = originalText;
-                btn.disabled = false;
-            }
-        });
-
-
 
       // Sign Out
       document
@@ -2030,29 +2042,24 @@
         }
       }
 
+      window.showCustomAlert = function (msg) {
+        document.getElementById("custom-alert-text").innerText = msg;
+        document.getElementById("custom-alert-overlay").classList.add("active");
+      };
+
       // Global function for feed post premium buttons
       window.initiatePremiumAction = async function (amount, type) {
-
-        window.showCustomAlert = function(msg) {
-            document.getElementById('custom-alert-text').innerText = msg;
-            document.getElementById('custom-alert-overlay').classList.add('active');
-        };
-
-        // Global function for feed post premium buttons
-        window.initiatePremiumAction = async function(amount, type) {
-            const success = await chargeTokens(amount, type);
-            if (success) {
-                showCustomAlert(`${amount} Tokens deducted for ${type}! Initializing UI...`);
-            } else {
-                showCustomAlert("Insufficient tokens! Please visit the Wallet to recharge.");
-            }
-        };
-
-
-
-
-
-
+        const success = await chargeTokens(amount, type);
+        if (success) {
+          showCustomAlert(
+            `${amount} Tokens deducted for ${type}! Initializing UI...`
+          );
+        } else {
+          showCustomAlert(
+            "Insufficient tokens! Please visit the Wallet to recharge."
+          );
+        }
+      };
 
       // Modal Premium Buttons
       document
