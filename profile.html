@@ -1,1589 +1,1726 @@
-
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mommychat | Feed</title>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        :root {
-            --bg-color: #fff5f7;
-            --primary-pink: #ff8fa3;
-            --light-pink: #ffb3c1;
-            --dark-pink: #c9184a;
-            --text-dark: #590d22;
-            --text-light: #800f2f;
-            --text-muted: #a47381;
-            --white: #ffffff;
-            --glass-bg: rgba(255, 255, 255, 0.85);
-            --border-color: #f8cdda;
-        }
+      :root {
+        --bg-color: #fff5f7;
+        --primary-pink: #ff8fa3;
+        --light-pink: #ffb3c1;
+        --dark-pink: #c9184a;
+        --text-dark: #590d22;
+        --text-light: #800f2f;
+        --text-muted: #a47381;
+        --white: #ffffff;
+        --glass-bg: rgba(255, 255, 255, 0.85);
+        --border-color: #f8cdda;
+      }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Nunito', sans-serif;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Nunito", sans-serif;
+      }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-dark);
-            overflow-x: hidden;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-        }
+      body {
+        background-color: var(--bg-color);
+        color: var(--text-dark);
+        overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+      }
 
-        /* Page Loader */
-        #page-loader {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
-        }
-        #page-loader.hidden {
-            opacity: 0;
-            visibility: hidden;
-        }
+      /* Page Loader */
+      #page-loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--bg-color);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        transition: opacity 0.5s ease, visibility 0.5s ease;
+      }
+      #page-loader.hidden {
+        opacity: 0;
+        visibility: hidden;
+      }
 
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid var(--light-pink);
-            border-top: 4px solid var(--dark-pink);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
+      .spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid var(--light-pink);
+        border-top: 4px solid var(--dark-pink);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
         }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
 
-        /* Primary Header */
-        .main-header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            height: 50px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255, 179, 193, 0.3);
-            z-index: 1000;
-        }
+      /* Primary Header */
+      .main-header {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        height: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: var(--glass-bg);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255, 179, 193, 0.3);
+        z-index: 1000;
+      }
 
-        .header-logo {
-            font-weight: 800;
-            font-size: 1.5rem;
-            color: var(--primary-pink);
-            letter-spacing: 0.5px;
-        }
+      .header-logo {
+        font-weight: 800;
+        font-size: 1.5rem;
+        color: var(--primary-pink);
+        letter-spacing: 0.5px;
+      }
 
-        /* Secondary Toolbar */
-        .toolbar {
-            position: fixed;
-            top: 50px;
-            width: 100%;
-            height: 55px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 1rem;
-            background: var(--white);
-            border-bottom: 1px solid var(--border-color);
-            z-index: 990;
-            box-shadow: 0 2px 10px rgba(255, 143, 163, 0.05);
-        }
+      /* Secondary Toolbar */
+      .toolbar {
+        position: fixed;
+        top: 50px;
+        width: 100%;
+        height: 55px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 1rem;
+        background: var(--white);
+        border-bottom: 1px solid var(--border-color);
+        z-index: 990;
+        box-shadow: 0 2px 10px rgba(255, 143, 163, 0.05);
+      }
 
-        .toolbar-group {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
+      .toolbar-group {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
 
-        .toolbar-btn {
-            background: none;
-            border: none;
-            color: var(--dark-pink);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 6px;
-            border-radius: 50%;
-            transition: all 0.2s ease;
-        }
+      .toolbar-btn {
+        background: none;
+        border: none;
+        color: var(--dark-pink);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 6px;
+        border-radius: 50%;
+        transition: all 0.2s ease;
+      }
 
-        .toolbar-btn:hover {
-            background: var(--bg-color);
-            transform: scale(1.05);
-        }
+      .toolbar-btn:hover {
+        background: var(--bg-color);
+        transform: scale(1.05);
+      }
 
-        .token-balance {
-            background: var(--white);
-            padding: 0.4rem 0.8rem;
-            border-radius: 20px;
-            font-weight: 800;
-            color: var(--dark-pink);
-            border: 2px solid var(--light-pink);
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            cursor: pointer;
-            box-shadow: 0 2px 10px rgba(255, 143, 163, 0.1);
-            transition: transform 0.2s ease;
-        }
-        
-        .token-balance:hover {
-            transform: translateY(-2px);
-        }
+      .token-balance {
+        background: var(--white);
+        padding: 0.4rem 0.8rem;
+        border-radius: 20px;
+        font-weight: 800;
+        color: var(--dark-pink);
+        border: 2px solid var(--light-pink);
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        cursor: pointer;
+        box-shadow: 0 2px 10px rgba(255, 143, 163, 0.1);
+        transition: transform 0.2s ease;
+      }
 
-        .profile-menu {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            background: var(--primary-pink);
-            color: var(--white);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-        }
+      .token-balance:hover {
+        transform: translateY(-2px);
+      }
 
-        .profile-menu:hover {
-            transform: scale(1.05);
-        }
+      .profile-menu {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        background: var(--primary-pink);
+        color: var(--white);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+      }
 
-        /* Layout Container */
-        .app-container {
-            display: flex;
-            margin-top: 105px; /* Offset for header + toolbar */
-            height: calc(100vh - 105px);
-        }
+      .profile-menu:hover {
+        transform: scale(1.05);
+      }
 
-        /* Collapsible Sidebar - Visible & Translucent by Default */
-        .sidebar {
-            position: fixed;
-            left: 0;
-            top: 105px;
-            height: calc(100vh - 105px);
-            width: 70px;
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-right: 1px solid var(--border-color);
-            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1), background 0.4s ease;
-            overflow-y: auto;
-            overflow-x: hidden;
-            display: flex;
-            flex-direction: column;
-            padding-top: 1rem;
-            z-index: 900;
-        }
+      /* Layout Container */
+      .app-container {
+        display: flex;
+        margin-top: 105px; /* Offset for header + toolbar */
+        height: calc(100vh - 105px);
+      }
 
-        .sidebar.expanded {
-            width: 260px;
-            background: var(--glass-bg);
-            box-shadow: 5px 0 15px rgba(255, 143, 163, 0.1);
-        }
+      /* Collapsible Sidebar - Visible & Translucent by Default */
+      .sidebar {
+        position: fixed;
+        left: 0;
+        top: 105px;
+        height: calc(100vh - 105px);
+        width: 70px;
+        background: rgba(255, 255, 255, 0.6);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-right: 1px solid var(--border-color);
+        transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+          background 0.4s ease;
+        overflow-y: auto;
+        overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
+        padding-top: 1rem;
+        z-index: 900;
+      }
 
-        .sidebar-title {
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            font-weight: 800;
-            color: var(--text-muted);
-            padding: 0 1rem;
-            margin-bottom: 1rem;
-            opacity: 0;
-            white-space: nowrap;
-            transition: opacity 0.3s ease;
-        }
+      .sidebar.expanded {
+        width: 260px;
+        background: var(--glass-bg);
+        box-shadow: 5px 0 15px rgba(255, 143, 163, 0.1);
+      }
 
-        .sidebar.expanded .sidebar-title {
-            opacity: 1;
-        }
+      .sidebar-title {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        font-weight: 800;
+        color: var(--text-muted);
+        padding: 0 1rem;
+        margin-bottom: 1rem;
+        opacity: 0;
+        white-space: nowrap;
+        transition: opacity 0.3s ease;
+      }
 
-        .friend-item {
-            display: flex;
-            align-items: center;
-            padding: 10px 15px;
-            cursor: pointer;
-            transition: background 0.2s ease;
-            white-space: nowrap;
-            gap: 15px;
-            border-left: 3px solid transparent;
-        }
+      .sidebar.expanded .sidebar-title {
+        opacity: 1;
+      }
 
-        .friend-item:hover {
-            background: var(--bg-color);
-            border-left: 3px solid var(--primary-pink);
-        }
+      .friend-item {
+        display: flex;
+        align-items: center;
+        padding: 10px 15px;
+        cursor: pointer;
+        transition: background 0.2s ease;
+        white-space: nowrap;
+        gap: 15px;
+        border-left: 3px solid transparent;
+      }
 
-        .friend-avatar {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--light-pink), var(--primary-pink));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--white);
-            font-weight: 800;
-            font-size: 1rem;
-            flex-shrink: 0;
-            transition: width 0.4s ease, height 0.4s ease;
-        }
+      .friend-item:hover {
+        background: var(--bg-color);
+        border-left: 3px solid var(--primary-pink);
+      }
 
-        .sidebar.expanded .friend-avatar {
-            width: 45px;
-            height: 45px;
-            font-size: 1.2rem;
-        }
+      .friend-avatar {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        background: linear-gradient(
+          135deg,
+          var(--light-pink),
+          var(--primary-pink)
+        );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--white);
+        font-weight: 800;
+        font-size: 1rem;
+        flex-shrink: 0;
+        transition: width 0.4s ease, height 0.4s ease;
+      }
 
-        .friend-info {
-            display: flex;
-            flex-direction: column;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            pointer-events: none;
-        }
+      .sidebar.expanded .friend-avatar {
+        width: 45px;
+        height: 45px;
+        font-size: 1.2rem;
+      }
 
-        .sidebar.expanded .friend-info {
-            opacity: 1;
-            pointer-events: auto;
-        }
+      .friend-info {
+        display: flex;
+        flex-direction: column;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        pointer-events: none;
+      }
 
-        .friend-name {
-            font-weight: 800;
-            color: var(--text-dark);
-            font-size: 1rem;
-        }
+      .sidebar.expanded .friend-info {
+        opacity: 1;
+        pointer-events: auto;
+      }
 
-        .friend-status {
-            font-size: 0.8rem;
-            color: var(--dark-pink);
-        }
+      .friend-name {
+        font-weight: 800;
+        color: var(--text-dark);
+        font-size: 1rem;
+      }
 
-        /* Main Feed Area */
+      .friend-status {
+        font-size: 0.8rem;
+        color: var(--dark-pink);
+      }
+
+      /* Main Feed Area */
+      .main-content {
+        flex: 1;
+        margin-left: 45px; /* Permanent offset for 45px sidebar */
+        overflow-y: auto;
+        padding: 2rem;
+        display: flex;
+        justify-content: center;
+        background: var(--bg-color);
+      }
+
+      .feed-container {
+        width: 100%;
+        max-width: 650px;
+      }
+
+      /* Horizontal Helper Carousel */
+      .helper-carousel {
+        display: flex;
+        overflow-x: auto;
+        gap: 1.2rem;
+        padding-bottom: 1rem;
+        margin-bottom: 1.5rem;
+        scrollbar-width: none; /* Firefox */
+      }
+      .helper-carousel::-webkit-scrollbar {
+        display: none; /* Chrome/Safari */
+      }
+      .helper-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        cursor: pointer;
+        min-width: 75px;
+        transition: transform 0.2s ease;
+      }
+      .helper-card:hover {
+        transform: translateY(-3px);
+      }
+      .helper-card .helper-avatar {
+        width: 65px;
+        height: 65px;
+        border-radius: 50%;
+        background: linear-gradient(
+          135deg,
+          var(--light-pink),
+          var(--primary-pink)
+        );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--white);
+        font-weight: 800;
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+        border: 3px solid var(--white);
+        box-shadow: 0 4px 10px rgba(255, 143, 163, 0.2);
+      }
+      .helper-card .helper-name {
+        font-size: 0.85rem;
+        font-weight: 800;
+        color: var(--text-dark);
+        text-align: center;
+        white-space: nowrap;
+      }
+
+      /* Toolbar Dropdown Modals (Search & Wallet) */
+      .dropdown-modal {
+        position: fixed;
+        background: var(--white);
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(255, 143, 163, 0.2);
+        border: 1px solid var(--border-color);
+        padding: 1.5rem;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 995;
+      }
+
+      .dropdown-modal.active {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+
+      #search-modal {
+        top: 110px;
+        left: 50%;
+        transform: translate(-50%, -10px);
+        width: 320px;
+      }
+      #search-modal.active {
+        transform: translate(-50%, 0);
+      }
+
+      #wallet-modal {
+        top: 110px;
+        right: 1rem;
+        width: 320px;
+      }
+
+      /* Tile Grid for Search & Token Checkout */
+      .tile-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+
+      .tile {
+        background: var(--bg-color);
+        border: 1px solid var(--border-color);
+        padding: 1rem 0.5rem;
+        border-radius: 10px;
+        text-align: center;
+        font-weight: 800;
+        color: var(--dark-pink);
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .tile:hover {
+        transform: translateY(-2px);
+        background: var(--primary-pink);
+        color: var(--white);
+        border-color: var(--primary-pink);
+      }
+
+      .token-pkg {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        font-size: 0.9rem;
+      }
+      .token-pkg strong {
+        font-size: 1.1rem;
+        margin-bottom: 5px;
+      }
+
+      /* Custom Token Image Icon */
+      .token-icon {
+        width: 1.2em;
+        height: 1.2em;
+        vertical-align: middle;
+        margin-top: -3px;
+      }
+
+      /* Create Post Box */
+      .create-post {
+        background: var(--white);
+        border-radius: 20px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 15px rgba(255, 143, 163, 0.1);
+        margin-bottom: 2rem;
+        border: 1px solid var(--border-color);
+      }
+
+      .create-post textarea {
+        width: 100%;
+        border: none;
+        resize: none;
+        font-size: 1.1rem;
+        color: var(--text-dark);
+        outline: none;
+        min-height: 80px;
+        background: transparent;
+      }
+
+      .create-post textarea::placeholder {
+        color: var(--text-muted);
+      }
+
+      .create-post-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--bg-color);
+      }
+
+      .btn-post {
+        background: var(--primary-pink);
+        color: var(--white);
+        border: none;
+        padding: 0.6rem 2rem;
+        border-radius: 50px;
+        font-weight: 800;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(255, 143, 163, 0.4);
+      }
+
+      .btn-post:hover {
+        background: var(--dark-pink);
+        transform: translateY(-2px);
+      }
+
+      /* Post Card */
+      .post-card {
+        background: var(--white);
+        border-radius: 20px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 15px rgba(255, 143, 163, 0.1);
+        border: 1px solid var(--border-color);
+        animation: fadeInDown 0.5s ease forwards;
+      }
+
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .post-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+
+      .post-avatar {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        background: var(--light-pink);
+        margin-right: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--white);
+        font-weight: 800;
+      }
+
+      .post-author-info {
+        flex: 1;
+      }
+
+      .post-author {
+        font-weight: 800;
+        color: var(--text-dark);
+        font-size: 1.1rem;
+      }
+
+      .post-time {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+      }
+
+      .post-content {
+        font-size: 1.05rem;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+        color: var(--text-dark);
+      }
+
+      /* Post Actions */
+      .post-actions {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        border-top: 1px solid var(--bg-color);
+        padding-top: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .action-btn {
+        background: none;
+        border: none;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: color 0.2s ease;
+      }
+
+      .action-btn svg {
+        width: 22px;
+        height: 22px;
+        fill: currentColor;
+        transition: transform 0.2s ease;
+      }
+
+      .action-btn:hover {
+        color: var(--dark-pink);
+      }
+
+      .action-btn:hover svg {
+        transform: scale(1.1);
+      }
+
+      .action-btn.liked {
+        color: var(--dark-pink);
+      }
+
+      .premium-action {
+        margin-left: auto;
+        color: var(--dark-pink);
+        background: var(--bg-color);
+        padding: 0.4rem 0.8rem;
+        border-radius: 10px;
+      }
+
+      /* Global Button Style used inside modals */
+      .btn-modal-action {
+        width: 100%;
+        padding: 0.8rem;
+        border-radius: 50px;
+        background: var(--primary-pink);
+        color: var(--white);
+        border: none;
+        font-weight: 800;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(255, 143, 163, 0.4);
+        text-align: center;
+      }
+
+      .btn-modal-action:hover {
+        background: var(--dark-pink);
+        transform: translateY(-2px);
+      }
+
+      .btn-close-modal {
+        background: var(--light-pink);
+        color: var(--white);
+        border: none;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+        font-weight: 800;
+        cursor: pointer;
+        transition: background 0.2s ease, transform 0.2s ease;
+      }
+
+      .btn-close-modal:hover {
+        background: var(--primary-pink);
+        transform: scale(1.1);
+      }
+
+      /* 90x90 User Profile Modal Overlay */
+      .user-profile-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(89, 13, 34, 0.3);
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        z-index: 1999;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+      }
+
+      .user-profile-backdrop.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .user-profile-modal {
+        position: fixed;
+        top: 5%;
+        left: 5%;
+        width: 90%;
+        height: 90%;
+        background: var(--white);
+        border-radius: 20px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+        z-index: 2000;
+        display: flex;
+        flex-direction: column;
+        border: 1px solid var(--border-color);
+        opacity: 0;
+        visibility: hidden;
+        transform: scale(0.95);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .user-profile-modal.active {
+        opacity: 1;
+        visibility: visible;
+        transform: scale(1);
+      }
+
+      .upm-header {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .upm-title {
+        font-size: 1.5rem;
+        color: var(--dark-pink);
+        font-weight: 800;
+        margin: 0;
+      }
+
+      .upm-body {
+        flex: 1;
+        padding: 2rem;
+        overflow-y: auto;
+        background: var(--bg-color);
+      }
+
+      .upm-tabs {
+        display: flex;
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+        border-bottom: 2px solid var(--border-color);
+        padding-bottom: 0.5rem;
+      }
+
+      .upm-tab {
+        font-weight: 800;
+        color: var(--text-muted);
+        cursor: pointer;
+        padding-bottom: 0.5rem;
+      }
+
+      .upm-tab.active {
+        color: var(--dark-pink);
+        border-bottom: 3px solid var(--dark-pink);
+      }
+
+      /* Avatar Upload Feature inside Profile */
+      .avatar-upload-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 2rem;
+      }
+
+      .avatar-edit-wrapper {
+        position: relative;
+        width: 110px;
+        height: 110px;
+      }
+
+      .avatar-preview {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: linear-gradient(
+          135deg,
+          var(--light-pink),
+          var(--primary-pink)
+        );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--white);
+        font-size: 3rem;
+        font-weight: 800;
+        overflow: hidden;
+        border: 4px solid var(--white);
+        box-shadow: 0 4px 15px rgba(255, 143, 163, 0.3);
+      }
+
+      .avatar-edit-badge {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 36px;
+        height: 36px;
+        background: var(--dark-pink);
+        color: var(--white);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        font-weight: 800;
+        cursor: pointer;
+        border: 3px solid var(--white);
+        transition: transform 0.2s ease, background 0.2s ease;
+      }
+
+      .avatar-edit-badge:hover {
+        transform: scale(1.1);
+        background: var(--primary-pink);
+      }
+
+      .hidden-file-input {
+        display: none;
+      }
+
+      .upm-form-group {
+        margin-bottom: 1.5rem;
+        background: var(--white);
+        padding: 1.5rem;
+        border-radius: 15px;
+        border: 1px solid var(--border-color);
+      }
+
+      .upm-form-group label {
+        display: block;
+        font-weight: 800;
+        color: var(--text-dark);
+        margin-bottom: 0.5rem;
+      }
+
+      .upm-form-group input,
+      .upm-form-group textarea {
+        width: 100%;
+        padding: 0.8rem 1rem;
+        border: 2px solid var(--border-color);
+        border-radius: 10px;
+        font-family: inherit;
+        font-size: 1rem;
+        outline: none;
+        transition: border-color 0.3s;
+      }
+
+      .upm-form-group input:focus,
+      .upm-form-group textarea:focus {
+        border-color: var(--primary-pink);
+      }
+
+      /* Unified 90x90 Friend/Helper Profile Modal */
+      .friend-modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(89, 13, 34, 0.3);
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        z-index: 1999;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+      }
+
+      .friend-modal-overlay.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .friend-modal {
+        position: fixed;
+        top: 5%;
+        left: 5%;
+        width: 90%;
+        height: 90%;
+        background: var(--white);
+        border-radius: 20px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+        z-index: 2000;
+        display: flex;
+        flex-direction: column;
+        border: 1px solid var(--border-color);
+        opacity: 0;
+        visibility: hidden;
+        transform: scale(0.95);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .friend-modal.active {
+        opacity: 1;
+        visibility: visible;
+        transform: scale(1);
+      }
+
+      .friend-modal-header {
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: var(--white);
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+      }
+
+      .fm-header-info {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .fm-header-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(
+          135deg,
+          var(--light-pink),
+          var(--primary-pink)
+        );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--white);
+        font-weight: 800;
+        font-size: 1.5rem;
+        box-shadow: 0 4px 10px rgba(255, 143, 163, 0.2);
+      }
+
+      .fm-header-name {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: var(--text-dark);
+        margin: 0;
+      }
+
+      .friend-modal-body {
+        flex: 1;
+        padding: 2rem;
+        overflow-y: auto;
+        background: var(--bg-color);
+      }
+
+      .modal-details {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--text-muted);
+        margin-bottom: 1.5rem;
+      }
+
+      .modal-bio {
+        background: var(--white);
+        padding: 1.5rem;
+        border-radius: 15px;
+        font-size: 1rem;
+        line-height: 1.6;
+        color: var(--text-dark);
+        border: 1px solid var(--border-color);
+        margin-bottom: 2rem;
+      }
+
+      .personal-feed-title {
+        font-size: 1.2rem;
+        font-weight: 800;
+        color: var(--dark-pink);
+        margin-bottom: 1.5rem;
+        border-bottom: 2px solid var(--border-color);
+        padding-bottom: 0.5rem;
+      }
+
+      .friend-modal-footer {
+        padding: 1.5rem 2rem;
+        border-top: 1px solid var(--border-color);
+        background: var(--white);
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+      }
+
+      .friend-modal-footer .btn-modal-action {
+        flex: 1;
+        min-width: 150px;
+      }
+
+      /* Responsive Fixes */
+      @media (max-width: 768px) {
         .main-content {
-            flex: 1;
-            margin-left: 45px; /* Permanent offset for 45px sidebar */
-            overflow-y: auto;
-            padding: 2rem;
-            display: flex;
-            justify-content: center;
-            background: var(--bg-color);
+          padding: 1rem;
         }
-
-        .feed-container {
-            width: 100%;
-            max-width: 650px;
-        }
-
-        /* Horizontal Helper Carousel */
-        .helper-carousel {
-            display: flex;
-            overflow-x: auto;
-            gap: 1.2rem;
-            padding-bottom: 1rem;
-            margin-bottom: 1.5rem;
-            scrollbar-width: none; /* Firefox */
-        }
-        .helper-carousel::-webkit-scrollbar {
-            display: none; /* Chrome/Safari */
-        }
-        .helper-card {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            cursor: pointer;
-            min-width: 75px;
-            transition: transform 0.2s ease;
-        }
-        .helper-card:hover {
-            transform: translateY(-3px);
-        }
-        .helper-card .helper-avatar {
-            width: 65px;
-            height: 65px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--light-pink), var(--primary-pink));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--white);
-            font-weight: 800;
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-            border: 3px solid var(--white);
-            box-shadow: 0 4px 10px rgba(255, 143, 163, 0.2);
-        }
-        .helper-card .helper-name {
-            font-size: 0.85rem;
-            font-weight: 800;
-            color: var(--text-dark);
-            text-align: center;
-            white-space: nowrap;
-        }
-
-        /* Toolbar Dropdown Modals (Search & Wallet) */
-        .dropdown-modal {
-            position: fixed;
-            background: var(--white);
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(255, 143, 163, 0.2);
-            border: 1px solid var(--border-color);
-            padding: 1.5rem;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 995;
-        }
-
-        .dropdown-modal.active {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-        #search-modal {
-            top: 110px;
-            left: 50%;
-            transform: translate(-50%, -10px);
-            width: 320px;
-        }
-        #search-modal.active {
-            transform: translate(-50%, 0);
-        }
-
-        #wallet-modal {
-            top: 110px;
-            right: 1rem;
-            width: 320px;
-        }
-
-        /* Tile Grid for Search & Token Checkout */
-        .tile-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-        }
-
-        .tile {
-            background: var(--bg-color);
-            border: 1px solid var(--border-color);
-            padding: 1rem 0.5rem;
-            border-radius: 10px;
-            text-align: center;
-            font-weight: 800;
-            color: var(--dark-pink);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .tile:hover {
-            transform: translateY(-2px);
-            background: var(--primary-pink);
-            color: var(--white);
-            border-color: var(--primary-pink);
-        }
-        
-        .token-pkg {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            font-size: 0.9rem;
-        }
-        .token-pkg strong {
-            font-size: 1.1rem;
-            margin-bottom: 5px;
-        }
-
-        /* Custom Token Image Icon */
-        .token-icon {
-            width: 1.2em;
-            height: 1.2em;
-            vertical-align: middle;
-            margin-top: -3px;
-        }
-
-        /* Create Post Box */
-        .create-post {
-            background: var(--white);
-            border-radius: 20px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 15px rgba(255, 143, 163, 0.1);
-            margin-bottom: 2rem;
-            border: 1px solid var(--border-color);
-        }
-
-        .create-post textarea {
-            width: 100%;
-            border: none;
-            resize: none;
-            font-size: 1.1rem;
-            color: var(--text-dark);
-            outline: none;
-            min-height: 80px;
-            background: transparent;
-        }
-
-        .create-post textarea::placeholder {
-            color: var(--text-muted);
-        }
-
-        .create-post-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--bg-color);
-        }
-
-        .btn-post {
-            background: var(--primary-pink);
-            color: var(--white);
-            border: none;
-            padding: 0.6rem 2rem;
-            border-radius: 50px;
-            font-weight: 800;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(255, 143, 163, 0.4);
-        }
-
-        .btn-post:hover {
-            background: var(--dark-pink);
-            transform: translateY(-2px);
-        }
-
-        /* Post Card */
-        .post-card {
-            background: var(--white);
-            border-radius: 20px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 4px 15px rgba(255, 143, 163, 0.1);
-            border: 1px solid var(--border-color);
-            animation: fadeInDown 0.5s ease forwards;
-        }
-
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .post-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .post-avatar {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: var(--light-pink);
-            margin-right: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--white);
-            font-weight: 800;
-        }
-
-        .post-author-info {
-            flex: 1;
-        }
-
-        .post-author {
-            font-weight: 800;
-            color: var(--text-dark);
-            font-size: 1.1rem;
-        }
-
-        .post-time {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        .post-content {
-            font-size: 1.05rem;
-            line-height: 1.6;
-            margin-bottom: 1.5rem;
-            color: var(--text-dark);
-        }
-
-        /* Post Actions */
-        .post-actions {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            border-top: 1px solid var(--bg-color);
-            padding-top: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .action-btn {
-            background: none;
-            border: none;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: color 0.2s ease;
-        }
-
-        .action-btn svg {
-            width: 22px;
-            height: 22px;
-            fill: currentColor;
-            transition: transform 0.2s ease;
-        }
-
-        .action-btn:hover {
-            color: var(--dark-pink);
-        }
-
-        .action-btn:hover svg {
-            transform: scale(1.1);
-        }
-
-        .action-btn.liked {
-            color: var(--dark-pink);
-        }
-        
-        .premium-action {
-            margin-left: auto;
-            color: var(--dark-pink);
-            background: var(--bg-color);
-            padding: 0.4rem 0.8rem;
-            border-radius: 10px;
-        }
-
-        /* Global Button Style used inside modals */
-        .btn-modal-action {
-            width: 100%;
-            padding: 0.8rem;
-            border-radius: 50px;
-            background: var(--primary-pink);
-            color: var(--white);
-            border: none;
-            font-weight: 800;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(255, 143, 163, 0.4);
-            text-align: center;
-        }
-
-        .btn-modal-action:hover {
-            background: var(--dark-pink);
-            transform: translateY(-2px);
-        }
-
-        .btn-close-modal {
-            background: var(--light-pink);
-            color: var(--white);
-            border: none;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-            font-weight: 800;
-            cursor: pointer;
-            transition: background 0.2s ease, transform 0.2s ease;
-        }
-
-        .btn-close-modal:hover {
-            background: var(--primary-pink);
-            transform: scale(1.1);
-        }
-
-        /* 90x90 User Profile Modal Overlay */
-        .user-profile-backdrop {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(89, 13, 34, 0.3);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            z-index: 1999;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-        }
-
-        .user-profile-backdrop.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .user-profile-modal {
-            position: fixed;
-            top: 5%;
-            left: 5%;
-            width: 90%;
-            height: 90%;
-            background: var(--white);
-            border-radius: 20px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
-            z-index: 2000;
-            display: flex;
-            flex-direction: column;
-            border: 1px solid var(--border-color);
-            opacity: 0;
-            visibility: hidden;
-            transform: scale(0.95);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .user-profile-modal.active {
-            opacity: 1;
-            visibility: visible;
-            transform: scale(1);
-        }
-
-        .upm-header {
-            padding: 1.5rem 2rem;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .upm-title {
-            font-size: 1.5rem;
-            color: var(--dark-pink);
-            font-weight: 800;
-            margin: 0;
-        }
-
-        .upm-body {
-            flex: 1;
-            padding: 2rem;
-            overflow-y: auto;
-            background: var(--bg-color);
-        }
-
-        .upm-tabs {
-            display: flex;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 0.5rem;
-        }
-
-        .upm-tab {
-            font-weight: 800;
-            color: var(--text-muted);
-            cursor: pointer;
-            padding-bottom: 0.5rem;
-        }
-
-        .upm-tab.active {
-            color: var(--dark-pink);
-            border-bottom: 3px solid var(--dark-pink);
-        }
-        
-        /* Avatar Upload Feature inside Profile */
-        .avatar-upload-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
-        
-        .avatar-edit-wrapper {
-            position: relative;
-            width: 110px;
-            height: 110px;
-        }
-        
-        .avatar-preview {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--light-pink), var(--primary-pink));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--white);
-            font-size: 3rem;
-            font-weight: 800;
-            overflow: hidden;
-            border: 4px solid var(--white);
-            box-shadow: 0 4px 15px rgba(255, 143, 163, 0.3);
-        }
-        
-        .avatar-edit-badge {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            width: 36px;
-            height: 36px;
-            background: var(--dark-pink);
-            color: var(--white);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            font-weight: 800;
-            cursor: pointer;
-            border: 3px solid var(--white);
-            transition: transform 0.2s ease, background 0.2s ease;
-        }
-        
-        .avatar-edit-badge:hover {
-            transform: scale(1.1);
-            background: var(--primary-pink);
-        }
-        
-        .hidden-file-input {
-            display: none;
-        }
-
-        .upm-form-group {
-            margin-bottom: 1.5rem;
-            background: var(--white);
-            padding: 1.5rem;
-            border-radius: 15px;
-            border: 1px solid var(--border-color);
-        }
-
-        .upm-form-group label {
-            display: block;
-            font-weight: 800;
-            color: var(--text-dark);
-            margin-bottom: 0.5rem;
-        }
-
-        .upm-form-group input, .upm-form-group textarea {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            border: 2px solid var(--border-color);
-            border-radius: 10px;
-            font-family: inherit;
-            font-size: 1rem;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-        
-        .upm-form-group input:focus, .upm-form-group textarea:focus {
-            border-color: var(--primary-pink);
-        }
-
-        /* Unified 90x90 Friend/Helper Profile Modal */
-        .friend-modal-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(89, 13, 34, 0.3);
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            z-index: 1999;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-        }
-
-        .friend-modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
+        .user-profile-modal,
         .friend-modal {
-            position: fixed;
-            top: 5%;
-            left: 5%;
-            width: 90%;
-            height: 90%;
-            background: var(--white);
-            border-radius: 20px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
-            z-index: 2000;
-            display: flex;
-            flex-direction: column;
-            border: 1px solid var(--border-color);
-            opacity: 0;
-            visibility: hidden;
-            transform: scale(0.95);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          width: 95%;
+          height: 95%;
+          top: 2.5%;
+          left: 2.5%;
         }
-
-        .friend-modal.active {
-            opacity: 1;
-            visibility: visible;
-            transform: scale(1);
-        }
-
-        .friend-modal-header {
-            padding: 1.5rem 2rem;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--white);
-            border-top-left-radius: 20px;
-            border-top-right-radius: 20px;
-        }
-
-        .fm-header-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .fm-header-avatar {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--light-pink), var(--primary-pink));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--white);
-            font-weight: 800;
-            font-size: 1.5rem;
-            box-shadow: 0 4px 10px rgba(255, 143, 163, 0.2);
-        }
-
-        .fm-header-name {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--text-dark);
-            margin: 0;
-        }
-
-        .friend-modal-body {
-            flex: 1;
-            padding: 2rem;
-            overflow-y: auto;
-            background: var(--bg-color);
-        }
-
-        .modal-details {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            margin-bottom: 1.5rem;
-        }
-        
-        .modal-bio {
-            background: var(--white);
-            padding: 1.5rem;
-            border-radius: 15px;
-            font-size: 1rem;
-            line-height: 1.6;
-            color: var(--text-dark);
-            border: 1px solid var(--border-color);
-            margin-bottom: 2rem;
-        }
-
-        .personal-feed-title {
-            font-size: 1.2rem;
-            font-weight: 800;
-            color: var(--dark-pink);
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 0.5rem;
-        }
-
         .friend-modal-footer {
-            padding: 1.5rem 2rem;
-            border-top: 1px solid var(--border-color);
-            background: var(--white);
-            border-bottom-left-radius: 20px;
-            border-bottom-right-radius: 20px;
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
+          padding: 1rem;
+          gap: 10px;
         }
-
-        .friend-modal-footer .btn-modal-action {
-            flex: 1;
-            min-width: 150px;
+        .upm-header,
+        .friend-modal-header,
+        .upm-body,
+        .friend-modal-body {
+          padding: 1rem;
         }
-
-        /* Responsive Fixes */
-        @media (max-width: 768px) {
-            .main-content {
-                padding: 1rem;
-            }
-            .user-profile-modal, .friend-modal {
-                width: 95%;
-                height: 95%;
-                top: 2.5%;
-                left: 2.5%;
-            }
-            .friend-modal-footer {
-                padding: 1rem;
-                gap: 10px;
-            }
-            .upm-header, .friend-modal-header, .upm-body, .friend-modal-body {
-                padding: 1rem;
-            }
-        }
+      }
     </style>
-  
-  <!-- Firebase SDKs -->
+
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
-  
-  
-  
-</head>
-<body>
-
+  </head>
+  <body>
     <!-- Initial Page Load Spinner -->
     <div id="page-loader">
-        <div class="spinner"></div>
+      <div class="spinner"></div>
     </div>
 
     <!-- Primary Header -->
     <header class="main-header">
-        <div class="header-logo">Mommychat.</div>
+      <div class="header-logo">Mommychat.</div>
     </header>
 
     <!-- Secondary Toolbar -->
     <div class="toolbar">
-        <div class="toolbar-group">
-            <button class="toolbar-btn" id="sidebar-toggle">
-                <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
-                    <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
-                </svg>
-            </button>
-        </div>
-        
-        <div class="toolbar-group">
-            <button class="toolbar-btn" id="search-toggle">
-                <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor">
-                    <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-                </svg>
-            </button>
-        </div>
+      <div class="toolbar-group">
+        <button class="toolbar-btn" id="sidebar-toggle">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+            <path
+              d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"
+            />
+          </svg>
+        </button>
+      </div>
 
-        <div class="toolbar-group">
-            <div class="token-balance" id="wallet-toggle">
-                <img src="Mtoken.PNG" class="token-icon" alt="Token"> 150
-            </div>
-            <div class="profile-menu" id="profile-toggle">
-                M
-            </div>
+      <div class="toolbar-group">
+        <button class="toolbar-btn" id="search-toggle">
+          <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor">
+            <path
+              d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+            />
+          </svg>
+        </button>
+      </div>
+
+      <div class="toolbar-group">
+        <div class="token-balance" id="wallet-toggle">
+          <img src="Mtoken.PNG" class="token-icon" alt="Token" /> 0
         </div>
+        <div class="profile-menu" id="profile-toggle">M</div>
+      </div>
     </div>
 
     <!-- Search Dropdown Modal -->
     <div class="dropdown-modal" id="search-modal">
-        <h3 style="margin-bottom: 1rem; color: var(--dark-pink); text-align: center;">Discover Topics</h3>
-        <div class="tile-grid">
-            <div class="tile">Toddlers</div>
-            <div class="tile">Special Needs</div>
-            <div class="tile">Local Moms</div>
-            <div class="tile">Teens</div>
-        </div>
+      <h3
+        style="margin-bottom: 1rem; color: var(--dark-pink); text-align: center"
+      >
+        Discover Topics
+      </h3>
+      <div class="tile-grid">
+        <div class="tile">Toddlers</div>
+        <div class="tile">Special Needs</div>
+        <div class="tile">Local Moms</div>
+        <div class="tile">Teens</div>
+      </div>
     </div>
 
     <!-- Wallet & Checkout Dropdown Modal -->
     <div class="dropdown-modal" id="wallet-modal">
-        <div id="wallet-view">
-            <h3 style="margin-bottom: 1rem; color: var(--dark-pink); text-align: center;">Your Wallet</h3>
-            <div style="font-size: 2rem; font-weight: 800; text-align: center; margin-bottom: 0.5rem; color: var(--text-dark); display: flex; justify-content: center; align-items: center; gap: 8px;">
-                <img src="Mtoken.PNG" alt="Token" style="width: 32px; height: 32px;"> 150
-            </div>
-            <p style="text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">Recent: -10 (Direct Message)</p>
-            <button class="btn-modal-action" id="btn-get-tokens">Get More Tokens</button>
+      <div id="wallet-view">
+        <h3
+          style="
+            margin-bottom: 1rem;
+            color: var(--dark-pink);
+            text-align: center;
+          "
+        >
+          Your Wallet
+        </h3>
+        <div
+          style="
+            font-size: 2rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+          "
+        >
+          <img src="Mtoken.PNG" alt="Token" style="width: 32px; height: 32px" />
+          0
         </div>
-        
-        <div id="checkout-view" style="display: none;">
-            <h3 style="margin-bottom: 1rem; color: var(--dark-pink); text-align: center;">Select Package</h3>
-            <div class="tile-grid">
-                <div class="tile token-pkg">
-                    <strong>50 Tokens</strong>
-                    $4.99
-                </div>
-                <div class="tile token-pkg" style="border-color: var(--primary-pink); background: var(--bg-color); box-shadow: inset 0 0 0 1px var(--primary-pink);">
-                    <strong>120 Tokens</strong>
-                    $9.99<br><span style="font-size: 0.75rem; color: var(--primary-pink);">+20 Bonus</span>
-                </div>
-                <div class="tile token-pkg">
-                    <strong>250 Tokens</strong>
-                    $19.99
-                </div>
-            </div>
-            <button class="action-btn" id="btn-back-wallet" style="margin-top: 1rem; justify-content: center; width: 100%;">
-                ← Back to Wallet
-            </button>
+        <p
+          style="
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+          "
+        >
+          Recent: -10 (Direct Message)
+        </p>
+        <button class="btn-modal-action" id="btn-get-tokens">
+          Get More Tokens
+        </button>
+      </div>
+
+      <div id="checkout-view" style="display: none">
+        <h3
+          style="
+            margin-bottom: 1rem;
+            color: var(--dark-pink);
+            text-align: center;
+          "
+        >
+          Select Package
+        </h3>
+        <div class="tile-grid">
+          <div class="tile token-pkg" id="pkg-50">
+            <strong>50 Tokens</strong>
+            $4.99
+          </div>
+          <div
+            class="tile token-pkg"
+            id="pkg-120"
+            style="
+              border-color: var(--primary-pink);
+              background: var(--bg-color);
+              box-shadow: inset 0 0 0 1px var(--primary-pink);
+            "
+          >
+            <strong>120 Tokens</strong>
+            $9.99<br /><span
+              style="font-size: 0.75rem; color: var(--primary-pink)"
+              >+20 Bonus</span
+            >
+          </div>
+          <div class="tile token-pkg" id="pkg-250">
+            <strong>250 Tokens</strong>
+            $19.99
+          </div>
         </div>
+        <button
+          class="action-btn"
+          id="btn-back-wallet"
+          style="margin-top: 1rem; justify-content: center; width: 100%"
+        >
+          ← Back to Wallet
+        </button>
+      </div>
     </div>
 
     <!-- 90x90 User Profile Overlay with Avatar Upload -->
     <div class="user-profile-backdrop" id="user-profile-backdrop"></div>
     <div class="user-profile-modal" id="user-profile-modal">
-        <div class="upm-header">
-            <h2 class="upm-title">Profile Settings</h2>
-            <button class="btn-close-modal" id="close-profile-btn">✕</button>
+      <div class="upm-header">
+        <h2 class="upm-title">Profile Settings</h2>
+        <button class="btn-close-modal" id="close-profile-btn">✕</button>
+      </div>
+      <div class="upm-body">
+        <div class="upm-tabs">
+          <div class="upm-tab active">Household Details</div>
+          <div class="upm-tab">Account</div>
+          <div class="upm-tab">Helper Payouts</div>
         </div>
-        <div class="upm-body">
-            <div class="upm-tabs">
-                <div class="upm-tab active">Household Details</div>
-                <div class="upm-tab">Account</div>
-                <div class="upm-tab">Helper Payouts</div>
-            </div>
-            
-            <!-- Avatar Upload Feature -->
-            <div class="avatar-upload-container">
-                <div class="avatar-edit-wrapper">
-                    <div class="avatar-preview" id="user-avatar-preview">M</div>
-                    <label for="profile-image-upload" class="avatar-edit-badge">+</label>
-                    <input type="file" id="profile-image-upload" class="hidden-file-input" accept="image/*">
-                </div>
-            </div>
-            
-          
-          <div class="upm-form-group">
-                <label>Your Display Name</label>
-                <input type="text" id="upm-display-name" value="">
-            </div>
-            
-            <div class="upm-form-group">
-                <label>Children (Ages & Context)</label>
-                <textarea id="upm-children-context" rows="3"></textarea>
-            </div>
-            
-            <div class="upm-form-group">
-                <label>Special Needs / Private Notes</label>
-                <textarea id="upm-private-notes" rows="3" placeholder="This context is securely shared with Helpers during live calls..."></textarea>
-            </div>
 
-            <button class="btn-modal-action" id="btn-save-profile" style="width: auto; padding: 0.8rem 2.5rem;">Save Changes</button>
-            <br>
-            <button class="btn-modal-action" id="btn-logout" style="width: auto; padding: 0.8rem 2.5rem; background: #e63946; margin-top: 2rem; box-shadow: none;">Log Out</button>
- 
+        <!-- Avatar Upload Feature -->
+        <div class="avatar-upload-container">
+          <div class="avatar-edit-wrapper">
+            <div class="avatar-preview" id="user-avatar-preview">M</div>
+            <label for="profile-image-upload" class="avatar-edit-badge"
+              >+</label
+            >
+            <input
+              type="file"
+              id="profile-image-upload"
+              class="hidden-file-input"
+              accept="image/*"
+            />
+          </div>
         </div>
+
+        <div class="upm-form-group">
+          <label>Your Display Name</label>
+          <input type="text" id="upm-display-name" value="" />
+        </div>
+
+        <div class="upm-form-group">
+          <label>Children (Ages & Context)</label>
+          <textarea id="upm-children-context" rows="3"></textarea>
+        </div>
+
+        <div class="upm-form-group">
+          <label>Special Needs / Private Notes</label>
+          <textarea
+            id="upm-private-notes"
+            rows="3"
+            placeholder="This context is securely shared with Helpers during live calls..."
+          ></textarea>
+        </div>
+
+        <button
+          class="btn-modal-action"
+          id="btn-save-profile"
+          style="width: auto; padding: 0.8rem 2.5rem"
+        >
+          Save Changes
+        </button>
+        <br />
+        <button
+          class="btn-modal-action"
+          id="btn-logout"
+          style="
+            width: auto;
+            padding: 0.8rem 2.5rem;
+            background: #e63946;
+            margin-top: 2rem;
+            box-shadow: none;
+          "
+        >
+          Log Out
+        </button>
+      </div>
     </div>
 
     <!-- Unified 90x90 Friend/Helper Profile Modal -->
     <div class="friend-modal-overlay" id="friend-modal-overlay"></div>
     <div class="friend-modal" id="friend-modal">
-        <!-- Fixed Header -->
-        <div class="friend-modal-header">
-            <div class="fm-header-info">
-                <div class="fm-header-avatar" id="modal-avatar-disp">S</div>
-                <h2 class="fm-header-name" id="modal-name-disp">Sarah Jenkins</h2>
-            </div>
-            <button class="btn-close-modal" id="close-friend-modal-btn">✕</button>
+      <!-- Fixed Header -->
+      <div class="friend-modal-header">
+        <div class="fm-header-info">
+          <div class="fm-header-avatar" id="modal-avatar-disp">S</div>
+          <h2 class="fm-header-name" id="modal-name-disp">Sarah Jenkins</h2>
         </div>
-        
-        <!-- Scrollable Body with Details and Personal Feed -->
-        <div class="friend-modal-body">
-            <div class="modal-details" id="modal-details-disp">Mother of 2 (Ages 3, 5)</div>
-            <div class="modal-bio" id="modal-bio-disp">
-                <strong>Bio & Needs:</strong><br>
-                Navigating the chaos of toddlerhood! My oldest has mild sensory processing needs. Always looking to connect with other moms who understand the overwhelmed days.
-            </div>
-            
-            <div class="personal-feed-title">Recent Posts</div>
-            
-            <!-- Personal Feed Post (TikTok/Instagram style) -->
-            <div class="post-card">
-                <div class="post-header">
-                    <div class="post-avatar" id="personal-feed-avatar">S</div>
-                    <div class="post-author-info">
-                        <div class="post-author" id="personal-feed-name">Sarah Jenkins</div>
-                        <div class="post-time">1 day ago</div>
-                    </div>
-                </div>
-                <div class="post-content">
-                    Found an amazing sensory-friendly park in the west end! The kids played for 2 hours straight without getting overwhelmed. Highly recommend for any moms dealing with SPD.
-                </div>
-                <div class="post-actions">
-                    <button class="action-btn" onclick="toggleHeart(this)">
-                        <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                        <span>32</span>
-                    </button>
-                    <button class="action-btn">
-                        <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
-                        <span>5</span>
-                    </button>
-                </div>
-            </div>
+        <button class="btn-close-modal" id="close-friend-modal-btn">✕</button>
+      </div>
+
+      <!-- Scrollable Body with Details and Personal Feed -->
+      <div class="friend-modal-body">
+        <div class="modal-details" id="modal-details-disp">
+          Mother of 2 (Ages 3, 5)
         </div>
-        
-        <!-- Fixed Footer Actions -->
-        <div class="friend-modal-footer">
-            <button class="btn-modal-action" id="btn-add-friend" style="background: var(--text-dark); color: var(--white);">➕ Add Friend</button>
-            <button class="btn-modal-action">💬 Message (10 <img src="Mtoken.PNG" class="token-icon" alt="Token">)</button>
-            <button class="btn-modal-action">📞 Live Call (60 <img src="Mtoken.PNG" class="token-icon" alt="Token">)</button>
+        <div class="modal-bio" id="modal-bio-disp">
+          <strong>Bio & Needs:</strong><br />
+          Navigating the chaos of toddlerhood! My oldest has mild sensory
+          processing needs. Always looking to connect with other moms who
+          understand the overwhelmed days.
         </div>
+
+        <div class="personal-feed-title">Recent Posts</div>
+
+        <!-- Personal Feed Post (TikTok/Instagram style) -->
+        <div class="post-card">
+          <div class="post-header">
+            <div class="post-avatar" id="personal-feed-avatar">S</div>
+            <div class="post-author-info">
+              <div class="post-author" id="personal-feed-name">
+                Sarah Jenkins
+              </div>
+              <div class="post-time">1 day ago</div>
+            </div>
+          </div>
+          <div class="post-content">
+            Found an amazing sensory-friendly park in the west end! The kids
+            played for 2 hours straight without getting overwhelmed. Highly
+            recommend for any moms dealing with SPD.
+          </div>
+          <div class="post-actions">
+            <button class="action-btn" onclick="toggleHeart(this)">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                />
+              </svg>
+              <span>32</span>
+            </button>
+            <button class="action-btn">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"
+                />
+              </svg>
+              <span>5</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fixed Footer Actions -->
+      <div class="friend-modal-footer">
+        <button
+          class="btn-modal-action"
+          id="btn-add-friend"
+          style="background: var(--text-dark); color: var(--white)"
+        >
+          ➕ Add Friend
+        </button>
+        <button class="btn-modal-action" id="btn-dm-friend">
+          💬 Message (10
+          <img src="Mtoken.PNG" class="token-icon" alt="Token" />)
+        </button>
+        <button class="btn-modal-action" id="btn-call-friend">
+          📞 Live Call (60
+          <img src="Mtoken.PNG" class="token-icon" alt="Token" />)
+        </button>
+      </div>
     </div>
 
     <div class="app-container">
-        <!-- Sidebar -->
-        <aside class="sidebar" id="sidebar">
-            <div class="sidebar-title">FRIENDS</div>
-            
-            <!-- isFriend = true -->
-            <div class="friend-item" onclick="openFriendModal('S', 'Sarah Jenkins', 'Mother of 2 (Ages 3, 5)', 'Navigating the chaos of toddlerhood! My oldest has mild sensory processing needs. Always looking to connect with other moms who understand the overwhelmed days.', true)">
-                <div class="friend-avatar">S</div>
-                <div class="friend-info">
-                    <span class="friend-name">Sarah Jenkins</span>
-                    <span class="friend-status">Online</span>
-                </div>
+      <!-- Sidebar -->
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-title">FRIENDS</div>
+
+        <!-- Dynamic Friends Populated Here -->
+      </aside>
+
+      <!-- Main Feed -->
+      <main class="main-content">
+        <div class="feed-container">
+          <!-- Horizontal Helper Carousel -->
+          <div class="helper-carousel">
+            <!-- Dynamic Helpers Populated Here -->
+          </div>
+
+          <!-- Create Post Box -->
+          <div class="create-post">
+            <textarea
+              id="post-input"
+              placeholder="How are you doing today, Mama? Share what's on your mind..."
+            ></textarea>
+            <div class="create-post-actions">
+              <span
+                style="
+                  color: var(--text-muted);
+                  font-size: 1.2rem;
+                  cursor: pointer;
+                "
+                >📷 📍</span
+              >
+              <button class="btn-post" id="publish-btn">Post</button>
             </div>
+          </div>
 
-            <div class="friend-item" onclick="openFriendModal('E', 'Emily R.', 'Mother of 1 (Age 8)', 'Working full time and trying to keep up. Looking for local playdates and homework tips.', true)">
-                <div class="friend-avatar" style="background: linear-gradient(135deg, #a2d2ff, #bde0fe);">E</div>
-                <div class="friend-info">
-                    <span class="friend-name">Emily R.</span>
-                    <span class="friend-status">2 hrs ago</span>
-                </div>
-            </div>
-
-            <div class="friend-item" onclick="openFriendModal('J', 'Jessica Miller', 'Mother of 3', 'Just moved to the area. I love crafting and baking with my kids. Let\'s chat!', true)">
-                <div class="friend-avatar" style="background: linear-gradient(135deg, #ffd6a5, #fdffb6);">J</div>
-                <div class="friend-info">
-                    <span class="friend-name">Jessica Miller</span>
-                    <span class="friend-status">Online</span>
-                </div>
-            </div>
-        </aside>
-
-        <!-- Main Feed -->
-        <main class="main-content">
-            <div class="feed-container">
-                
-                <!-- Horizontal Helper Carousel -->
-                <div class="helper-carousel">
-                    <!-- isFriend = false (Helpers) -->
-                    <div class="helper-card" onclick="openFriendModal('A', 'Amanda T.', 'Mother of 2 • Certified Doula', 'Passionate about helping new moms navigate postpartum challenges. Let\'s chat!', false)">
-                        <div class="helper-avatar" style="background: linear-gradient(135deg, #ff9a9e, #fecfef);">A</div>
-                        <div class="helper-name">Amanda T.</div>
-                    </div>
-                    <div class="helper-card" onclick="openFriendModal('K', 'Katie W.', 'Mother of 3 • Sleep Specialist', 'I specialize in gentle sleep training and toddler routines. Always here to listen.', false)">
-                        <div class="helper-avatar" style="background: linear-gradient(135deg, #a18cd1, #fbc2eb);">K</div>
-                        <div class="helper-name">Katie W.</div>
-                    </div>
-                    <div class="helper-card" onclick="openFriendModal('R', 'Rachel G.', 'Mother of 1 (Special Needs)', 'Navigating autism and sensory processing. Happy to share resources and support.', false)">
-                        <div class="helper-avatar" style="background: linear-gradient(135deg, #84fab0, #8fd3f4);">R</div>
-                        <div class="helper-name">Rachel G.</div>
-                    </div>
-                    <div class="helper-card" onclick="openFriendModal('L', 'Lauren M.', 'Mother of Twins', 'Twin mom survivalist! If you are feeling overwhelmed, you are not alone.', false)">
-                        <div class="helper-avatar" style="background: linear-gradient(135deg, #fccb90, #d57eeb);">L</div>
-                        <div class="helper-name">Lauren M.</div>
-                    </div>
-                </div>
-
-                <!-- Create Post Box -->
-                <div class="create-post">
-                    <textarea id="post-input" placeholder="How are you doing today, Mama? Share what's on your mind..."></textarea>
-                    <div class="create-post-actions">
-                        <span style="color: var(--text-muted); font-size: 1.2rem; cursor: pointer;">📷 📍</span>
-                        <button class="btn-post" id="publish-btn">Post</button>
-                    </div>
-                </div>
-
-                <!-- Feed Output Container -->
-                <div id="feed-posts">
-                    <!-- Static Mock Post 1 -->
-                    <div class="post-card">
-                        <div class="post-header">
-                            <div class="post-avatar" style="background: linear-gradient(135deg, #ffc8dd, #ffafcc);">H</div>
-                            <div class="post-author-info">
-                                <div class="post-author">Hannah Carter</div>
-                                <div class="post-time">2 hours ago • Mother of 2</div>
-                            </div>
-                        </div>
-                        <div class="post-content">
-                            My 4-year-old just threw the biggest tantrum in the middle of Target. I felt so judged by everyone walking past. Some days it just feels impossible to keep it together. Sending love to anyone else having a rough afternoon. ❤️
-                        </div>
-                        <div class="post-actions">
-                            <button class="action-btn" onclick="toggleHeart(this)">
-                                <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                                <span>24</span>
-                            </button>
-                            <button class="action-btn">
-                                <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
-                                <span>8</span>
-                            </button>
-                            <button class="action-btn premium-action">
-                                💬 Message (10 <img src="Mtoken.PNG" class="token-icon" alt="Token">)
-                            </button>
-                            <button class="action-btn premium-action">
-                                📞 Live Call (60 <img src="Mtoken.PNG" class="token-icon" alt="Token">)
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Static Mock Post 2 -->
-                    <div class="post-card">
-                        <div class="post-header">
-                            <div class="post-avatar" style="background: linear-gradient(135deg, #a2d2ff, #bde0fe);">M</div>
-                            <div class="post-author-info">
-                                <div class="post-author">Megan V.</div>
-                                <div class="post-time">5 hours ago • Mother of 1 (Special Needs)</div>
-                            </div>
-                        </div>
-                        <div class="post-content">
-                            Finally got little Leo down for a nap after 3 hours of trying. Sensory overload days are the hardest for both of us. Anyone have tips for creating a calming corner in a small apartment?
-                        </div>
-                        <div class="post-actions">
-                            <button class="action-btn" onclick="toggleHeart(this)">
-                                <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                                <span>15</span>
-                            </button>
-                            <button class="action-btn">
-                                <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
-                                <span>12</span>
-                            </button>
-                            <button class="action-btn premium-action">
-                                💬 Message (10 <img src="Mtoken.PNG" class="token-icon" alt="Token">)
-                            </button>
-                            <button class="action-btn premium-action">
-                                📞 Live Call (60 <img src="Mtoken.PNG" class="token-icon" alt="Token">)
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </main>
+          <!-- Feed Output Container -->
+          <div id="feed-posts">
+            <!-- Dynamic Posts Populated Here -->
+          </div>
+        </div>
+      </main>
     </div>
 
     <script>
-        // Remove Loader
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.getElementById('page-loader').classList.add('hidden');
-            }, 400);
-        });
+      // Remove Loader
+      window.addEventListener("load", () => {
+        setTimeout(() => {
+          document.getElementById("page-loader").classList.add("hidden");
+        }, 400);
+      });
 
-        // 1. Sidebar Toggle Logic
-        const sidebar = document.getElementById('sidebar');
-        const sidebarToggleBtn = document.getElementById('sidebar-toggle');
+      // 1. Sidebar Toggle Logic
+      const sidebar = document.getElementById("sidebar");
+      const sidebarToggleBtn = document.getElementById("sidebar-toggle");
 
-        sidebarToggleBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            sidebar.classList.toggle('expanded');
-        });
+      sidebarToggleBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        sidebar.classList.toggle("expanded");
+      });
 
-        // 2. Search Dropdown Logic
-        const searchModal = document.getElementById('search-modal');
-        const searchToggleBtn = document.getElementById('search-toggle');
-        
-        searchToggleBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            searchModal.classList.toggle('active');
-            walletModal.classList.remove('active'); // Close wallet if open
-        });
+      // 2. Search Dropdown Logic
+      const searchModal = document.getElementById("search-modal");
+      const searchToggleBtn = document.getElementById("search-toggle");
 
-        // 3. Wallet Dropdown Logic
-        const walletModal = document.getElementById('wallet-modal');
-        const walletToggleBtn = document.getElementById('wallet-toggle');
-        const walletView = document.getElementById('wallet-view');
-        const checkoutView = document.getElementById('checkout-view');
-        const btnGetTokens = document.getElementById('btn-get-tokens');
-        const btnBackWallet = document.getElementById('btn-back-wallet');
+      searchToggleBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        searchModal.classList.toggle("active");
+        walletModal.classList.remove("active"); // Close wallet if open
+      });
 
-        walletToggleBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            walletModal.classList.toggle('active');
-            searchModal.classList.remove('active'); // Close search if open
-            // Reset to default wallet view upon opening
-            walletView.style.display = 'block';
-            checkoutView.style.display = 'none';
-        });
+      // 3. Wallet Dropdown Logic
+      const walletModal = document.getElementById("wallet-modal");
+      const walletToggleBtn = document.getElementById("wallet-toggle");
+      const walletView = document.getElementById("wallet-view");
+      const checkoutView = document.getElementById("checkout-view");
+      const btnGetTokens = document.getElementById("btn-get-tokens");
+      const btnBackWallet = document.getElementById("btn-back-wallet");
 
-        // Transition from Wallet to Checkout
-        btnGetTokens.addEventListener('click', (e) => {
-            e.stopPropagation();
-            walletView.style.display = 'none';
-            checkoutView.style.display = 'block';
-        });
+      walletToggleBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        walletModal.classList.toggle("active");
+        searchModal.classList.remove("active"); // Close search if open
+        // Reset to default wallet view upon opening
+        walletView.style.display = "block";
+        checkoutView.style.display = "none";
+      });
 
-        // Transition Back to Wallet
-        btnBackWallet.addEventListener('click', (e) => {
-            e.stopPropagation();
-            checkoutView.style.display = 'none';
-            walletView.style.display = 'block';
-        });
+      // Transition from Wallet to Checkout
+      btnGetTokens.addEventListener("click", (e) => {
+        e.stopPropagation();
+        walletView.style.display = "none";
+        checkoutView.style.display = "block";
+      });
 
-      
-      
-      
-      
-      
+      // Transition Back to Wallet
+      btnBackWallet.addEventListener("click", (e) => {
+        e.stopPropagation();
+        checkoutView.style.display = "none";
+        walletView.style.display = "block";
+      });
 
+      // 5. 90x90 User Profile Modal Logic
+      const userProfileModal = document.getElementById("user-profile-modal");
+      const userProfileBackdrop = document.getElementById(
+        "user-profile-backdrop"
+      );
+      const profileToggleBtn = document.getElementById("profile-toggle");
+      const closeProfileBtn = document.getElementById("close-profile-btn");
 
-        // 5. 90x90 User Profile Modal Logic
-        const userProfileModal = document.getElementById('user-profile-modal');
-        const userProfileBackdrop = document.getElementById('user-profile-backdrop');
-        const profileToggleBtn = document.getElementById('profile-toggle');
-        const closeProfileBtn = document.getElementById('close-profile-btn');
+      function openUserProfile() {
+        userProfileModal.classList.add("active");
+        userProfileBackdrop.classList.add("active");
+      }
 
-        function openUserProfile() {
-            userProfileModal.classList.add('active');
-            userProfileBackdrop.classList.add('active');
+      function closeUserProfile() {
+        userProfileModal.classList.remove("active");
+        userProfileBackdrop.classList.remove("active");
+      }
+
+      profileToggleBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        openUserProfile();
+      });
+      closeProfileBtn.addEventListener("click", closeUserProfile);
+
+      // 6. Unified Friend/Helper Profile Modal Logic
+      const friendModal = document.getElementById("friend-modal");
+      const friendModalOverlay = document.getElementById(
+        "friend-modal-overlay"
+      );
+      const closeFriendModalBtn = document.getElementById(
+        "close-friend-modal-btn"
+      );
+      const modalAvatar = document.getElementById("modal-avatar-disp");
+      const modalName = document.getElementById("modal-name-disp");
+      const btnAddFriend = document.getElementById("btn-add-friend");
+
+      // Personal Feed elements to sync with opened profile
+      const personalFeedAvatar = document.getElementById(
+        "personal-feed-avatar"
+      );
+      const personalFeedName = document.getElementById("personal-feed-name");
+
+      async function openFriendModal(targetUid) {
+        if (!targetUid) return;
+        try {
+          const doc = await db.collection("users").doc(targetUid).get();
+          if (!doc.exists) return;
+
+          const targetData = doc.data();
+          const initial = targetData.displayName
+            ? targetData.displayName.charAt(0).toUpperCase()
+            : "M";
+          const avatarMarkup = targetData.avatarUrl
+            ? `<img src="${targetData.avatarUrl}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`
+            : initial;
+
+          modalAvatar.innerHTML = avatarMarkup;
+          modalName.innerText = targetData.displayName || "Mama";
+          document.getElementById("modal-details-disp").innerText =
+            targetData.childrenContext || "Community Member";
+
+          const bioText = targetData.privateNotes
+            ? `<strong>Bio & Needs:</strong><br>${escapeHTML(
+                targetData.privateNotes
+              )}`
+            : `<strong>Bio & Needs:</strong><br>Looking to connect!`;
+          document.getElementById("modal-bio-disp").innerHTML = bioText;
+
+          // Sync Personal Feed Author
+          personalFeedAvatar.innerHTML = avatarMarkup;
+          personalFeedName.innerText = targetData.displayName || "Mama";
+
+          // Basic friend check
+          const isFriend =
+            currentUserDoc &&
+            currentUserDoc.friends &&
+            currentUserDoc.friends.includes(targetUid);
+          btnAddFriend.style.display = isFriend ? "none" : "block";
+
+          friendModal.classList.add("active");
+          friendModalOverlay.classList.add("active");
+          sidebar.classList.remove("expanded"); // Auto-close sidebar
+        } catch (err) {
+          console.error("Error fetching user profile:", err);
+        }
+      }
+
+      function closeFriendModal() {
+        friendModal.classList.remove("active");
+        friendModalOverlay.classList.remove("active");
+      }
+
+      closeFriendModalBtn.addEventListener("click", closeFriendModal);
+
+      // 7. Global Outside Click Detection
+      document.addEventListener("click", (event) => {
+        // Close Sidebar if clicked outside
+        if (
+          sidebar.classList.contains("expanded") &&
+          !sidebar.contains(event.target)
+        ) {
+          sidebar.classList.remove("expanded");
         }
 
-        function closeUserProfile() {
-            userProfileModal.classList.remove('active');
-            userProfileBackdrop.classList.remove('active');
+        // Close Dropdowns if clicked outside
+        if (
+          searchModal.classList.contains("active") &&
+          !searchModal.contains(event.target)
+        ) {
+          searchModal.classList.remove("active");
+        }
+        if (
+          walletModal.classList.contains("active") &&
+          !walletModal.contains(event.target)
+        ) {
+          walletModal.classList.remove("active");
         }
 
-        profileToggleBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            openUserProfile();
-        });
-        closeProfileBtn.addEventListener('click', closeUserProfile);
-
-
-        // 6. Unified Friend/Helper Profile Modal Logic
-        const friendModal = document.getElementById('friend-modal');
-        const friendModalOverlay = document.getElementById('friend-modal-overlay');
-        const closeFriendModalBtn = document.getElementById('close-friend-modal-btn');
-        const modalAvatar = document.getElementById('modal-avatar-disp');
-        const modalName = document.getElementById('modal-name-disp');
-        const btnAddFriend = document.getElementById('btn-add-friend');
-        
-        // Personal Feed elements to sync with opened profile
-        const personalFeedAvatar = document.getElementById('personal-feed-avatar');
-        const personalFeedName = document.getElementById('personal-feed-name');
-
-        function openFriendModal(avatarLetter, name, details, bio, isFriend) {
-            modalAvatar.innerText = avatarLetter;
-            modalName.innerText = name;
-            document.getElementById('modal-details-disp').innerText = details;
-            document.getElementById('modal-bio-disp').innerHTML = `<strong>Bio & Needs:</strong><br>${bio}`;
-            
-            // Sync Personal Feed Author
-            personalFeedAvatar.innerText = avatarLetter;
-            personalFeedName.innerText = name;
-
-            // Handle Add Friend Button visibility
-            if (isFriend === true) {
-                btnAddFriend.style.display = 'none';
-            } else {
-                btnAddFriend.style.display = 'block';
-            }
-            
-            friendModal.classList.add('active');
-            friendModalOverlay.classList.add('active');
-            sidebar.classList.remove('expanded'); // Auto-close sidebar
+        // Close Overlays if clicked on the backdrop
+        if (event.target === friendModalOverlay) {
+          closeFriendModal();
         }
-
-        function closeFriendModal() {
-            friendModal.classList.remove('active');
-            friendModalOverlay.classList.remove('active');
+        if (event.target === userProfileBackdrop) {
+          closeUserProfile();
         }
+      });
 
-        closeFriendModalBtn.addEventListener('click', closeFriendModal);
-        
-        // 7. Global Outside Click Detection
-        document.addEventListener('click', (event) => {
-            // Close Sidebar if clicked outside
-            if (sidebar.classList.contains('expanded') && !sidebar.contains(event.target)) {
-                sidebar.classList.remove('expanded');
-            }
-            
-            // Close Dropdowns if clicked outside
-            if (searchModal.classList.contains('active') && !searchModal.contains(event.target)) {
-                searchModal.classList.remove('active');
-            }
-            if (walletModal.classList.contains('active') && !walletModal.contains(event.target)) {
-                walletModal.classList.remove('active');
-            }
+      // Prevent modals from closing when clicking inside them
+      searchModal.addEventListener("click", (e) => e.stopPropagation());
+      walletModal.addEventListener("click", (e) => e.stopPropagation());
+      userProfileModal.addEventListener("click", (e) => e.stopPropagation());
+      friendModal.addEventListener("click", (e) => e.stopPropagation());
 
-            // Close Overlays if clicked on the backdrop
-            if (event.target === friendModalOverlay) {
-                closeFriendModal();
-            }
-            if (event.target === userProfileBackdrop) {
-                closeUserProfile();
-            }
-        });
-
-        // Prevent modals from closing when clicking inside them
-        searchModal.addEventListener('click', e => e.stopPropagation());
-        walletModal.addEventListener('click', e => e.stopPropagation());
-        userProfileModal.addEventListener('click', e => e.stopPropagation());
-        friendModal.addEventListener('click', e => e.stopPropagation());
-
-
-      
       // Firebase Production Backend Wiring
-        const firebaseConfig = {
-            apiKey: "AIzaSyAQLpT8HHjE_wcjo7psPvT0igkew6iMqgw",
-            authDomain: "mommychat-b6e3c.firebaseapp.com",
-            projectId: "mommychat-b6e3c",
-            storageBucket: "mommychat-b6e3c.firebasestorage.app",
-            messagingSenderId: "355234858731",
-            appId: "1:355234858731:web:9d730c1154d10102d6a0ae"
-        };
+      const firebaseConfig = {
+        apiKey: "AIzaSyAQLpT8HHjE_wcjo7psPvT0igkew6iMqgw",
+        authDomain: "mommychat-b6e3c.firebaseapp.com",
+        projectId: "mommychat-b6e3c",
+        storageBucket: "mommychat-b6e3c.firebasestorage.app",
+        messagingSenderId: "355234858731",
+        appId: "1:355234858731:web:9d730c1154d10102d6a0ae",
+      };
 
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
+      if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+      }
+      const auth = firebase.auth();
+      const db = firebase.firestore();
+      const storage = firebase.storage();
+
+      let currentUser = null;
+      let currentUserDoc = null;
+
+      // Session Protection & Real-time Profile Listener
+      auth.onAuthStateChanged((user) => {
+        if (!user) {
+          window.location.href = "home.html";
+          return;
         }
-        const auth = firebase.auth();
-        const db = firebase.firestore();
-        const storage = firebase.storage();
+        currentUser = user;
+        listenToUserProfile(user.uid);
+        listenToLiveFeed();
+        listenToHelpers();
+        listenToFriends();
+      });
 
-        let currentUser = null;
-        let currentUserDoc = null;
+      function listenToUserProfile(uid) {
+        db.collection("users")
+          .doc(uid)
+          .onSnapshot((doc) => {
+            if (!doc.exists) return;
+            currentUserDoc = doc.data();
 
-        // Session Protection & Real-time Profile Listener
-        auth.onAuthStateChanged((user) => {
-            if (!user) {
-                window.location.href = 'home.html';
-                return;
+            // Real-time Token Sync (Toolbar + Modal)
+            const tokens = currentUserDoc.tokens ?? 0;
+            document.getElementById(
+              "wallet-toggle"
+            ).innerHTML = `<img src="Mtoken.PNG" class="token-icon" alt="Token"> ${tokens}`;
+            const walletModalDisp = document.querySelector("#wallet-view div");
+            if (walletModalDisp) {
+              walletModalDisp.innerHTML = `<img src="Mtoken.PNG" alt="Token" style="width: 32px; height: 32px;"> ${tokens}`;
             }
-            currentUser = user;
-            listenToUserProfile(user.uid);
-            listenToLiveFeed();
-        });
 
-        function listenToUserProfile(uid) {
-            db.collection('users').doc(uid).onSnapshot((doc) => {
-                if (!doc.exists) return;
-                currentUserDoc = doc.data();
+            // Avatar & Profile Initial Sync
+            const initial = currentUserDoc.displayName
+              ? currentUserDoc.displayName.charAt(0).toUpperCase()
+              : "M";
+            const profileToggle = document.getElementById("profile-toggle");
+            const userAvatarPreview = document.getElementById(
+              "user-avatar-preview"
+            );
 
-                // Real-time Token Sync (Toolbar + Modal)
-                const tokens = currentUserDoc.tokens ?? 0;
-                document.getElementById('wallet-toggle').innerHTML = `<img src="Mtoken.PNG" class="token-icon" alt="Token"> ${tokens}`;
-                const walletModalDisp = document.querySelector('#wallet-view div');
-                if (walletModalDisp) {
-                    walletModalDisp.innerHTML = `<img src="Mtoken.PNG" alt="Token" style="width: 32px; height: 32px;"> ${tokens}`;
-                }
+            if (currentUserDoc.avatarUrl) {
+              const imgTag = `<img src="${currentUserDoc.avatarUrl}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
+              profileToggle.innerHTML = imgTag;
+              userAvatarPreview.innerHTML = imgTag;
+            } else {
+              profileToggle.innerText = initial;
+              userAvatarPreview.innerText = initial;
+            }
 
-                // Avatar & Profile Initial Sync
-                const initial = currentUserDoc.displayName ? currentUserDoc.displayName.charAt(0).toUpperCase() : 'M';
-                const profileToggle = document.getElementById('profile-toggle');
-                const userAvatarPreview = document.getElementById('user-avatar-preview');
+            // Form Field Sync (Only if not currently editing)
+            const nameInput = document.getElementById("upm-display-name");
+            const childrenInput = document.getElementById(
+              "upm-children-context"
+            );
+            const notesInput = document.getElementById("upm-private-notes");
 
-                if (currentUserDoc.avatarUrl) {
-                    const imgTag = `<img src="${currentUserDoc.avatarUrl}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
-                    profileToggle.innerHTML = imgTag;
-                    userAvatarPreview.innerHTML = imgTag;
-                } else {
-                    profileToggle.innerText = initial;
-                    userAvatarPreview.innerText = initial;
-                }
+            if (nameInput && document.activeElement !== nameInput) {
+              nameInput.value = currentUserDoc.displayName || "";
+            }
+            if (childrenInput && document.activeElement !== childrenInput) {
+              childrenInput.value = currentUserDoc.childrenContext || "";
+            }
+            if (notesInput && document.activeElement !== notesInput) {
+              notesInput.value = currentUserDoc.privateNotes || "";
+            }
+          });
+      }
 
-                // Form Field Sync (Only if not currently editing)
-                const nameInput = document.getElementById('upm-display-name');
-                const childrenInput = document.getElementById('upm-children-context');
-                const notesInput = document.getElementById('upm-private-notes');
+      // Firebase Storage Avatar Upload
+      const profileImageUpload = document.getElementById(
+        "profile-image-upload"
+      );
+      profileImageUpload.addEventListener("change", async (event) => {
+        if (event.target.files && event.target.files[0] && currentUser) {
+          const file = event.target.files[0];
+          const storageRef = storage.ref(
+            `avatars/${currentUser.uid}/profile_${Date.now()}`
+          );
 
-                if (nameInput && document.activeElement !== nameInput) {
-                    nameInput.value = currentUserDoc.displayName || '';
-                }
-                if (childrenInput && document.activeElement !== childrenInput) {
-                    childrenInput.value = currentUserDoc.childrenContext || '';
-                }
-                if (notesInput && document.activeElement !== notesInput) {
-                    notesInput.value = currentUserDoc.privateNotes || '';
-                }
+          try {
+            const snapshot = await storageRef.put(file);
+            const downloadUrl = await snapshot.ref.getDownloadURL();
+            await db.collection("users").doc(currentUser.uid).update({
+              avatarUrl: downloadUrl,
             });
+          } catch (err) {
+            console.error("Storage upload failed:", err);
+          }
         }
+      });
 
-        // Firebase Storage Avatar Upload
-        const profileImageUpload = document.getElementById('profile-image-upload');
-        profileImageUpload.addEventListener('change', async (event) => {
-            if (event.target.files && event.target.files[0] && currentUser) {
-                const file = event.target.files[0];
-                const storageRef = storage.ref(`avatars/${currentUser.uid}/profile_${Date.now()}`);
+      // Save Profile Settings to Firestore
+      document
+        .getElementById("btn-save-profile")
+        .addEventListener("click", async () => {
+          if (!currentUser) return;
+          const updatedName = document
+            .getElementById("upm-display-name")
+            .value.trim();
+          const updatedChildren = document
+            .getElementById("upm-children-context")
+            .value.trim();
+          const updatedNotes = document
+            .getElementById("upm-private-notes")
+            .value.trim();
 
-                try {
-                    const snapshot = await storageRef.put(file);
-                    const downloadUrl = await snapshot.ref.getDownloadURL();
-                    await db.collection('users').doc(currentUser.uid).update({
-                        avatarUrl: downloadUrl
-                    });
-                } catch (err) {
-                    console.error("Storage upload failed:", err);
-                }
-            }
+          try {
+            await db.collection("users").doc(currentUser.uid).update({
+              displayName: updatedName,
+              childrenContext: updatedChildren,
+              privateNotes: updatedNotes,
+            });
+            await currentUser.updateProfile({ displayName: updatedName });
+            closeUserProfile();
+          } catch (err) {
+            console.error("Error updating profile:", err);
+          }
         });
 
-        // Save Profile Settings to Firestore
-        document.getElementById('btn-save-profile').addEventListener('click', async () => {
-            if (!currentUser) return;
-            const updatedName = document.getElementById('upm-display-name').value.trim();
-            const updatedChildren = document.getElementById('upm-children-context').value.trim();
-            const updatedNotes = document.getElementById('upm-private-notes').value.trim();
-
-            try {
-                await db.collection('users').doc(currentUser.uid).update({
-                    displayName: updatedName,
-                    childrenContext: updatedChildren,
-                    privateNotes: updatedNotes
-                });
-                await currentUser.updateProfile({ displayName: updatedName });
-                closeUserProfile();
-            } catch (err) {
-                console.error("Error updating profile:", err);
-            }
+      // Sign Out
+      document
+        .getElementById("btn-logout")
+        .addEventListener("click", async () => {
+          await auth.signOut();
+          window.location.href = "home.html";
         });
 
-        // Sign Out
-        document.getElementById('btn-logout').addEventListener('click', async () => {
-            await auth.signOut();
-            window.location.href = 'home.html';
-        });
+      // Live Real-Time Feed
+      const feedPosts = document.getElementById("feed-posts");
 
-        // Live Real-Time Feed
-        const feedPosts = document.getElementById('feed-posts');
+      function listenToLiveFeed() {
+        db.collection("posts")
+          .orderBy("createdAt", "desc")
+          .limit(50)
+          .onSnapshot((snapshot) => {
+            feedPosts.innerHTML = "";
+            snapshot.forEach((doc) => {
+              const post = doc.data();
+              const postId = doc.id;
+              const isLiked =
+                currentUser &&
+                post.likedBy &&
+                post.likedBy.includes(currentUser.uid);
+              const likesCount = post.likesCount || 0;
+              const timeString = post.createdAt
+                ? formatRelativeTime(post.createdAt.toDate())
+                : "Just now";
 
-        function listenToLiveFeed() {
-            db.collection('posts').orderBy('createdAt', 'desc').limit(50).onSnapshot((snapshot) => {
-                feedPosts.innerHTML = '';
-                snapshot.forEach((doc) => {
-                    const post = doc.data();
-                    const postId = doc.id;
-                    const isLiked = currentUser && post.likedBy && post.likedBy.includes(currentUser.uid);
-                    const likesCount = post.likesCount || 0;
-                    const timeString = post.createdAt ? formatRelativeTime(post.createdAt.toDate()) : 'Just now';
+              const avatarMarkup = post.authorAvatarUrl
+                ? `<img src="${post.authorAvatarUrl}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`
+                : post.authorAvatarLetter || "M";
 
-                    const avatarMarkup = post.authorAvatarUrl 
-                        ? `<img src="${post.authorAvatarUrl}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`
-                        : (post.authorAvatarLetter || 'M');
-
-                    const postElement = `
+              const postElement = `
                         <div class="post-card" data-id="${postId}">
                             <div class="post-header">
                                 <div class="post-avatar">${avatarMarkup}</div>
                                 <div class="post-author-info">
-                                    <div class="post-author">${escapeHTML(post.authorName || 'Mama')}</div>
-                                    <div class="post-time">${timeString} ${post.authorContext ? '• ' + escapeHTML(post.authorContext) : ''}</div>
+                                    <div class="post-author">${escapeHTML(
+                                      post.authorName || "Mama"
+                                    )}</div>
+                                    <div class="post-time">${timeString} ${
+                post.authorContext ? "• " + escapeHTML(post.authorContext) : ""
+              }</div>
                                 </div>
                             </div>
                             <div class="post-content">
                                 ${escapeHTML(post.content)}
                             </div>
                             <div class="post-actions">
-                                <button class="action-btn ${isLiked ? 'liked' : ''}" onclick="togglePostLike('${postId}')">
+                                <button class="action-btn ${
+                                  isLiked ? "liked" : ""
+                                }" onclick="togglePostLike('${postId}')">
                                     <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
                                     <span>${likesCount}</span>
                                 </button>
@@ -1591,107 +1728,252 @@
                                     <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
                                     <span>${post.commentsCount || 0}</span>
                                 </button>
-                                <button class="action-btn premium-action">
+                                
+                                <button class="action-btn premium-action" onclick="initiatePremiumAction(10, 'Message')">
                                     💬 Message (10 <img src="Mtoken.PNG" class="token-icon" alt="Token">)
                                 </button>
-                                <button class="action-btn premium-action">
+                                <button class="action-btn premium-action" onclick="initiatePremiumAction(60, 'Live Call')">
                                     📞 Live Call (60 <img src="Mtoken.PNG" class="token-icon" alt="Token">)
                                 </button>
+                                
+                                
+                                
+            
                             </div>
                         </div>
                     `;
-                    feedPosts.insertAdjacentHTML('beforeend', postElement);
-                });
+              feedPosts.insertAdjacentHTML("beforeend", postElement);
             });
+          });
+      }
+
+      // Create Real-time Post
+      const publishBtn = document.getElementById("publish-btn");
+      const postInput = document.getElementById("post-input");
+
+      publishBtn.addEventListener("click", async () => {
+        const content = postInput.value.trim();
+        if (content === "" || !currentUser) return;
+
+        publishBtn.disabled = true;
+
+        try {
+          await db.collection("posts").add({
+            authorUid: currentUser.uid,
+            authorName:
+              currentUserDoc?.displayName || currentUser.displayName || "Mama",
+            authorAvatarUrl: currentUserDoc?.avatarUrl || "",
+            authorAvatarLetter: currentUserDoc?.displayName
+              ? currentUserDoc.displayName.charAt(0).toUpperCase()
+              : "M",
+            authorContext: currentUserDoc?.childrenContext || "",
+            content: content,
+            likesCount: 0,
+            likedBy: [],
+            commentsCount: 0,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          });
+          postInput.value = "";
+        } catch (err) {
+          console.error("Publishing error:", err);
+        } finally {
+          publishBtn.disabled = false;
         }
+      });
 
-        // Create Real-time Post
-        const publishBtn = document.getElementById('publish-btn');
-        const postInput = document.getElementById('post-input');
+      // Atomic Post Likes via Firestore Transaction
+      async function togglePostLike(postId) {
+        if (!currentUser) return;
+        const postRef = db.collection("posts").doc(postId);
 
-        publishBtn.addEventListener('click', async () => {
-            const content = postInput.value.trim();
-            if (content === '' || !currentUser) return;
+        try {
+          await db.runTransaction(async (transaction) => {
+            const postDoc = await transaction.get(postRef);
+            if (!postDoc.exists) return;
 
-            publishBtn.disabled = true;
+            const data = postDoc.data();
+            const likedBy = data.likedBy || [];
+            const hasLiked = likedBy.includes(currentUser.uid);
 
-            try {
-                await db.collection('posts').add({
-                    authorUid: currentUser.uid,
-                    authorName: currentUserDoc?.displayName || currentUser.displayName || 'Mama',
-                    authorAvatarUrl: currentUserDoc?.avatarUrl || '',
-                    authorAvatarLetter: currentUserDoc?.displayName ? currentUserDoc.displayName.charAt(0).toUpperCase() : 'M',
-                    authorContext: currentUserDoc?.childrenContext || '',
-                    content: content,
-                    likesCount: 0,
-                    likedBy: [],
-                    commentsCount: 0,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                postInput.value = '';
-            } catch (err) {
-                console.error("Publishing error:", err);
-            } finally {
-                publishBtn.disabled = false;
+            if (hasLiked) {
+              transaction.update(postRef, {
+                likedBy: firebase.firestore.FieldValue.arrayRemove(
+                  currentUser.uid
+                ),
+                likesCount: firebase.firestore.FieldValue.increment(-1),
+              });
+            } else {
+              transaction.update(postRef, {
+                likedBy: firebase.firestore.FieldValue.arrayUnion(
+                  currentUser.uid
+                ),
+                likesCount: firebase.firestore.FieldValue.increment(1),
+              });
             }
-        });
+          });
+        } catch (err) {
+          console.error("Like toggle transaction failed:", err);
+        }
+      }
 
-        // Atomic Post Likes via Firestore Transaction
-        async function togglePostLike(postId) {
-            if (!currentUser) return;
-            const postRef = db.collection('posts').doc(postId);
+      // Relative Timestamp Formatter
+      function formatRelativeTime(date) {
+        const diffSeconds = Math.floor((new Date() - date) / 1000);
+        if (diffSeconds < 60) return "Just now";
+        const diffMinutes = Math.floor(diffSeconds / 60);
+        if (diffMinutes < 60) return `${diffMinutes}m ago`;
+        const diffHours = Math.floor(diffMinutes / 60);
+        if (diffHours < 24) return `${diffHours}h ago`;
+        const diffDays = Math.floor(diffHours / 24);
+        return `${diffDays}d ago`;
+      }
 
-            try {
-                await db.runTransaction(async (transaction) => {
-                    const postDoc = await transaction.get(postRef);
-                    if (!postDoc.exists) return;
+      function escapeHTML(str) {
+        return str.replace(
+          /[&<>'"]/g,
+          (tag) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              "'": "&#39;",
+              '"': "&quot;",
+            }[tag])
+        );
+      }
 
-                    const data = postDoc.data();
-                    const likedBy = data.likedBy || [];
-                    const hasLiked = likedBy.includes(currentUser.uid);
+      // Stripe Payment Links Checkout
+      // Update these URLs in the future with your real Stripe Payment Links
+      document.getElementById("pkg-50").addEventListener("click", () => {
+        if (currentUser)
+          window.open(
+            `https://buy.stripe.com/test_50tokens?client_reference_id=${currentUser.uid}`,
+            "_blank"
+          );
+      });
+      document.getElementById("pkg-120").addEventListener("click", () => {
+        if (currentUser)
+          window.open(
+            `https://buy.stripe.com/test_120tokens?client_reference_id=${currentUser.uid}`,
+            "_blank"
+          );
+      });
+      document.getElementById("pkg-250").addEventListener("click", () => {
+        if (currentUser)
+          window.open(
+            `https://buy.stripe.com/test_250tokens?client_reference_id=${currentUser.uid}`,
+            "_blank"
+          );
+      });
 
-                    if (hasLiked) {
-                        transaction.update(postRef, {
-                            likedBy: firebase.firestore.FieldValue.arrayRemove(currentUser.uid),
-                            likesCount: firebase.firestore.FieldValue.increment(-1)
-                        });
-                    } else {
-                        transaction.update(postRef, {
-                            likedBy: firebase.firestore.FieldValue.arrayUnion(currentUser.uid),
-                            likesCount: firebase.firestore.FieldValue.increment(1)
-                        });
-                    }
-                });
-            } catch (err) {
-                console.error("Like toggle transaction failed:", err);
+      // Dynamic Helpers Carousel Listener
+      function listenToHelpers() {
+        const carousel = document.querySelector(".helper-carousel");
+        db.collection("users")
+          .where("isHelper", "==", true)
+          .onSnapshot((snapshot) => {
+            carousel.innerHTML = "";
+            snapshot.forEach((doc) => {
+              const helper = doc.data();
+              const initial = helper.displayName
+                ? helper.displayName.charAt(0).toUpperCase()
+                : "H";
+              const avatarMarkup = helper.avatarUrl
+                ? `<img src="${helper.avatarUrl}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`
+                : initial;
+
+              const card = `
+                        <div class="helper-card" onclick="openFriendModal('${
+                          doc.id
+                        }')">
+                            <div class="helper-avatar">${avatarMarkup}</div>
+                            <div class="helper-name">${escapeHTML(
+                              helper.displayName || "Helper"
+                            )}</div>
+                        </div>
+                    `;
+              carousel.insertAdjacentHTML("beforeend", card);
+            });
+          });
+      }
+
+      // Dynamic Friends Sidebar Listener
+      function listenToFriends() {
+        const sidebar = document.getElementById("sidebar");
+        db.collection("users")
+          .where("isHelper", "==", false)
+          .limit(15)
+          .onSnapshot((snapshot) => {
+            sidebar.innerHTML = '<div class="sidebar-title">COMMUNITY</div>';
+            snapshot.forEach((doc) => {
+              if (currentUser && doc.id === currentUser.uid) return; // Hide self
+              const friend = doc.data();
+              const initial = friend.displayName
+                ? friend.displayName.charAt(0).toUpperCase()
+                : "M";
+              const avatarMarkup = friend.avatarUrl
+                ? `<img src="${friend.avatarUrl}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`
+                : initial;
+
+              const item = `
+                        <div class="friend-item" onclick="openFriendModal('${
+                          doc.id
+                        }')">
+                            <div class="friend-avatar">${avatarMarkup}</div>
+                            <div class="friend-info">
+                                <span class="friend-name">${escapeHTML(
+                                  friend.displayName || "Mom"
+                                )}</span>
+                                <span class="friend-status">Online</span>
+                            </div>
+                        </div>
+                    `;
+              sidebar.insertAdjacentHTML("beforeend", item);
+            });
+          });
+      }
+
+      // Atomic Token Deduction Logic
+      async function chargeTokens(amount, description) {
+        if (!currentUser) return false;
+        const userRef = db.collection("users").doc(currentUser.uid);
+        try {
+          return await db.runTransaction(async (transaction) => {
+            const doc = await transaction.get(userRef);
+            if (!doc.exists) throw "User does not exist!";
+            const currentTokens = doc.data().tokens || 0;
+            if (currentTokens >= amount) {
+              transaction.update(userRef, { tokens: currentTokens - amount });
+              return true;
+            } else {
+              return false;
             }
+          });
+        } catch (err) {
+          console.error("Token transaction failed: ", err);
+          return false;
         }
+      }
 
-        // Relative Timestamp Formatter
-        function formatRelativeTime(date) {
-            const diffSeconds = Math.floor((new Date() - date) / 1000);
-            if (diffSeconds < 60) return 'Just now';
-            const diffMinutes = Math.floor(diffSeconds / 60);
-            if (diffMinutes < 60) return `${diffMinutes}m ago`;
-            const diffHours = Math.floor(diffMinutes / 60);
-            if (diffHours < 24) return `${diffHours}h ago`;
-            const diffDays = Math.floor(diffHours / 24);
-            return `${diffDays}d ago`;
+      // Global function for feed post premium buttons
+      window.initiatePremiumAction = async function (amount, type) {
+        const success = await chargeTokens(amount, type);
+        if (success) {
+          alert(`${amount} Tokens deducted for ${type}! Initializing UI...`);
+        } else {
+          alert("Insufficient tokens! Please visit the Wallet to recharge.");
         }
+      };
 
-        function escapeHTML(str) {
-            return str.replace(/[&<>'"]/g, 
-                tag => ({
-                    '&': '&amp;',
-                    '<': '&lt;',
-                    '>': '&gt;',
-                    "'": '&#39;',
-                    '"': '&quot;'
-                }[tag])
-            );
-        }
-      
-
+      // Modal Premium Buttons
+      document
+        .getElementById("btn-dm-friend")
+        .addEventListener("click", () => initiatePremiumAction(10, "Message"));
+      document
+        .getElementById("btn-call-friend")
+        .addEventListener("click", () =>
+          initiatePremiumAction(60, "Live Call")
+        );
     </script>
-</body>
+  </body>
 </html>
