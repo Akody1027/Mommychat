@@ -2042,23 +2042,21 @@
         }
       }
 
-      window.showCustomAlert = function (msg) {
-        document.getElementById("custom-alert-text").innerText = msg;
-        document.getElementById("custom-alert-overlay").classList.add("active");
+      
+      // Custom Alert Setup
+      window.showCustomAlert = function(msg) {
+          document.getElementById('custom-alert-text').innerText = msg;
+          document.getElementById('custom-alert-overlay').classList.add('active');
       };
 
       // Global function for feed post premium buttons
-      window.initiatePremiumAction = async function (amount, type) {
-        const success = await chargeTokens(amount, type);
-        if (success) {
-          showCustomAlert(
-            `${amount} Tokens deducted for ${type}! Initializing UI...`
-          );
-        } else {
-          showCustomAlert(
-            "Insufficient tokens! Please visit the Wallet to recharge."
-          );
-        }
+      window.initiatePremiumAction = async function(amount, type) {
+          const success = await chargeTokens(amount, type);
+          if (success) {
+              showCustomAlert(`${amount} Tokens deducted for ${type}! Initializing UI...`);
+          } else {
+              showCustomAlert("Insufficient tokens! Please visit the Wallet to recharge.");
+          }
       };
 
       // Modal Premium Buttons
@@ -2070,6 +2068,11 @@
         .addEventListener("click", () =>
           initiatePremiumAction(60, "Live Call")
         );
+      
+      
+
+      
+      
     </script>
   </body>
 </html>
