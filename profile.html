@@ -12,11 +12,11 @@
       :root {
         --bg-color: #fff5f7;
         --primary-pink: #ff8fa3;
-        --light-pink: #ffb3c1;
-        --dark-pink: #c9184a; 
+        --light-pink: #ffb3c1; 
+        --dark-pink: #c9184a;
         --text-dark: #590d22;
         --text-light: #800f2f;
-        --text-muted: #a47381; 
+        --text-muted: #a47381;
         --white: #ffffff;
         --glass-bg: rgba(255, 255, 255, 0.85);
         --border-color: #f8cdda;
@@ -1674,17 +1674,13 @@
           });
       }
 
-      // Firebase Storage Avatar Upload
-      const profileImageUpload = document.getElementById(
-        "profile-image-upload"
-      );
-
       let pendingAvatarFile = null;
 
       // Firebase Storage Avatar Upload - Local Preview
       const profileImageUpload = document.getElementById(
         "profile-image-upload"
       );
+
       profileImageUpload.addEventListener("change", (event) => {
         if (event.target.files && event.target.files[0]) {
           pendingAvatarFile = event.target.files[0];
@@ -2042,21 +2038,24 @@
         }
       }
 
-      
       // Custom Alert Setup
-      window.showCustomAlert = function(msg) {
-          document.getElementById('custom-alert-text').innerText = msg;
-          document.getElementById('custom-alert-overlay').classList.add('active');
+      window.showCustomAlert = function (msg) {
+        document.getElementById("custom-alert-text").innerText = msg;
+        document.getElementById("custom-alert-overlay").classList.add("active");
       };
 
       // Global function for feed post premium buttons
-      window.initiatePremiumAction = async function(amount, type) {
-          const success = await chargeTokens(amount, type);
-          if (success) {
-              showCustomAlert(`${amount} Tokens deducted for ${type}! Initializing UI...`);
-          } else {
-              showCustomAlert("Insufficient tokens! Please visit the Wallet to recharge.");
-          }
+      window.initiatePremiumAction = async function (amount, type) {
+        const success = await chargeTokens(amount, type);
+        if (success) {
+          showCustomAlert(
+            `${amount} Tokens deducted for ${type}! Initializing UI...`
+          );
+        } else {
+          showCustomAlert(
+            "Insufficient tokens! Please visit the Wallet to recharge."
+          );
+        }
       };
 
       // Modal Premium Buttons
@@ -2068,11 +2067,6 @@
         .addEventListener("click", () =>
           initiatePremiumAction(60, "Live Call")
         );
-      
-      
-
-      
-      
     </script>
   </body>
 </html>
