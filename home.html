@@ -217,6 +217,18 @@
             100% { transform: rotate(360deg); }
         }
     </style>
+  
+  
+  <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+  
+  
+  
+  
+  
+  
 </head>
 <body>
 
@@ -370,48 +382,116 @@
             signupPass.addEventListener(evt, validateSignup);
             signupConfirm.addEventListener(evt, validateSignup);
         });
+      
+      
+      
+      // Firebase Initialization
+        const firebaseConfig = {
+            apiKey: "AIzaSyAQLpT8HHjE_wcjo7psPvT0igkew6iMqgw",
+            authDomain: "mommychat-b6e3c.firebaseapp.com",
+            projectId: "mommychat-b6e3c",
+            storageBucket: "mommychat-b6e3c.firebasestorage.app",
+            messagingSenderId: "355234858731",
+            appId: "1:355234858731:web:9d730c1154d10102d6a0ae"
+        };
 
-        // Mock Form Submissions & Loading States
-        document.getElementById('login-form').addEventListener('submit', (e) => {
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // Redirect active sessions immediately
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                window.location.href = 'profile.html';
+            }
+        });
+
+        function displayAuthError(containerId, message) {
+            let errEl = document.getElementById(containerId);
+            if (!errEl) {
+                errEl = document.createElement('div');
+                errEl.id = containerId;
+                errEl.style.color = 'var(--dark-pink)';
+                errEl.style.fontSize = '0.85rem';
+                errEl.style.fontWeight = '700';
+                errEl.style.marginBottom = '1rem';
+                errEl.style.textAlign = 'center';
+            }
+            errEl.textContent = message;
+            return errEl;
+        }
+
+        // Production Sign In
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
-            // Show Spinner
+            const email = loginEmail.value.trim();
+            const password = loginPass.value;
+
             loginBtn.disabled = true;
             document.querySelector('#login-btn .btn-text').style.display = 'none';
             document.getElementById('login-spinner').style.display = 'block';
 
-            // Mock Network Request (2 seconds) then route
-            setTimeout(() => {
+            const existingErr = document.getElementById('login-error-msg');
+            if (existingErr) existingErr.remove();
+
+            try {
+                await auth.signInWithEmailAndPassword(email, password);
                 window.location.href = 'profile.html';
-            }, 2000);
+            } catch (error) {
+                const errNode = displayAuthError('login-error-msg', error.message);
+                loginBtn.parentNode.insertBefore(errNode, loginBtn);
+                loginBtn.disabled = false;
+                document.querySelector('#login-btn .btn-text').style.display = 'block';
+                document.getElementById('login-spinner').style.display = 'none';
+            }
         });
 
-        document.getElementById('signup-form').addEventListener('submit', (e) => {
+        // Production Sign Up with Firestore User Document Provisioning
+        document.getElementById('signup-form').addEventListener('submit', async (e) => {
             e.preventDefault();
+            const name = signupName.value.trim();
+            const email = signupEmail.value.trim();
+            const password = signupPass.value;
 
-            // Show Spinner
             signupBtn.disabled = true;
             document.querySelector('#signup-btn .btn-text').style.display = 'none';
             document.getElementById('signup-spinner').style.display = 'block';
 
-            // Mock Network Request pushing to DB, reset and slide to login
-            setTimeout(() => {
-                // Reset Button state
+            const existingErr = document.getElementById('signup-error-msg');
+            if (existingErr) existingErr.remove();
+
+            try {
+                const cred = await auth.createUserWithEmailAndPassword(email, password);
+                const user = cred.user;
+
+                await user.updateProfile({ displayName: name });
+
+                await db.collection('users').doc(user.uid).set({
+                    uid: user.uid,
+                    displayName: name,
+                    email: email,
+                    avatarUrl: '',
+                    avatarLetter: name.charAt(0).toUpperCase() || 'M',
+                    tokens: 150,
+                    childrenContext: 'Mother of 2 (Ages 3, 5). Navigating the chaos of toddlerhood!',
+                    privateNotes: '',
+                    isHelper: false,
+                    friends: [],
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                window.location.href = 'profile.html';
+            } catch (error) {
+                const errNode = displayAuthError('signup-error-msg', error.message);
+                signupBtn.parentNode.insertBefore(errNode, signupBtn);
+                signupBtn.disabled = false;
                 document.querySelector('#signup-btn .btn-text').style.display = 'block';
                 document.getElementById('signup-spinner').style.display = 'none';
-                
-                // Clear form and re-validate
-                document.getElementById('signup-form').reset();
-                validateSignup();
-
-                // Transfer email to login for convenience
-                loginEmail.value = signupEmail.value;
-                validateLogin();
-
-                // Slide back to login
-                slideTo('login');
-            }, 2000);
+            }
         });
+
     </script>
 </body>
 </html>
