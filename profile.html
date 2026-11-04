@@ -988,6 +988,50 @@
           padding: 1rem;
         }
       }
+
+      /* Custom Alert System */
+      .custom-alert-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(89, 13, 34, 0.4);
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        z-index: 9999;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .custom-alert-overlay.active {
+        opacity: 1;
+        visibility: visible;
+      }
+      .custom-alert-box {
+        background: var(--white);
+        border-radius: 20px;
+        padding: 2rem;
+        width: 90%;
+        max-width: 320px;
+        text-align: center;
+        box-shadow: 0 15px 35px rgba(255, 143, 163, 0.3);
+        border: 1px solid var(--border-color);
+        transform: scale(0.9);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .custom-alert-overlay.active .custom-alert-box {
+        transform: scale(1);
+      }
+      .custom-alert-text {
+        font-size: 1.1rem;
+        color: var(--text-dark);
+        margin-bottom: 1.5rem;
+        font-weight: 800;
+      }
     </style>
 
     <!-- Firebase SDKs -->
@@ -1299,6 +1343,19 @@
     <div class="app-container">
       <!-- Sidebar -->
       <aside class="sidebar" id="sidebar">
+        <!-- Custom Alert Modal -->
+        <div class="custom-alert-overlay" id="custom-alert-overlay">
+          <div class="custom-alert-box">
+            <div class="custom-alert-text" id="custom-alert-text">Message</div>
+            <button
+              class="btn-modal-action"
+              onclick="document.getElementById('custom-alert-overlay').classList.remove('active')"
+            >
+              Okay
+            </button>
+          </div>
+        </div>
+
         <div class="sidebar-title">FRIENDS</div>
 
         <!-- Dynamic Friends Populated Here -->
@@ -1621,52 +1678,70 @@
       const profileImageUpload = document.getElementById(
         "profile-image-upload"
       );
-      profileImageUpload.addEventListener("change", async (event) => {
-        if (event.target.files && event.target.files[0] && currentUser) {
-          const file = event.target.files[0];
-          const storageRef = storage.ref(
-            `avatars/${currentUser.uid}/profile_${Date.now()}`
-          );
 
-          try {
-            const snapshot = await storageRef.put(file);
-            const downloadUrl = await snapshot.ref.getDownloadURL();
-            await db.collection("users").doc(currentUser.uid).update({
-              avatarUrl: downloadUrl,
-            });
-          } catch (err) {
-            console.error("Storage upload failed:", err);
-          }
-        }
-      });
 
-      // Save Profile Settings to Firestore
-      document
-        .getElementById("btn-save-profile")
-        .addEventListener("click", async () => {
-          if (!currentUser) return;
-          const updatedName = document
-            .getElementById("upm-display-name")
-            .value.trim();
-          const updatedChildren = document
-            .getElementById("upm-children-context")
-            .value.trim();
-          const updatedNotes = document
-            .getElementById("upm-private-notes")
-            .value.trim();
 
-          try {
-            await db.collection("users").doc(currentUser.uid).update({
-              displayName: updatedName,
-              childrenContext: updatedChildren,
-              privateNotes: updatedNotes,
-            });
-            await currentUser.updateProfile({ displayName: updatedName });
-            closeUserProfile();
-          } catch (err) {
-            console.error("Error updating profile:", err);
-          }
+
+      let pendingAvatarFile = null;
+
+        // Firebase Storage Avatar Upload - Local Preview
+        const profileImageUpload = document.getElementById('profile-image-upload');
+        profileImageUpload.addEventListener('change', (event) => {
+            if (event.target.files && event.target.files[0]) {
+                pendingAvatarFile = event.target.files[0];
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('user-avatar-preview').innerHTML = `<img src="${e.target.result}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
+                }
+                reader.readAsDataURL(pendingAvatarFile);
+            }
         });
+
+        // Save Profile Settings to Firestore (Including Avatar Payload)
+        document.getElementById('btn-save-profile').addEventListener('click', async () => {
+            if (!currentUser) return;
+
+            const btn = document.getElementById('btn-save-profile');
+            const originalText = btn.innerText;
+            btn.innerText = "Saving...";
+            btn.disabled = true;
+
+            const updatedName = document.getElementById('upm-display-name').value.trim();
+            const updatedChildren = document.getElementById('upm-children-context').value.trim();
+            const updatedNotes = document.getElementById('upm-private-notes').value.trim();
+
+            let downloadUrl = currentUserDoc?.avatarUrl || '';
+
+            try {
+                // Upload to Firebase Storage ONLY if a new image was selected
+                if (pendingAvatarFile) {
+                    const storageRef = storage.ref(`avatars/${currentUser.uid}/profile_${Date.now()}`);
+                    const snapshot = await storageRef.put(pendingAvatarFile);
+                    downloadUrl = await snapshot.ref.getDownloadURL();
+                    pendingAvatarFile = null; // Clear pending state
+                }
+
+                await db.collection('users').doc(currentUser.uid).update({
+                    displayName: updatedName,
+                    childrenContext: updatedChildren,
+                    privateNotes: updatedNotes,
+                    avatarUrl: downloadUrl
+                });
+
+                await currentUser.updateProfile({ displayName: updatedName, photoURL: downloadUrl || currentUser.photoURL });
+
+                closeUserProfile();
+                showCustomAlert("Profile updated successfully!");
+            } catch (err) {
+                console.error("Error updating profile:", err);
+                showCustomAlert("Failed to save profile. Please try again.");
+            } finally {
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+        });
+
+
 
       // Sign Out
       document
@@ -1728,17 +1803,17 @@
                                     <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
                                     <span>${post.commentsCount || 0}</span>
                                 </button>
-                                
+
                                 <button class="action-btn premium-action" onclick="initiatePremiumAction(10, 'Message')">
                                     💬 Message (10 <img src="Mtoken.PNG" class="token-icon" alt="Token">)
                                 </button>
                                 <button class="action-btn premium-action" onclick="initiatePremiumAction(60, 'Live Call')">
                                     📞 Live Call (60 <img src="Mtoken.PNG" class="token-icon" alt="Token">)
                                 </button>
-                                
-                                
-                                
-            
+
+
+
+
                             </div>
                         </div>
                     `;
@@ -1957,13 +2032,27 @@
 
       // Global function for feed post premium buttons
       window.initiatePremiumAction = async function (amount, type) {
-        const success = await chargeTokens(amount, type);
-        if (success) {
-          alert(`${amount} Tokens deducted for ${type}! Initializing UI...`);
-        } else {
-          alert("Insufficient tokens! Please visit the Wallet to recharge.");
-        }
-      };
+
+        window.showCustomAlert = function(msg) {
+            document.getElementById('custom-alert-text').innerText = msg;
+            document.getElementById('custom-alert-overlay').classList.add('active');
+        };
+
+        // Global function for feed post premium buttons
+        window.initiatePremiumAction = async function(amount, type) {
+            const success = await chargeTokens(amount, type);
+            if (success) {
+                showCustomAlert(`${amount} Tokens deducted for ${type}! Initializing UI...`);
+            } else {
+                showCustomAlert("Insufficient tokens! Please visit the Wallet to recharge.");
+            }
+        };
+
+
+
+
+
+
 
       // Modal Premium Buttons
       document
