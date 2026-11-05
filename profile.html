@@ -1027,6 +1027,37 @@
         opacity: 0.7;
       }
 
+      /* Live Minimap Sidebar Animations (Scroll-Aware) */
+      .friend-item.community-anim {
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        max-height: 0;
+        opacity: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+        margin-bottom: 0;
+        overflow: hidden;
+        transform: translateX(-15px);
+        border-left: 3px solid transparent;
+      }
+      .friend-item.community-anim.visible {
+        max-height: 75px;
+        opacity: 0.5; /* Dimmed state for peripheral authors */
+        padding-top: 10px;
+        padding-bottom: 10px;
+        margin-bottom: 5px;
+        transform: translateX(0);
+      }
+      .friend-item.community-anim.visible.active-author {
+        opacity: 1;
+        border-left: 3px solid var(--dark-pink);
+        background: var(--white);
+        box-shadow: 0 2px 10px rgba(255, 143, 163, 0.1);
+        transform: scale(1.02) translateX(0);
+      }
+      .friend-item.community-anim.visible.active-author .friend-name {
+        color: var(--dark-pink);
+      }
+
       /* Active Sidebar Highlight (Scroll-Aware) */
       .friend-item.active-author {
         border-left: 3px solid var(--dark-pink);
@@ -1959,50 +1990,138 @@
           });
       }
 
-      // Scroll-Aware Discovery Observer
+      // Live Minimap Observer & Scroll Tracker
+      let visiblePosts = new Set();
+      let minimapScrollTimeout;
+
       function setupScrollObserver() {
         if (window.postObserver) window.postObserver.disconnect();
+        visiblePosts.clear();
 
-        // Triggers when a post reaches the middle 20% of the screen
-        const options = {
-          root: null,
-          rootMargin: "-40% 0px -40% 0px",
-          threshold: 0,
-        };
+        // Broad observer watching the full viewport (Top to Bottom)
+        const options = { root: null, rootMargin: "0px", threshold: 0.1 };
         window.postObserver = new IntersectionObserver((entries) => {
+          let changed = false;
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
-              const uid = entry.target.getAttribute("data-author-uid");
-              const name = entry.target.getAttribute("data-author-name");
-              const avatarUrl = entry.target.getAttribute("data-author-avatar");
-              const letter = entry.target.getAttribute("data-author-letter");
-              updateCommunitySidebar(uid, name, avatarUrl, letter);
+              if (!visiblePosts.has(entry.target)) {
+                visiblePosts.add(entry.target);
+                changed = true;
+              }
+            } else {
+              if (visiblePosts.has(entry.target)) {
+                visiblePosts.delete(entry.target);
+                changed = true;
+              }
             }
           });
+          if (changed) updateCommunityMinimap();
         }, options);
 
         document.querySelectorAll(".post-card").forEach((card) => {
           window.postObserver.observe(card);
         });
+
+        // Attach scroll event for continuous center-tracking
+        window.removeEventListener("scroll", handleMinimapScroll);
+        window.addEventListener("scroll", handleMinimapScroll);
       }
 
-      function updateCommunitySidebar(uid, name, avatarUrl, letter) {
+      function handleMinimapScroll() {
+        if (minimapScrollTimeout) cancelAnimationFrame(minimapScrollTimeout);
+        minimapScrollTimeout = requestAnimationFrame(updateCommunityMinimap);
+      }
+
+      function updateCommunityMinimap() {
         const section = document.getElementById("sidebar-community-section");
-        if (!uid || !section) return;
+        if (!section) return;
 
-        const avatarMarkup = avatarUrl
-          ? `<img src="${avatarUrl}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`
-          : letter;
+        const viewportCenter = window.innerHeight / 2;
+        let closestPostUid = null;
+        let closestDistance = Infinity;
+        const desiredAuthors = new Map();
 
-        section.innerHTML = `
-              <div class="friend-item active-author" onclick="openFriendModal('${uid}')">
-                  <div class="friend-avatar">${avatarMarkup}</div>
-                  <div class="friend-info">
-                      <span class="friend-name">${name}</span>
-                      <span class="friend-status">Reading their post...</span>
-                  </div>
+        // 1. Analyze all visible posts on screen
+        visiblePosts.forEach((card) => {
+          const uid = card.getAttribute("data-author-uid");
+
+          // Skip invalid posts and the current user
+          if (!uid || uid === "undefined" || uid === "null") return;
+          if (currentUser && uid === currentUser.uid) return;
+
+          const name = card.getAttribute("data-author-name");
+          const avatarUrl = card.getAttribute("data-author-avatar");
+          const letter = card.getAttribute("data-author-letter");
+
+          // Find which post is physically closest to the exact center of the screen
+          const rect = card.getBoundingClientRect();
+          const postCenter = rect.top + rect.height / 2;
+          const distance = Math.abs(viewportCenter - postCenter);
+
+          if (distance < closestDistance) {
+            closestDistance = distance;
+            closestPostUid = uid;
+          }
+
+          if (!desiredAuthors.has(uid)) {
+            desiredAuthors.set(uid, { name, avatarUrl, letter });
+          }
+        });
+
+        // 2. Remove authors that scrolled out of view (Trigger exit animation)
+        Array.from(section.children).forEach((child) => {
+          const childUid = child.getAttribute("data-uid");
+          if (!desiredAuthors.has(childUid)) {
+            child.classList.remove("visible", "active-author");
+            // Wait for CSS shrink/fade transition to finish before destroying the DOM node
+            setTimeout(() => {
+              if (
+                child.parentNode === section &&
+                !child.classList.contains("visible")
+              ) {
+                child.remove();
+              }
+            }, 400);
+          }
+        });
+
+        // 3. Add new authors and update the centered glow highlight
+        desiredAuthors.forEach((data, uid) => {
+          let el = section.querySelector(`[data-uid="${uid}"]`);
+
+          // Create new profile with height 0 if they just entered the screen
+          if (!el) {
+            const avatarMarkup = data.avatarUrl
+              ? `<img src="${data.avatarUrl}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`
+              : data.letter;
+
+            el = document.createElement("div");
+            el.className = "friend-item community-anim";
+            el.setAttribute("data-uid", uid);
+            el.onclick = () => openFriendModal(uid);
+            el.innerHTML = `
+              <div class="friend-avatar">${avatarMarkup}</div>
+              <div class="friend-info">
+                <span class="friend-name">${escapeHTML(data.name)}</span>
+                <span class="friend-status">In your feed</span>
               </div>
-          `;
+            `;
+            section.appendChild(el);
+
+            // Force browser layout recalculation so the CSS entry transition triggers smoothly
+            void el.offsetWidth;
+          }
+
+          // Apply expanded visible state
+          el.classList.add("visible");
+
+          // Apply highlighted active state if their post is dead-center
+          if (uid === closestPostUid) {
+            el.classList.add("active-author");
+          } else {
+            el.classList.remove("active-author");
+          }
+        });
       }
 
       // Post Options Controls
