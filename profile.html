@@ -1414,10 +1414,11 @@
       </div>
     </div>
 
-    <div class="app-container">
-      <!-- Sidebar -->
-      <aside class="sidebar" id="sidebar">
-        <!-- Custom Alert Modal -->
+    
+    
+    
+    
+            <!-- Custom Alert Modal -->
         <div class="custom-alert-overlay" id="custom-alert-overlay">
           <div class="custom-alert-box">
             <div class="custom-alert-text" id="custom-alert-text">Message</div>
@@ -1429,6 +1430,13 @@
             </button>
           </div>
         </div>
+    
+    
+    
+    <div class="app-container">
+      <!-- Sidebar -->
+
+      <aside class="sidebar" id="sidebar">
 
         <!-- Scroll-Aware Mirror -->
         <div class="sidebar-title">COMMUNITY</div>
@@ -1460,7 +1468,7 @@
                   font-size: 1.2rem;
                   cursor: pointer;
                 "
-                >📷 📍</span
+                >📷 </span
               >
               <button class="btn-post" id="publish-btn">Post</button>
             </div>
@@ -1572,18 +1580,39 @@
       const personalFeedAvatar = document.getElementById(
         "personal-feed-avatar"
       );
+      
+      
+      
       const personalFeedName = document.getElementById("personal-feed-name");
 
       async function openFriendModal(targetUid) {
-        if (!targetUid) return;
+        
+        if (!targetUid || targetUid === 'undefined' || targetUid === 'null') {
+            showCustomAlert("This is an older test post without a valid profile.");
+            return;
+        }
+        
+        // If you click your own name, do nothing.
+        if (currentUser && targetUid === currentUser.uid) {
+            return;
+        }
+
         try {
           const doc = await db.collection("users").doc(targetUid).get();
-          if (!doc.exists) return;
+          if (!doc.exists) {
+              showCustomAlert("User profile could not be found.");
+              return;
+          }
 
           const targetData = doc.data();
           const initial = targetData.displayName
             ? targetData.displayName.charAt(0).toUpperCase()
             : "M";
+        
+
+          
+          
+          
           const avatarMarkup = targetData.avatarUrl
             ? `<img src="${targetData.avatarUrl}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`
             : initial;
