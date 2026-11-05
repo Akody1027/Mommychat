@@ -20,7 +20,7 @@
         --white: #ffffff;
         --glass-bg: rgba(255, 255, 255, 0.85);
         --border-color: #f8cdda;
-      } 
+      }
 
       * {
         margin: 0;
@@ -1414,30 +1414,23 @@
       </div>
     </div>
 
-    
-    
-    
-    
-            <!-- Custom Alert Modal -->
-        <div class="custom-alert-overlay" id="custom-alert-overlay">
-          <div class="custom-alert-box">
-            <div class="custom-alert-text" id="custom-alert-text">Message</div>
-            <button
-              class="btn-modal-action"
-              onclick="document.getElementById('custom-alert-overlay').classList.remove('active')"
-            >
-              Okay
-            </button>
-          </div>
-        </div>
-    
-    
-    
+    <!-- Custom Alert Modal -->
+    <div class="custom-alert-overlay" id="custom-alert-overlay">
+      <div class="custom-alert-box">
+        <div class="custom-alert-text" id="custom-alert-text">Message</div>
+        <button
+          class="btn-modal-action"
+          onclick="document.getElementById('custom-alert-overlay').classList.remove('active')"
+        >
+          Okay
+        </button>
+      </div>
+    </div>
+
     <div class="app-container">
       <!-- Sidebar -->
 
       <aside class="sidebar" id="sidebar">
-
         <!-- Scroll-Aware Mirror -->
         <div class="sidebar-title">COMMUNITY</div>
         <div id="sidebar-community-section"></div>
@@ -1468,8 +1461,8 @@
                   font-size: 1.2rem;
                   cursor: pointer;
                 "
-                >📷 </span
-              >
+                >📷
+              </span>
               <button class="btn-post" id="publish-btn">Post</button>
             </div>
           </div>
@@ -1580,39 +1573,34 @@
       const personalFeedAvatar = document.getElementById(
         "personal-feed-avatar"
       );
-      
-      
-      
+
       const personalFeedName = document.getElementById("personal-feed-name");
 
       async function openFriendModal(targetUid) {
-        
-        if (!targetUid || targetUid === 'undefined' || targetUid === 'null') {
-            showCustomAlert("This is an older test post without a valid profile.");
-            return;
+        if (!targetUid || targetUid === "undefined" || targetUid === "null") {
+          showCustomAlert(
+            "This is an older test post without a valid profile."
+          );
+          return;
         }
-        
+
         // If you click your own name, do nothing.
         if (currentUser && targetUid === currentUser.uid) {
-            return;
+          return;
         }
 
         try {
           const doc = await db.collection("users").doc(targetUid).get();
           if (!doc.exists) {
-              showCustomAlert("User profile could not be found.");
-              return;
+            showCustomAlert("User profile could not be found.");
+            return;
           }
 
           const targetData = doc.data();
           const initial = targetData.displayName
             ? targetData.displayName.charAt(0).toUpperCase()
             : "M";
-        
 
-          
-          
-          
           const avatarMarkup = targetData.avatarUrl
             ? `<img src="${targetData.avatarUrl}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`
             : initial;
@@ -1846,12 +1834,16 @@
               pendingAvatarFile = null; // Clear pending state
             }
 
-            await db.collection("users").doc(currentUser.uid).update({
-              displayName: updatedName,
-              childrenContext: updatedChildren,
-              privateNotes: updatedNotes,
-              avatarUrl: downloadUrl,
-            });
+            // Use set with merge: true to automatically create the document if it doesn't exist
+            await db.collection("users").doc(currentUser.uid).set(
+              {
+                displayName: updatedName,
+                childrenContext: updatedChildren,
+                privateNotes: updatedNotes,
+                avatarUrl: downloadUrl,
+              },
+              { merge: true }
+            );
 
             await currentUser.updateProfile({
               displayName: updatedName,
@@ -1888,7 +1880,7 @@
             feedPosts.innerHTML = "";
             snapshot.forEach((doc) => {
               const post = doc.data();
-              const postId = doc.id; 
+              const postId = doc.id;
               const isLiked =
                 currentUser &&
                 post.likedBy &&
