@@ -1999,7 +1999,8 @@
         visiblePosts.clear();
 
         // Broad observer watching the full viewport (Top to Bottom)
-        const options = { root: null, rootMargin: "0px", threshold: 0.1 };
+// Expanded observer: Keeps authors in the sidebar well before they enter and after they leave
+        const options = { root: null, rootMargin: "800px 0px 800px 0px", threshold: 0 };
         window.postObserver = new IntersectionObserver((entries) => {
           let changed = false;
           entries.forEach((entry) => {
