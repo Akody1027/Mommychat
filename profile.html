@@ -1600,6 +1600,9 @@
       const modalName = document.getElementById("modal-name-disp");
       const btnAddFriend = document.getElementById("btn-add-friend");
 
+      
+      
+      
       // Personal Feed elements to sync with opened profile
       const personalFeedAvatar = document.getElementById(
         "personal-feed-avatar"
@@ -1607,20 +1610,35 @@
 
       const personalFeedName = document.getElementById("personal-feed-name");
 
+      let currentFriendModalUid = null;
+
       async function openFriendModal(targetUid) {
+
+        
+        
+        
+        
         if (!targetUid || targetUid === "undefined" || targetUid === "null") {
           showCustomAlert(
             "This is an older test post without a valid profile."
           );
           return;
         }
+        
+        
+        
 
-        // If you click your own name, do nothing.
+
+          // If you click your own name, do nothing.
         if (currentUser && targetUid === currentUser.uid) {
           return;
         }
 
+        currentFriendModalUid = targetUid;
+
         try {
+          
+          
           const doc = await db.collection("users").doc(targetUid).get();
           if (!doc.exists) {
             showCustomAlert("User profile could not be found.");
@@ -1666,7 +1684,11 @@
           console.error("Error fetching user profile:", err);
         }
       }
-
+      
+      
+      
+      
+      
       function closeFriendModal() {
         friendModal.classList.remove("active");
         friendModalOverlay.classList.remove("active");
@@ -1674,7 +1696,33 @@
 
       closeFriendModalBtn.addEventListener("click", closeFriendModal);
 
+      btnAddFriend.addEventListener("click", async () => {
+        if (!currentUser || !currentFriendModalUid) return;
+
+        const originalText = btnAddFriend.innerText;
+        btnAddFriend.innerText = "Adding...";
+        btnAddFriend.disabled = true;
+
+        try {
+          await db.collection("users").doc(currentUser.uid).update({
+            friends: firebase.firestore.FieldValue.arrayUnion(currentFriendModalUid)
+          });
+          showCustomAlert("Friend added successfully!");
+          btnAddFriend.style.display = "none";
+        } catch (err) {
+          console.error("Error adding friend:", err);
+          showCustomAlert("Failed to add friend. Please try again.");
+        } finally {
+          btnAddFriend.innerText = originalText;
+          btnAddFriend.disabled = false;
+        }
+      });
+
       window.closeAllOptions = function () {
+
+        
+        
+        
         document
           .querySelectorAll(".post-options-menu.active")
           .forEach((menu) => {
@@ -1999,7 +2047,7 @@
         visiblePosts.clear();
 
         // Broad observer watching the full viewport (Top to Bottom)
-// Expanded observer: Keeps authors in the sidebar well before they enter and after they leave
+       // Expanded observer: Keeps authors in the sidebar well before they enter and after they leave
         const options = { root: null, rootMargin: "800px 0px 800px 0px", threshold: 0 };
         window.postObserver = new IntersectionObserver((entries) => {
           let changed = false;
