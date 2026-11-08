@@ -13,7 +13,7 @@
         --bg-color: #fff5f7;
         --primary-pink: #ff8fa3;
         --light-pink: #ffb3c1;
-        --dark-pink: #c9184a; 
+        --dark-pink: #c9184a;
         --text-dark: #590d22;
         --text-light: #800f2f;
         --text-muted: #a47381;
@@ -1683,6 +1683,7 @@
         <button
           class="btn-modal-action"
           id="btn-block-user"
+          onclick="blockCurrentUser()"
           style="
             background: transparent;
             color: #e63946;
@@ -1706,6 +1707,36 @@
         >
           Okay
         </button>
+      </div>
+    </div>
+
+    <!-- Custom Confirm Modal -->
+    <div class="custom-alert-overlay" id="custom-confirm-overlay">
+      <div class="custom-alert-box">
+        <div class="custom-alert-text" id="custom-confirm-text">
+          Are you sure?
+        </div>
+        <div style="display: flex; gap: 10px; margin-top: 1rem">
+          <button
+            class="btn-modal-action"
+            style="
+              background: var(--bg-color);
+              color: var(--text-dark);
+              border: 1px solid var(--border-color);
+              box-shadow: none;
+            "
+            onclick="window.closeCustomConfirm()"
+          >
+            Cancel
+          </button>
+          <button
+            class="btn-modal-action"
+            id="custom-confirm-btn"
+            style="background: #e63946"
+          >
+            Confirm
+          </button>
+        </div>
       </div>
     </div>
 
@@ -2770,6 +2801,32 @@
         document.getElementById("custom-alert-overlay").classList.add("active");
       };
 
+      // Custom Confirm Setup
+      window.showCustomConfirm = function (msg, confirmCallback) {
+        document.getElementById("custom-confirm-text").innerText = msg;
+        const confirmOverlay = document.getElementById(
+          "custom-confirm-overlay"
+        );
+        const confirmBtn = document.getElementById("custom-confirm-btn");
+
+        // Remove old listeners to prevent multiple fires when used on different buttons
+        const newConfirmBtn = confirmBtn.cloneNode(true);
+        confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+
+        newConfirmBtn.addEventListener("click", () => {
+          window.closeCustomConfirm();
+          confirmCallback();
+        });
+
+        confirmOverlay.classList.add("active");
+      };
+
+      window.closeCustomConfirm = function () {
+        document
+          .getElementById("custom-confirm-overlay")
+          .classList.remove("active");
+      };
+
       // Global function for feed post premium buttons
       window.initiatePremiumAction = async function (amount, type) {
         const success = await chargeTokens(amount, type);
@@ -2823,7 +2880,6 @@
           btn.disabled = true;
 
           try {
-            // Auto-approving the Helper application for this iteration
             await db.collection("users").doc(currentUser.uid).update({
               isHelper: true,
               helperSpecialties: specialties,
@@ -2865,21 +2921,20 @@
       document
         .getElementById("btn-delete-account")
         .addEventListener("click", async () => {
-          if (
-            confirm(
-              "Are you absolutely sure? This will permanently delete your Mommychat profile, posts, and remaining tokens. This cannot be undone."
-            )
-          ) {
-            try {
-              await db.collection("users").doc(currentUser.uid).delete();
-              await currentUser.delete();
-              window.location.href = "home.html";
-            } catch (err) {
-              showCustomAlert(
-                "Please log out and log back in to verify your identity before deleting your account."
-              );
+          showCustomConfirm(
+            "Are you absolutely sure? This will permanently delete your Mommychat profile, posts, and remaining tokens. This cannot be undone.",
+            async () => {
+              try {
+                await db.collection("users").doc(currentUser.uid).delete();
+                await currentUser.delete();
+                window.location.href = "home.html";
+              } catch (err) {
+                showCustomAlert(
+                  "Please log out and log back in to verify your identity before deleting your account."
+                );
+              }
             }
-          }
+          );
         });
 
       // Privacy Toggle Auto-Save
@@ -2896,48 +2951,59 @@
           }
         });
 
+      // Block User Logic (Clean & Unnested)
+      window.blockCurrentUser = async function () {
+        if (!currentUser) {
+          showCustomAlert("You must be logged in to block users.");
+          return;
+        }
+        if (!currentFriendModalUid) {
+          showCustomAlert("Error: Could not identify user to block.");
+          return;
+        }
+
+        showCustomConfirm(
+          "Are you sure you want to block this user? You will no longer see their posts or be able to interact.",
+          async () => {
+            const blockBtn = document.getElementById("btn-block-user");
+            blockBtn.innerText = "Blocking...";
+
+            try {
+              await db
+                .collection("users")
+                .doc(currentUser.uid)
+                .update({
+                  blockedUsers: firebase.firestore.FieldValue.arrayUnion(
+                    currentFriendModalUid
+                  ),
+                  friends: firebase.firestore.FieldValue.arrayRemove(
+                    currentFriendModalUid
+                  ),
+                });
+
+              showCustomAlert(
+                "User has been blocked and removed from your feed."
+              );
+              closeFriendModal();
+
+              const feedPostsContainer = document.getElementById("feed-posts");
+              if (feedPostsContainer) {
+                feedPostsContainer.innerHTML =
+                  '<div style="text-align:center; padding: 2rem; color: var(--text-muted);">Refreshing feed...</div>';
+              }
+              setTimeout(listenToLiveFeed, 500);
+            } catch (err) {
+              console.error("Error blocking user:", err);
+              showCustomAlert("Failed to block user. Please try again.");
+            } finally {
+              blockBtn.innerText = "🚫 Block User";
+            }
+          }
+        );
+      };
+
       // Unblock User Logic
       window.unblockUser = async function (blockedUid) {
-        // Block User Logic
-        document
-          .getElementById("btn-block-user")
-          .addEventListener("click", async () => {
-            if (!currentUser || !currentFriendModalUid) return;
-
-            if (
-              confirm(
-                "Are you sure you want to block this user? You will no longer see their posts or be able to interact with them."
-              )
-            ) {
-              try {
-                await db
-                  .collection("users")
-                  .doc(currentUser.uid)
-                  .update({
-                    blockedUsers: firebase.firestore.FieldValue.arrayUnion(
-                      currentFriendModalUid
-                    ),
-                    friends: firebase.firestore.FieldValue.arrayRemove(
-                      currentFriendModalUid
-                    ), // Sever friendship if it exists
-                  });
-
-                showCustomAlert(
-                  "User has been blocked and removed from your feed."
-                );
-                closeFriendModal();
-
-                // Force a quick feed refresh to clear their posts from the screen
-                feedPosts.innerHTML =
-                  '<div style="text-align:center; padding: 2rem; color: var(--text-muted);">Refreshing feed...</div>';
-                setTimeout(listenToLiveFeed, 500);
-              } catch (err) {
-                console.error("Error blocking user:", err);
-                showCustomAlert("Failed to block user. Please try again.");
-              }
-            }
-          });
-
         if (!currentUser) return;
         try {
           await db
