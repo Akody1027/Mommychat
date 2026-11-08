@@ -1951,11 +1951,11 @@
           ➕ Add Friend
         </button>
         <button class="btn-modal-action" id="btn-dm-friend">
-          💬 Message (10
+          Message (10
           <img src="Mtoken.PNG" class="token-icon" alt="Token" />)
         </button>
         <button class="btn-modal-action" id="btn-call-friend">
-          📞 Live Call (60
+          Live Call (60
           <img src="Mtoken.PNG" class="token-icon" alt="Token" />)
         </button>
 
@@ -2277,14 +2277,14 @@
 
           if (targetData.isHelper) {
             btnDm.innerHTML =
-              '💬 Message (10 <img src="Mtoken.PNG" class="token-icon" alt="Token">)';
+              'Message (10 <img src="Mtoken.PNG" class="token-icon" alt="Token">)';
             btnDm.setAttribute(
               "onclick",
               `startDirectMessage('${targetUid}', true)`
             );
             btnCall.style.display = "block";
           } else {
-            btnDm.innerHTML = "💬 Message (Free)";
+            btnDm.innerHTML = "Message (Free)";
             btnDm.setAttribute(
               "onclick",
               `startDirectMessage('${targetUid}', false)`
@@ -2739,7 +2739,7 @@
                                 <button class="action-btn premium-action" onclick="openFriendModal('${
                                   post.authorUid
                                 }')">
-                                    💬 Message
+                                    Message
                                 </button>
                                 
                                 
