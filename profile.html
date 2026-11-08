@@ -13,7 +13,7 @@
         --bg-color: #fff5f7;
         --primary-pink: #ff8fa3;
         --light-pink: #ffb3c1;
-        --dark-pink: #c9184a;
+        --dark-pink: #c9184a; 
         --text-dark: #590d22;
         --text-light: #800f2f;
         --text-muted: #a47381;
@@ -601,6 +601,118 @@
         background: var(--bg-color);
         padding: 0.4rem 0.8rem;
         border-radius: 10px;
+      }
+
+      /* Post Image & Upload Preview */
+      .post-feed-image {
+        width: 100%;
+        border-radius: 15px;
+        margin-bottom: 1.5rem;
+        border: 1px solid var(--border-color);
+        max-height: 400px;
+        object-fit: cover;
+      }
+      .create-post-preview-container {
+        position: relative;
+        display: none;
+        margin-bottom: 1rem;
+      }
+      .create-post-preview-img {
+        width: 100%;
+        max-height: 200px;
+        object-fit: cover;
+        border-radius: 10px;
+        border: 1px solid var(--border-color);
+      }
+      .btn-remove-preview {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(230, 57, 70, 0.9);
+        color: var(--white);
+        border: none;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        font-weight: 800;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      }
+
+      /* Inline Comments Section */
+      .comments-container {
+        border-top: 1px solid var(--bg-color);
+        padding-top: 1rem;
+        margin-top: 1rem;
+        display: none;
+        animation: fadeInTab 0.3s ease;
+      }
+      .comment-row {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 1rem;
+      }
+      .comment-avatar {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        background: var(--light-pink);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--white);
+        font-weight: 800;
+        font-size: 0.9rem;
+        flex-shrink: 0;
+      }
+      .comment-content {
+        background: var(--bg-color);
+        padding: 0.8rem 1rem;
+        border-radius: 15px;
+        border-top-left-radius: 0;
+        flex: 1;
+        font-size: 0.95rem;
+        color: var(--text-dark);
+      }
+      .comment-author {
+        font-weight: 800;
+        font-size: 0.85rem;
+        margin-bottom: 3px;
+        color: var(--dark-pink);
+      }
+      .comment-input-row {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-top: 1rem;
+      }
+      .comment-input-box {
+        flex: 1;
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        padding: 0.6rem 1rem;
+        outline: none;
+        font-family: inherit;
+        color: var(--text-dark);
+      }
+      .comment-input-box:focus {
+        border-color: var(--primary-pink);
+      }
+      .btn-send-comment {
+        background: var(--primary-pink);
+        color: var(--white);
+        border: none;
+        border-radius: 20px;
+        padding: 0.6rem 1rem;
+        font-weight: 800;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .btn-send-comment:hover {
+        background: var(--dark-pink);
       }
 
       /* Global Button Style used inside modals */
@@ -1442,12 +1554,14 @@
           </div>
 
           <div class="upm-form-group">
-            <label>Children (Ages & Context)</label>
+            <label id="label-children-context">Children (Ages & Context)</label>
             <textarea id="upm-children-context" rows="3"></textarea>
           </div>
 
           <div class="upm-form-group">
-            <label>Special Needs / Private Notes</label>
+            <label id="label-private-notes"
+              >Special Needs / Private Notes</label
+            >
             <textarea
               id="upm-private-notes"
               rows="3"
@@ -1767,15 +1881,49 @@
               id="post-input"
               placeholder="How are you doing today, Mama? Share what's on your mind..."
             ></textarea>
+
+            <div
+              class="create-post-preview-container"
+              id="post-preview-container"
+            >
+              <img
+                src=""
+                id="post-image-preview-img"
+                class="create-post-preview-img"
+              />
+              <button class="btn-remove-preview" id="btn-remove-post-image">
+                ✕
+              </button>
+            </div>
             <div class="create-post-actions">
-              <span
+              <label
+                for="post-image-upload"
                 style="
                   color: var(--text-muted);
-                  font-size: 1.2rem;
                   cursor: pointer;
+                  display: flex;
+                  align-items: center;
+                  transition: color 0.2s;
                 "
-                >📷
-              </span>
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  width="28"
+                  height="28"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 11l-3-4-4 5h16l-5-7-4 6z"
+                  />
+                </svg>
+              </label>
+              <input
+                type="file"
+                id="post-image-upload"
+                class="hidden-file-input"
+                accept="image/*"
+              />
+
               <button class="btn-post" id="publish-btn">Post</button>
             </div>
           </div>
@@ -2162,6 +2310,31 @@
               "helper-dashboard-view"
             );
 
+            // Dynamic Profile Labels (DRY Architecture)
+            const labelChildren = document.getElementById(
+              "label-children-context"
+            );
+            const labelNotes = document.getElementById("label-private-notes");
+
+            if (currentUserDoc.isHelper) {
+              if (labelChildren)
+                labelChildren.innerText =
+                  "Specialties (e.g., Sleep Training, Autism)";
+              if (labelNotes)
+                labelNotes.innerText = "Professional Bio & Experience";
+              if (notesInput)
+                notesInput.placeholder =
+                  "Share your background and coaching style with moms looking for support...";
+            } else {
+              if (labelChildren)
+                labelChildren.innerText = "Children (Ages & Context)";
+              if (labelNotes)
+                labelNotes.innerText = "Special Needs / Private Notes";
+              if (notesInput)
+                notesInput.placeholder =
+                  "This context is securely shared with Helpers during live calls...";
+            }
+
             if (currentUserDoc.isHelper) {
               explainerView.style.display = "none";
               dashboardView.style.display = "block";
@@ -2306,6 +2479,9 @@
                 ? `<img src="${post.authorAvatarUrl}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`
                 : post.authorAvatarLetter || "M";
 
+              const imageMarkup = post.postImageUrl
+                ? `<img src="${post.postImageUrl}" class="post-feed-image" alt="Post Image">`
+                : "";
               const isOwner = currentUser && post.authorUid === currentUser.uid;
 
               const postElement = `
@@ -2330,7 +2506,6 @@
                 post.authorContext ? "• " + escapeHTML(post.authorContext) : ""
               }</div>
                                 </div>
-                                
                                 <div class="post-options-container" ${
                                   isOwner ? "" : 'style="display:none;"'
                                 }>
@@ -2341,9 +2516,13 @@
                                     </div>
                                 </div>
                             </div>
+                            
+                            ${imageMarkup}
+                            
                             <div class="post-content" id="content-${postId}">
                                 ${escapeHTML(post.content)}
                             </div>
+                            
                             <div class="post-actions">
                                 <button class="action-btn ${
                                   isLiked ? "liked" : ""
@@ -2351,16 +2530,33 @@
                                     <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
                                     <span>${likesCount}</span>
                                 </button>
-                                <button class="action-btn">
+                                <button class="action-btn" onclick="toggleComments('${postId}')">
                                     <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
                                     <span>${post.commentsCount || 0}</span>
                                 </button>
                                 <button class="action-btn premium-action" onclick="initiatePremiumAction(10, 'Message')">
                                     💬 Message (10 <img src="Mtoken.PNG" class="token-icon" alt="Token">)
                                 </button>
-                                <button class="action-btn premium-action" onclick="initiatePremiumAction(60, 'Live Call')">
-                                    📞 Live Call (60 <img src="Mtoken.PNG" class="token-icon" alt="Token">)
-                                </button>
+                            </div>
+                            
+                            <!-- Hidden Inline Comments Section -->
+                            <div class="comments-container" id="comments-section-${postId}">
+                                <div id="comments-list-${postId}">
+                                    <!-- Populated via JS Snapshot -->
+                                </div>
+                                <div class="comment-input-row">
+                                    <div class="comment-avatar">${
+                                      currentUserDoc?.avatarUrl
+                                        ? `<img src="${currentUserDoc.avatarUrl}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`
+                                        : currentUserDoc?.displayName
+                                        ? currentUserDoc.displayName
+                                            .charAt(0)
+                                            .toUpperCase()
+                                        : "M"
+                                    }</div>
+                                    <input type="text" class="comment-input-box" id="comment-input-${postId}" placeholder="Add a comment, Mama...">
+                                    <button class="btn-send-comment" onclick="submitComment('${postId}')">Reply</button>
+                                </div>
                             </div>
                         </div>
                     `;
@@ -2546,9 +2742,40 @@
       const publishBtn = document.getElementById("publish-btn");
       const postInput = document.getElementById("post-input");
 
+      let pendingPostFile = null;
+      const postImageUpload = document.getElementById("post-image-upload");
+      const postPreviewContainer = document.getElementById(
+        "post-preview-container"
+      );
+      const postImagePreviewImg = document.getElementById(
+        "post-image-preview-img"
+      );
+      const btnRemovePostImage = document.getElementById(
+        "btn-remove-post-image"
+      );
+
+      postImageUpload.addEventListener("change", (e) => {
+        if (e.target.files && e.target.files[0]) {
+          pendingPostFile = e.target.files[0];
+          const reader = new FileReader();
+          reader.onload = (ev) => {
+            postImagePreviewImg.src = ev.target.result;
+            postPreviewContainer.style.display = "block";
+          };
+          reader.readAsDataURL(pendingPostFile);
+        }
+      });
+
+      btnRemovePostImage.addEventListener("click", () => {
+        pendingPostFile = null;
+        postImageUpload.value = "";
+        postPreviewContainer.style.display = "none";
+        postImagePreviewImg.src = "";
+      });
+
       publishBtn.addEventListener("click", async () => {
         const content = postInput.value.trim();
-        if (content === "" || !currentUser) return;
+        if ((content === "" && !pendingPostFile) || !currentUser) return;
 
         publishBtn.disabled = true;
 
@@ -2556,17 +2783,28 @@
         publishBtn.innerText = "Processing...";
 
         try {
+          let downloadUrl = "";
+          if (pendingPostFile) {
+            const storageRef = storage.ref(
+              `posts/${currentUser.uid}/img_${Date.now()}`
+            );
+            const snapshot = await storageRef.put(pendingPostFile);
+            downloadUrl = await snapshot.ref.getDownloadURL();
+          }
+
           if (editingPostId) {
             // Update existing post
-            await db.collection("posts").doc(editingPostId).update({
-              content: content,
-            });
+            const updatePayload = { content: content };
+            if (downloadUrl) updatePayload.postImageUrl = downloadUrl;
+            await db
+              .collection("posts")
+              .doc(editingPostId)
+              .update(updatePayload);
             editingPostId = null;
           } else {
             // Add new post
             await db.collection("posts").add({
               authorUid: currentUser.uid,
-
               authorName:
                 currentUserDoc?.displayName ||
                 currentUser.displayName ||
@@ -2577,14 +2815,20 @@
                 : "M",
               authorContext: currentUserDoc?.childrenContext || "",
               content: content,
+              postImageUrl: downloadUrl, // Store image URL if it exists
               likesCount: 0,
               likedBy: [],
               commentsCount: 0,
-
               createdAt: firebase.firestore.FieldValue.serverTimestamp(),
             });
           }
+
+          // Clear inputs
           postInput.value = "";
+          pendingPostFile = null;
+          postImageUpload.value = "";
+          postPreviewContainer.style.display = "none";
+          postImagePreviewImg.src = "";
         } catch (err) {
         } finally {
           publishBtn.innerText = "Post";
@@ -2629,6 +2873,109 @@
 
       // Relative Timestamp Formatter
       function formatRelativeTime(date) {
+        // Inline Commenting Engine
+        window.activeCommentListeners = {};
+
+        window.toggleComments = function (postId) {
+          const section = document.getElementById(`comments-section-${postId}`);
+          if (section.style.display === "block") {
+            section.style.display = "none";
+            // Unsubscribe from live listener to save bandwidth if closed
+            if (window.activeCommentListeners[postId]) {
+              window.activeCommentListeners[postId]();
+              delete window.activeCommentListeners[postId];
+            }
+          } else {
+            section.style.display = "block";
+
+            // Attach real-time listener to the subcollection
+            const listContainer = document.getElementById(
+              `comments-list-${postId}`
+            );
+            window.activeCommentListeners[postId] = db
+              .collection("posts")
+              .doc(postId)
+              .collection("comments")
+              .orderBy("createdAt", "asc")
+              .onSnapshot((snapshot) => {
+                listContainer.innerHTML = "";
+                if (snapshot.empty) {
+                  listContainer.innerHTML = `<div style="text-align:center; padding: 1rem; color: var(--text-muted); font-size: 0.9rem;">No comments yet. Be the first!</div>`;
+                  return;
+                }
+
+                snapshot.forEach((doc) => {
+                  const comment = doc.data();
+                  const initial = comment.authorName
+                    ? comment.authorName.charAt(0).toUpperCase()
+                    : "M";
+                  const avatarMarkup = comment.authorAvatarUrl
+                    ? `<img src="${comment.authorAvatarUrl}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`
+                    : initial;
+
+                  const commentHTML = `
+                              <div class="comment-row">
+                                  <div class="comment-avatar clickable-profile" onclick="openFriendModal('${
+                                    comment.authorUid
+                                  }')">${avatarMarkup}</div>
+                                  <div class="comment-content">
+                                      <div class="comment-author clickable-profile" onclick="openFriendModal('${
+                                        comment.authorUid
+                                      }')">${escapeHTML(
+                    comment.authorName
+                  )}</div>
+                                      <div>${escapeHTML(comment.content)}</div>
+                                  </div>
+                              </div>
+                          `;
+                  listContainer.insertAdjacentHTML("beforeend", commentHTML);
+                });
+              });
+          }
+        };
+
+        window.submitComment = async function (postId) {
+          if (!currentUser) return;
+          const inputEl = document.getElementById(`comment-input-${postId}`);
+          const content = inputEl.value.trim();
+          if (content === "") return;
+
+          inputEl.value = "Sending...";
+          inputEl.disabled = true;
+
+          try {
+            // 1. Add to subcollection
+            await db
+              .collection("posts")
+              .doc(postId)
+              .collection("comments")
+              .add({
+                authorUid: currentUser.uid,
+                authorName: currentUserDoc?.displayName || "Mama",
+                authorAvatarUrl: currentUserDoc?.avatarUrl || "",
+                content: content,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+              });
+
+            // 2. Increment comment count on main post doc
+            await db
+              .collection("posts")
+              .doc(postId)
+              .update({
+                commentsCount: firebase.firestore.FieldValue.increment(1),
+              });
+
+            inputEl.value = "";
+          } catch (err) {
+            console.error("Error posting comment:", err);
+            showCustomAlert("Failed to post comment.");
+            inputEl.value = content; // Restore text
+          } finally {
+            inputEl.disabled = false;
+            inputEl.focus();
+          }
+        };
+
         const diffSeconds = Math.floor((new Date() - date) / 1000);
         if (diffSeconds < 60) return "Just now";
         const diffMinutes = Math.floor(diffSeconds / 60);
