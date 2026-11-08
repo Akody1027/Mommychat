@@ -11,16 +11,16 @@
     <style>
       :root {
         --bg-color: #fff5f7;
-        --primary-pink: #ff8fa3;
+        --primary-pink: #ff8fa3; 
         --light-pink: #ffb3c1;
-        --dark-pink: #c9184a; 
+        --dark-pink: #c9184a;
         --text-dark: #590d22;
         --text-light: #800f2f;
         --text-muted: #a47381;
         --white: #ffffff;
         --glass-bg: rgba(255, 255, 255, 0.85);
         --border-color: #f8cdda;
-      }
+      } 
 
       * {
         margin: 0;
@@ -1362,6 +1362,14 @@
         opacity: 0.9;
         margin-top: 5px;
       }
+
+      /* Inbox & Chat Styles */
+      .inbox-item:hover {
+        background: var(--bg-color);
+      }
+      .inbox-delete-btn:hover {
+        background: var(--light-pink) !important;
+      }
     </style>
 
     <!-- Firebase SDKs -->
@@ -1404,9 +1412,18 @@
       </div>
 
       <div class="toolbar-group">
+        <button class="toolbar-btn" id="inbox-toggle">
+          <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor">
+            <path
+              d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"
+            />
+          </svg>
+        </button>
+
         <div class="token-balance" id="wallet-toggle">
           <img src="Mtoken.PNG" class="token-icon" alt="Token" /> 0
         </div>
+
         <div class="profile-menu" id="profile-toggle">M</div>
       </div>
     </div>
@@ -1511,6 +1528,154 @@
         >
           ← Back to Wallet
         </button>
+      </div>
+    </div>
+
+    <!-- Inbox Dropdown Modal -->
+    <div
+      class="dropdown-modal"
+      id="inbox-modal"
+      style="width: 350px; right: 1rem; top: 110px; padding: 1rem; z-index: 996"
+    >
+      <h3
+        style="
+          margin-bottom: 1rem;
+          color: var(--dark-pink);
+          text-align: center;
+          border-bottom: 1px solid var(--border-color);
+          padding-bottom: 0.5rem;
+        "
+      >
+        Messages
+      </h3>
+      <div
+        id="inbox-threads-container"
+        style="max-height: 400px; overflow-y: auto"
+      >
+        <div
+          style="
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+          "
+        >
+          No messages yet.
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Chat Modal (90x90) -->
+    <div class="user-profile-modal" id="chat-modal" style="z-index: 2001">
+      <div
+        class="upm-header"
+        style="
+          padding: 1rem 1.5rem;
+          display: flex;
+          align-items: center;
+          gap: 15px;
+        "
+      >
+        <button
+          class="btn-close-modal"
+          onclick="closeChatModal()"
+          style="background: var(--bg-color); color: var(--dark-pink)"
+        >
+          ←
+        </button>
+        <div
+          class="fm-header-avatar"
+          id="chat-header-avatar"
+          style="width: 40px; height: 40px; font-size: 1rem; box-shadow: none"
+        >
+          M
+        </div>
+        <h2
+          class="upm-title"
+          id="chat-header-name"
+          style="font-size: 1.2rem; margin: 0"
+        >
+          Name
+        </h2>
+      </div>
+      <div
+        class="upm-body"
+        id="chat-messages-container"
+        style="
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          padding: 1rem;
+          background: var(--bg-color);
+          overflow-y: auto;
+        "
+      >
+        <!-- Dynamic Messages -->
+      </div>
+      <div
+        style="
+          padding: 1rem;
+          background: var(--white);
+          border-top: 1px solid var(--border-color);
+        "
+      >
+        <div
+          id="chat-image-preview-container"
+          style="display: none; position: relative; margin-bottom: 10px"
+        >
+          <img
+            src=""
+            id="chat-image-preview"
+            style="
+              max-height: 100px;
+              border-radius: 10px;
+              border: 1px solid var(--border-color);
+            "
+          />
+          <button
+            class="btn-remove-preview"
+            onclick="clearChatImagePreview()"
+            style="
+              top: -5px;
+              left: 80px;
+              width: 24px;
+              height: 24px;
+              font-size: 12px;
+            "
+          >
+            ✕
+          </button>
+        </div>
+        <div style="display: flex; gap: 10px; align-items: center">
+          <label
+            for="chat-image-upload"
+            style="color: var(--text-muted); cursor: pointer; flex-shrink: 0"
+          >
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+              <path
+                d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 11l-3-4-4 5h16l-5-7-4 6z"
+              />
+            </svg>
+          </label>
+          <input
+            type="file"
+            id="chat-image-upload"
+            class="hidden-file-input"
+            accept="image/*"
+          />
+          <input
+            type="text"
+            id="chat-input"
+            class="comment-input-box"
+            placeholder="Type a message..."
+          />
+          <button
+            class="btn-send-comment"
+            id="btn-send-chat-msg"
+            onclick="sendChatMessage()"
+          >
+            Send
+          </button>
+        </div>
       </div>
     </div>
 
@@ -1994,6 +2159,18 @@
         walletView.style.display = "block";
       });
 
+      // Inbox Dropdown Logic
+      const inboxModal = document.getElementById("inbox-modal");
+      const inboxToggleBtn = document.getElementById("inbox-toggle");
+
+      inboxToggleBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        inboxModal.classList.toggle("active");
+        walletModal.classList.remove("active");
+        searchModal.classList.remove("active");
+      });
+      inboxModal.addEventListener("click", (e) => e.stopPropagation());
+
       // 5. 90x90 User Profile Modal Logic
       const userProfileModal = document.getElementById("user-profile-modal");
       const userProfileBackdrop = document.getElementById(
@@ -2047,8 +2224,9 @@
           return;
         }
 
-        // If you click your own name, do nothing.
+        // If you click your own name, open your own profile settings instead of the friend modal
         if (currentUser && targetUid === currentUser.uid) {
+          openUserProfile();
           return;
         }
 
@@ -2216,6 +2394,7 @@
         listenToLiveFeed();
         listenToHelpers();
         listenToFriends();
+        listenToInbox();
       });
 
       function listenToUserProfile(uid) {
@@ -2913,66 +3092,157 @@
                     ? `<img src="${comment.authorAvatarUrl}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`
                     : initial;
 
+                  const commentId = doc.id;
+                  const isCommentOwner =
+                    currentUser && comment.authorUid === currentUser.uid;
+
                   const commentHTML = `
                               <div class="comment-row">
                                   <div class="comment-avatar clickable-profile" onclick="openFriendModal('${
                                     comment.authorUid
                                   }')">${avatarMarkup}</div>
                                   <div class="comment-content">
-                                      <div class="comment-author clickable-profile" onclick="openFriendModal('${
-                                        comment.authorUid
-                                      }')">${escapeHTML(
+                                      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 3px;">
+                                          <div class="comment-author clickable-profile" style="margin-bottom: 0;" onclick="openFriendModal('${
+                                            comment.authorUid
+                                          }')">${escapeHTML(
                     comment.authorName
                   )}</div>
-                                      <div>${escapeHTML(comment.content)}</div>
+                                          
+                                          <div class="post-options-container" ${
+                                            isCommentOwner
+                                              ? ""
+                                              : 'style="display:none;"'
+                                          }>
+                                              <button class="post-options-btn" onclick="toggleCommentOptions('${commentId}', event)" style="font-size: 1.2rem; padding: 0;">⋮</button>
+                                              <div class="post-options-menu" id="comment-options-${commentId}">
+                                                  <button onclick="startEditComment('${postId}', '${commentId}')"> Edit</button>
+                                                  <button class="delete-btn" onclick="deleteComment('${postId}', '${commentId}')"> Delete</button>
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <div id="comment-text-${commentId}">${escapeHTML(
+                    comment.content
+                  )}</div>
                                   </div>
                               </div>
                           `;
+
                   listContainer.insertAdjacentHTML("beforeend", commentHTML);
                 });
               });
           }
         };
 
+        window.editingCommentIds = {}; // Map to track if a comment is currently being edited
+
+        window.toggleCommentOptions = function (commentId, event) {
+          event.stopPropagation();
+          closeAllOptions(); // This automatically closes the dropdown if clicked elsewhere
+          document
+            .getElementById("comment-options-" + commentId)
+            .classList.toggle("active");
+        };
+
+        window.startEditComment = function (postId, commentId) {
+          closeAllOptions();
+          const contentDiv = document.getElementById(
+            "comment-text-" + commentId
+          );
+          const rawText = contentDiv.innerText.trim();
+
+          window.editingCommentIds[postId] = commentId;
+
+          // Pull text back into the input box and change button to "Update"
+          const inputEl = document.getElementById(`comment-input-${postId}`);
+          inputEl.value = rawText;
+          inputEl.focus();
+
+          const btn = inputEl.nextElementSibling;
+          btn.innerText = "Update";
+        };
+
+        window.deleteComment = async function (postId, commentId) {
+          closeAllOptions();
+          showCustomConfirm(
+            "Are you sure you want to delete this comment?",
+            async () => {
+              try {
+                await db
+                  .collection("posts")
+                  .doc(postId)
+                  .collection("comments")
+                  .doc(commentId)
+                  .delete();
+                await db
+                  .collection("posts")
+                  .doc(postId)
+                  .update({
+                    commentsCount: firebase.firestore.FieldValue.increment(-1),
+                  });
+              } catch (err) {
+                console.error("Error deleting comment:", err);
+              }
+            }
+          );
+        };
+
         window.submitComment = async function (postId) {
           if (!currentUser) return;
           const inputEl = document.getElementById(`comment-input-${postId}`);
+          const btn = inputEl.nextElementSibling;
           const content = inputEl.value.trim();
           if (content === "") return;
 
           inputEl.value = "Sending...";
           inputEl.disabled = true;
 
-          try {
-            // 1. Add to subcollection
-            await db
-              .collection("posts")
-              .doc(postId)
-              .collection("comments")
-              .add({
-                authorUid: currentUser.uid,
-                authorName: currentUserDoc?.displayName || "Mama",
-                authorAvatarUrl: currentUserDoc?.avatarUrl || "",
-                content: content,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-              });
+          const isEditing = window.editingCommentIds[postId];
 
-            // 2. Increment comment count on main post doc
-            await db
-              .collection("posts")
-              .doc(postId)
-              .update({
-                commentsCount: firebase.firestore.FieldValue.increment(1),
-              });
+          try {
+            if (isEditing) {
+              // Update existing comment in Firestore
+              await db
+                .collection("posts")
+                .doc(postId)
+                .collection("comments")
+                .doc(isEditing)
+                .update({
+                  content: content,
+                });
+              window.editingCommentIds[postId] = null;
+            } else {
+              // Add new comment
+              await db
+                .collection("posts")
+                .doc(postId)
+                .collection("comments")
+                .add({
+                  authorUid: currentUser.uid,
+                  authorName: currentUserDoc?.displayName || "Mama",
+                  authorAvatarUrl: currentUserDoc?.avatarUrl || "",
+                  content: content,
+                  createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                });
+
+              // Increment comment count
+              await db
+                .collection("posts")
+                .doc(postId)
+                .update({
+                  commentsCount: firebase.firestore.FieldValue.increment(1),
+                });
+            }
 
             inputEl.value = "";
+            btn.innerText = "Reply";
           } catch (err) {
             console.error("Error posting comment:", err);
             showCustomAlert("Failed to post comment.");
-            inputEl.value = content; // Restore text
+            inputEl.value = content; // Restore text in case of error
           } finally {
             inputEl.disabled = false;
-            inputEl.focus();
+            if (!window.editingCommentIds[postId]) inputEl.focus();
           }
         };
 
@@ -3192,6 +3462,303 @@
       document
         .getElementById("btn-dm-friend")
         .addEventListener("click", () => initiatePremiumAction(10, "Message"));
+
+      // DIRECT MESSAGING ENGINE
+      let currentActiveChatId = null;
+      let activeChatListener = null;
+
+      // Unlocking & Opening a Chat from Friend Profile
+      document
+        .getElementById("btn-dm-friend")
+        .addEventListener("click", async () => {
+          if (!currentUser || !currentFriendModalUid) return;
+          const chatId = [currentUser.uid, currentFriendModalUid]
+            .sort()
+            .join("_");
+
+          try {
+            const chatDoc = await db.collection("chats").doc(chatId).get();
+            if (chatDoc.exists) {
+              // Chat already unlocked, just open it
+              openChatModal(chatId, currentFriendModalUid);
+              closeFriendModal();
+              return;
+            }
+
+            showCustomConfirm(
+              "This will cost 10 Tokens to open a Direct Message channel. Continue?",
+              async () => {
+                const success = await chargeTokens(10, "Direct Message");
+                if (success) {
+                  await db
+                    .collection("chats")
+                    .doc(chatId)
+                    .set({
+                      participants: [currentUser.uid, currentFriendModalUid],
+                      updatedAt:
+                        firebase.firestore.FieldValue.serverTimestamp(),
+                      lastMessage: "Channel opened",
+                    });
+                  showCustomAlert("10 Tokens deducted! Channel opened.");
+                  openChatModal(chatId, currentFriendModalUid);
+                  closeFriendModal();
+                } else {
+                  showCustomAlert(
+                    "Insufficient tokens! Please visit the Wallet to recharge."
+                  );
+                }
+              }
+            );
+          } catch (err) {
+            console.error(err);
+          }
+        });
+
+      // Populate Inbox with Real-time Threads
+      function listenToInbox() {
+        if (!currentUser) return;
+        db.collection("chats")
+          .where("participants", "array-contains", currentUser.uid)
+          .orderBy("updatedAt", "desc")
+          .onSnapshot(async (snapshot) => {
+            const container = document.getElementById(
+              "inbox-threads-container"
+            );
+            if (snapshot.empty) {
+              container.innerHTML =
+                '<div style="text-align:center; color:var(--text-muted); font-size:0.9rem; padding: 2rem;">No messages yet.</div>';
+              return;
+            }
+
+            let html = "";
+            const threads = [];
+            snapshot.forEach((doc) =>
+              threads.push({ id: doc.id, ...doc.data() })
+            );
+
+            for (const chat of threads) {
+              const otherUid = chat.participants.find(
+                (uid) => uid !== currentUser.uid
+              );
+              if (!otherUid) continue;
+
+              let otherName = "Mama";
+              let avatarMarkup = "M";
+
+              try {
+                const userDoc = await db
+                  .collection("users")
+                  .doc(otherUid)
+                  .get();
+                if (userDoc.exists) {
+                  const uData = userDoc.data();
+                  otherName = uData.displayName || "Mama";
+                  const initial = otherName.charAt(0).toUpperCase();
+                  avatarMarkup = uData.avatarUrl
+                    ? `<img src="${uData.avatarUrl}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`
+                    : initial;
+                }
+              } catch (e) {}
+
+              html += `
+                          <div class="inbox-item" style="display: flex; align-items: center; padding: 12px; border-bottom: 1px solid var(--border-color); cursor: pointer; transition: background 0.2s; border-radius: 10px;">
+                              <div class="friend-avatar" onclick="openChatModal('${
+                                chat.id
+                              }', '${otherUid}')" style="margin-right: 15px; box-shadow: none;">${avatarMarkup}</div>
+                              <div style="flex: 1;" onclick="openChatModal('${
+                                chat.id
+                              }', '${otherUid}')">
+                                  <div style="font-weight: 800; color: var(--text-dark);">${escapeHTML(
+                                    otherName
+                                  )}</div>
+                                  <div style="font-size: 0.85rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px;">${escapeHTML(
+                                    chat.lastMessage || "New chat"
+                                  )}</div>
+                              </div>
+                              <button class="inbox-delete-btn" onclick="deleteChatThread('${
+                                chat.id
+                              }', event)" style="background: none; border: none; color: #e63946; cursor: pointer; padding: 5px; border-radius: 5px; display: flex; align-items: center; justify-content: center;">
+                                  <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                              </button>
+                          </div>
+                      `;
+            }
+            container.innerHTML = html;
+          });
+      }
+
+      // Thread Viewer
+      window.openChatModal = async function (chatId, otherUid) {
+        currentActiveChatId = chatId;
+
+        const doc = await db.collection("users").doc(otherUid).get();
+        if (doc.exists) {
+          const data = doc.data();
+          document.getElementById("chat-header-name").innerText =
+            data.displayName || "Mama";
+          const initial = data.displayName
+            ? data.displayName.charAt(0).toUpperCase()
+            : "M";
+          document.getElementById("chat-header-avatar").innerHTML =
+            data.avatarUrl
+              ? `<img src="${data.avatarUrl}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`
+              : initial;
+        }
+
+        document.getElementById("chat-modal").classList.add("active");
+        document
+          .getElementById("user-profile-backdrop")
+          .classList.add("active");
+        const inboxModal = document.getElementById("inbox-modal");
+        if (inboxModal) inboxModal.classList.remove("active");
+
+        if (activeChatListener) activeChatListener();
+
+        const container = document.getElementById("chat-messages-container");
+        container.innerHTML = `<div style="text-align:center; padding: 2rem; color: var(--text-muted);">Loading...</div>`;
+
+        activeChatListener = db
+          .collection("chats")
+          .doc(chatId)
+          .collection("messages")
+          .orderBy("createdAt", "asc")
+          .onSnapshot((snapshot) => {
+            container.innerHTML = "";
+            snapshot.forEach((doc) => {
+              const msg = doc.data();
+              const isMine = msg.senderId === currentUser.uid;
+              const align = isMine ? "flex-end" : "flex-start";
+              const bg = isMine ? "var(--primary-pink)" : "var(--white)";
+              const color = isMine ? "var(--white)" : "var(--text-dark)";
+              const border = isMine ? "none" : "1px solid var(--border-color)";
+
+              const imgHTML = msg.imageUrl
+                ? `<img src="${msg.imageUrl}" style="max-width: 100%; border-radius: 10px; margin-bottom: 5px;">`
+                : "";
+              const textHTML = msg.text
+                ? `<div>${escapeHTML(msg.text)}</div>`
+                : "";
+
+              container.innerHTML += `
+                          <div style="display: flex; flex-direction: column; align-items: ${align}; margin-bottom: 10px;">
+                              <div style="max-width: 80%; background: ${bg}; color: ${color}; padding: 10px 15px; border-radius: 20px; border: ${border}; box-shadow: 0 2px 5px rgba(255,143,163,0.1); font-size: 0.95rem;">
+                                  ${imgHTML}
+                                  ${textHTML}
+                              </div>
+                          </div>
+                      `;
+            });
+            container.scrollTop = container.scrollHeight;
+          });
+      };
+
+      window.closeChatModal = function () {
+        document.getElementById("chat-modal").classList.remove("active");
+        document
+          .getElementById("user-profile-backdrop")
+          .classList.remove("active");
+        if (activeChatListener) {
+          activeChatListener();
+          activeChatListener = null;
+        }
+        currentActiveChatId = null;
+      };
+
+      // Delete Thread
+      window.deleteChatThread = function (chatId, event) {
+        event.stopPropagation();
+        showCustomConfirm(
+          "Are you sure you want to delete this entire conversation?",
+          async () => {
+            try {
+              await db.collection("chats").doc(chatId).delete();
+            } catch (err) {
+              console.error("Error deleting chat:", err);
+            }
+          }
+        );
+      };
+
+      // Chat Image Uploader
+      let pendingChatFile = null;
+      document
+        .getElementById("chat-image-upload")
+        .addEventListener("change", (e) => {
+          if (e.target.files && e.target.files[0]) {
+            pendingChatFile = e.target.files[0];
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+              document.getElementById("chat-image-preview").src =
+                ev.target.result;
+              document.getElementById(
+                "chat-image-preview-container"
+              ).style.display = "block";
+            };
+            reader.readAsDataURL(pendingChatFile);
+          }
+        });
+
+      window.clearChatImagePreview = function () {
+        pendingChatFile = null;
+        document.getElementById("chat-image-upload").value = "";
+        document.getElementById("chat-image-preview-container").style.display =
+          "none";
+        document.getElementById("chat-image-preview").src = "";
+      };
+
+      // Send Message Pipeline
+      window.sendChatMessage = async function () {
+        if (!currentUser || !currentActiveChatId) return;
+
+        const inputEl = document.getElementById("chat-input");
+        const text = inputEl.value.trim();
+
+        if (text === "" && !pendingChatFile) return;
+
+        const btn = document.getElementById("btn-send-chat-msg");
+        btn.innerText = "Sending...";
+        btn.disabled = true;
+
+        try {
+          let downloadUrl = "";
+          if (pendingChatFile) {
+            const storageRef = storage.ref(
+              `chats/${currentActiveChatId}/${Date.now()}`
+            );
+            const snapshot = await storageRef.put(pendingChatFile);
+            downloadUrl = await snapshot.ref.getDownloadURL();
+          }
+
+          await db
+            .collection("chats")
+            .doc(currentActiveChatId)
+            .collection("messages")
+            .add({
+              senderId: currentUser.uid,
+              text: text,
+              imageUrl: downloadUrl,
+              createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            });
+
+          await db
+            .collection("chats")
+            .doc(currentActiveChatId)
+            .update({
+              lastMessage: text !== "" ? text : "📷 Image",
+              updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            });
+
+          inputEl.value = "";
+          clearChatImagePreview();
+        } catch (err) {
+          console.error("Error sending message:", err);
+          showCustomAlert("Failed to send message.");
+        } finally {
+          btn.innerText = "Send";
+          btn.disabled = false;
+        }
+      };
+
       document
         .getElementById("btn-call-friend")
         .addEventListener("click", () =>
