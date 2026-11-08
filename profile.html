@@ -11,16 +11,16 @@
     <style>
       :root {
         --bg-color: #fff5f7;
-        --primary-pink: #ff8fa3; 
+        --primary-pink: #ff8fa3;
         --light-pink: #ffb3c1;
-        --dark-pink: #c9184a;
+        --dark-pink: #c9184a; 
         --text-dark: #590d22;
         --text-light: #800f2f;
         --text-muted: #a47381;
         --white: #ffffff;
         --glass-bg: rgba(255, 255, 255, 0.85);
         --border-color: #f8cdda;
-      } 
+      }
 
       * {
         margin: 0;
@@ -2271,6 +2271,27 @@
             currentUserDoc.friends.includes(targetUid);
           btnAddFriend.style.display = isFriend ? "none" : "block";
 
+          // Hybrid Economy Logic: Free P2P vs Paid Helper
+          const btnDm = document.getElementById("btn-dm-friend");
+          const btnCall = document.getElementById("btn-call-friend");
+
+          if (targetData.isHelper) {
+            btnDm.innerHTML =
+              '💬 Message (10 <img src="Mtoken.PNG" class="token-icon" alt="Token">)';
+            btnDm.setAttribute(
+              "onclick",
+              `startDirectMessage('${targetUid}', true)`
+            );
+            btnCall.style.display = "block";
+          } else {
+            btnDm.innerHTML = "💬 Message (Free)";
+            btnDm.setAttribute(
+              "onclick",
+              `startDirectMessage('${targetUid}', false)`
+            );
+            btnCall.style.display = "none"; // Hide live calls for standard moms
+          }
+
           friendModal.classList.add("active");
           friendModalOverlay.classList.add("active");
           sidebar.classList.remove("expanded"); // Auto-close sidebar
@@ -2713,9 +2734,16 @@
                                     <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
                                     <span>${post.commentsCount || 0}</span>
                                 </button>
-                                <button class="action-btn premium-action" onclick="initiatePremiumAction(10, 'Message')">
-                                    💬 Message (10 <img src="Mtoken.PNG" class="token-icon" alt="Token">)
+                                
+                                
+                                <button class="action-btn premium-action" onclick="openFriendModal('${
+                                  post.authorUid
+                                }')">
+                                    💬 Message
                                 </button>
+                                
+                                
+                    
                             </div>
                             
                             <!-- Hidden Inline Comments Section -->
@@ -3458,49 +3486,74 @@
         }
       };
 
-      // Modal Premium Buttons
-      document
-        .getElementById("btn-dm-friend")
-        .addEventListener("click", () => initiatePremiumAction(10, "Message"));
-
       // DIRECT MESSAGING ENGINE
       let currentActiveChatId = null;
       let activeChatListener = null;
 
-      // Unlocking & Opening a Chat from Friend Profile
-      document
-        .getElementById("btn-dm-friend")
-        .addEventListener("click", async () => {
-          if (!currentUser || !currentFriendModalUid) return;
-          const chatId = [currentUser.uid, currentFriendModalUid]
-            .sort()
-            .join("_");
+      // 80/20 Revenue Split Transaction
+      window.unlockPremiumChat = async function (chatId, targetUid) {
+        const userRef = db.collection("users").doc(currentUser.uid);
+        const targetRef = db.collection("users").doc(targetUid);
 
-          try {
-            const chatDoc = await db.collection("chats").doc(chatId).get();
-            if (chatDoc.exists) {
-              // Chat already unlocked, just open it
-              openChatModal(chatId, currentFriendModalUid);
-              closeFriendModal();
-              return;
-            }
+        try {
+          return await db.runTransaction(async (transaction) => {
+            const userDoc = await transaction.get(userRef);
+            const targetDoc = await transaction.get(targetRef);
 
+            if (!userDoc.exists || !targetDoc.exists) throw "User not found";
+
+            const currentTokens = userDoc.data().tokens || 0;
+            if (currentTokens < 10) return false; // Insufficient funds
+
+            const targetEarned = targetDoc.data().earnedTokens || 0;
+
+            // Platform takes 20% (2), Helper gets 80% (8)
+            transaction.update(userRef, { tokens: currentTokens - 10 });
+            transaction.update(targetRef, { earnedTokens: targetEarned + 8 });
+
+            // Unlock Channel
+            const chatRef = db.collection("chats").doc(chatId);
+            transaction.set(
+              chatRef,
+              {
+                participants: [currentUser.uid, targetUid],
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                lastMessage: "Channel unlocked",
+              },
+              { merge: true }
+            );
+
+            return true;
+          });
+        } catch (err) {
+          console.error("Premium chat unlock failed:", err);
+          return false;
+        }
+      };
+
+      // Unified Chat Launcher (Free & Premium)
+      window.startDirectMessage = async function (targetUid, isPremium) {
+        if (!currentUser || !targetUid) return;
+        const chatId = [currentUser.uid, targetUid].sort().join("_");
+
+        try {
+          const chatDoc = await db.collection("chats").doc(chatId).get();
+          if (chatDoc.exists) {
+            openChatModal(chatId, targetUid);
+            closeFriendModal();
+            return;
+          }
+
+          if (isPremium === true || isPremium === "true") {
             showCustomConfirm(
-              "This will cost 10 Tokens to open a Direct Message channel. Continue?",
+              "Opening a premium Helper channel costs 10 Tokens. Continue?",
               async () => {
-                const success = await chargeTokens(10, "Direct Message");
+                const success = await unlockPremiumChat(chatId, targetUid);
                 if (success) {
-                  await db
-                    .collection("chats")
-                    .doc(chatId)
-                    .set({
-                      participants: [currentUser.uid, currentFriendModalUid],
-                      updatedAt:
-                        firebase.firestore.FieldValue.serverTimestamp(),
-                      lastMessage: "Channel opened",
-                    });
-                  showCustomAlert("10 Tokens deducted! Channel opened.");
-                  openChatModal(chatId, currentFriendModalUid);
+                  showCustomAlert(
+                    "10 Tokens deducted! 80% sent to Helper. Channel opened."
+                  );
+                  openChatModal(chatId, targetUid);
                   closeFriendModal();
                 } else {
                   showCustomAlert(
@@ -3509,17 +3562,29 @@
                 }
               }
             );
-          } catch (err) {
-            console.error(err);
+          } else {
+            // Free Peer-to-Peer Chat
+            await db
+              .collection("chats")
+              .doc(chatId)
+              .set({
+                participants: [currentUser.uid, targetUid],
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                lastMessage: "Chat started",
+              });
+            openChatModal(chatId, targetUid);
+            closeFriendModal();
           }
-        });
+        } catch (err) {
+          console.error("Error starting chat:", err);
+        }
+      };
 
       // Populate Inbox with Real-time Threads
       function listenToInbox() {
         if (!currentUser) return;
         db.collection("chats")
           .where("participants", "array-contains", currentUser.uid)
-          .orderBy("updatedAt", "desc")
           .onSnapshot(async (snapshot) => {
             const container = document.getElementById(
               "inbox-threads-container"
@@ -3535,6 +3600,19 @@
             snapshot.forEach((doc) =>
               threads.push({ id: doc.id, ...doc.data() })
             );
+
+            // Sort threads in JavaScript to completely bypass Firestore's strict Index requirements
+            threads.sort((a, b) => {
+              const timeA =
+                a.updatedAt && a.updatedAt.toMillis
+                  ? a.updatedAt.toMillis()
+                  : Date.now();
+              const timeB =
+                b.updatedAt && b.updatedAt.toMillis
+                  ? b.updatedAt.toMillis()
+                  : Date.now();
+              return timeB - timeA;
+            });
 
             for (const chat of threads) {
               const otherUid = chat.participants.find(
