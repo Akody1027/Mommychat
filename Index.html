@@ -3,19 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mommychat | A Safe Space for Mothers</title>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>Mommychat | Exclusive Safe Space for Mothers</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-color: #fff5f7;
             --primary-pink: #ff8fa3;
             --light-pink: #ffb3c1;
             --dark-pink: #c9184a;
+            --deep-red: #590d22;
             --text-dark: #590d22;
             --text-light: #800f2f;
             --white: #ffffff;
-            --glass-bg: rgba(255, 255, 255, 0.75);
+            --glass-bg: rgba(255, 255, 255, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.8);
             --transition-smooth: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            --transition-bounce: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         * {
@@ -32,32 +35,103 @@
             scroll-behavior: smooth;
         }
 
-        /* Parallax Background Elements */
+        /* Scroll Progress Bar */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--light-pink), var(--dark-pink));
+            width: 0%;
+            z-index: 2000;
+            transition: width 0.1s;
+        }
+
+        /* Deep Parallax Environment */
         .parallax-bg {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
+            width: 100vw;
             height: 100vh;
             pointer-events: none;
-            z-index: -1;
+            z-index: -2;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, #ffffff 0%, var(--bg-color) 100%);
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.5;
+            animation: float 20s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .orb-1 { width: 40vw; height: 40vw; background: var(--light-pink); top: -10%; left: -10%; animation-delay: 0s; }
+        .orb-2 { width: 50vw; height: 50vw; background: rgba(255, 143, 163, 0.3); bottom: -20%; right: -10%; animation-delay: -5s; }
+        .orb-3 { width: 30vw; height: 30vw; background: var(--white); top: 30%; left: 40%; animation-delay: -10s; filter: blur(40px); }
+
+        /* Floating Hearts / Icons Background */
+        .floating-icons-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: -1; /* Behind content, above deep background */
             overflow: hidden;
         }
 
-        .blob {
+        .bg-icon {
             position: absolute;
-            background: linear-gradient(135deg, var(--light-pink) 0%, var(--bg-color) 100%);
-            border-radius: 50%;
-            filter: blur(40px);
-            opacity: 0.6;
-            transition: transform 0.1s linear;
+            animation: pulseIcon 4s infinite alternate ease-in-out;
+            will-change: transform;
         }
 
-        .blob-1 { top: -10%; left: -10%; width: 500px; height: 500px; }
-        .blob-2 { top: 40%; right: -20%; width: 600px; height: 600px; background: linear-gradient(135deg, var(--white) 0%, var(--primary-pink) 100%); opacity: 0.3; }
-        .blob-3 { bottom: -20%; left: 20%; width: 400px; height: 400px; }
+        @keyframes pulseIcon {
+            0% { transform: scale(1) rotate(-5deg); }
+            100% { transform: scale(1.15) rotate(5deg); }
+        }
 
-        /* Glassmorphism Navigation */
+        /* Floating Foreground Elements (Glass Badges) */
+        .floating-feature {
+            position: absolute;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 15px 35px rgba(255,143,163,0.15);
+            z-index: 2; /* Brought slightly up so it floats beautifully */
+            pointer-events: none;
+        }
+
+        .float-1 { top: 15%; left: 5%; animation: floatY 6s infinite alternate ease-in-out; }
+        .float-2 { top: 55%; right: 5%; animation: floatY 8s infinite alternate-reverse ease-in-out; }
+        .float-3 { bottom: 15%; left: 12%; animation: floatX 7s infinite alternate ease-in-out; }
+
+        .floating-feature svg {
+            width: 24px;
+            height: 24px;
+            stroke: var(--dark-pink);
+            fill: none;
+            stroke-width: 2;
+        }
+
+        .floating-feature span {
+            font-weight: 800;
+            color: var(--dark-pink);
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        /* Glass Navigation */
         nav {
             position: fixed;
             top: 0;
@@ -65,31 +139,35 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 5%;
-            background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+            padding: 1.2rem 5%;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.4);
             z-index: 1000;
             transition: var(--transition-smooth);
         }
 
         nav.scrolled {
             padding: 0.8rem 5%;
-            box-shadow: 0 10px 30px rgba(201, 24, 74, 0.05);
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 15px 40px rgba(201, 24, 74, 0.1);
         }
 
         .nav-logo {
-            font-weight: 800;
-            font-size: 1.5rem;
+            font-weight: 900;
+            font-size: 1.8rem;
             color: var(--dark-pink);
             flex: 1;
+            letter-spacing: -1px;
         }
 
         .nav-title {
             font-weight: 800;
-            font-size: 1.8rem;
-            color: var(--primary-pink);
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--dark-pink), var(--primary-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             letter-spacing: 1px;
             text-align: center;
             flex: 1;
@@ -99,30 +177,39 @@
             flex: 1;
             display: flex;
             justify-content: flex-end;
+            align-items: center;
             gap: 1rem;
+            position: relative;
         }
 
-        /* Buttons */
+        /* Buttons & Forms */
         .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 0.8rem 2rem;
+            padding: 0.8rem 2.2rem;
             border-radius: 50px;
             text-decoration: none;
-            font-weight: 700;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-weight: 800;
+            transition: var(--transition-bounce);
             cursor: pointer;
             border: none;
             letter-spacing: 0.5px;
+            font-size: 1rem;
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap; /* Prevent overlap by keeping text unified */
         }
 
         .btn-primary {
-            background: var(--primary-pink);
+            background: linear-gradient(135deg, var(--primary-pink), var(--dark-pink));
             color: var(--white);
-            box-shadow: 0 4px 15px rgba(255, 143, 163, 0.4);
-            position: relative;
-            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(201, 24, 74, 0.25);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 12px 30px rgba(201, 24, 74, 0.35);
         }
 
         .btn-primary::after {
@@ -132,18 +219,12 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
             transition: all 0.6s ease;
         }
 
         .btn-primary:hover::after {
             left: 100%;
-        }
-
-        .btn-primary:hover {
-            background: var(--dark-pink);
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 8px 25px rgba(201, 24, 74, 0.4);
         }
 
         .btn-outline {
@@ -153,9 +234,117 @@
         }
 
         .btn-outline:hover {
-            background: var(--primary-pink);
+            background: var(--light-pink);
+            border-color: var(--dark-pink);
+            color: var(--dark-pink);
+            transform: translateY(-2px);
+        }
+
+        /* Invite Code Dropdown Logic */
+        .invite-wrapper {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            z-index: 10; /* Ensures buttons and dropdowns stay above other elements */
+        }
+
+        .nav-actions .invite-wrapper {
+            align-items: flex-end;
+        }
+
+        .invite-dropdown {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            align-items: center;
+            background: var(--white);
+            border-radius: 50px;
+            box-shadow: 0 10px 25px rgba(201, 24, 74, 0);
+            border: 1px solid transparent;
+            width: 100%;
+            min-width: 320px;
+            transform: translateY(-10px);
+            pointer-events: none;
+        }
+
+        .invite-wrapper.active .invite-dropdown {
+            max-height: 80px; /* Safely accounts for internal padding */
+            opacity: 1;
+            margin-top: 1rem;
+            padding: 0.4rem 0.4rem 0.4rem 1.5rem;
+            box-shadow: 0 15px 35px rgba(201, 24, 74, 0.15);
+            border-color: var(--light-pink);
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .nav-actions .invite-wrapper.active .invite-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+        }
+
+        .invite-input {
+            border: none;
+            outline: none;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            flex: 1;
+            background: transparent;
+            letter-spacing: 2px;
+            width: 100%;
+        }
+        
+        .invite-input::placeholder {
+            color: var(--light-pink);
+            font-weight: 600;
+            letter-spacing: 0;
+        }
+
+        .invite-dropdown .btn {
+            padding: 0.6rem 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        /* Scrolling Marquee Banner */
+        .marquee-container {
+            width: 100vw;
+            background: var(--dark-pink);
             color: var(--white);
-            transform: translateY(-3px);
+            padding: 1rem 0;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            z-index: 10;
+            box-shadow: 0 4px 15px rgba(89, 13, 34, 0.2);
+            border-top: 1px solid var(--primary-pink);
+            border-bottom: 1px solid var(--primary-pink);
+        }
+
+        .marquee-content {
+            display: flex;
+            white-space: nowrap;
+            animation: marqueeScroll 25s linear infinite;
+        }
+
+        .marquee-content span {
+            font-size: 1rem;
+            font-weight: 800;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin: 0 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .marquee-content span::after {
+            content: '•';
+            color: var(--primary-pink);
         }
 
         /* Hero Section */
@@ -164,35 +353,58 @@
             align-items: center;
             justify-content: space-between;
             min-height: 100vh;
-            padding: 8rem 5% 4rem;
+            padding: 10rem 5% 5rem;
             position: relative;
             z-index: 1;
+            max-width: 1600px;
+            margin: 0 auto;
+            gap: 4rem; /* Safely separates text and image panel on all screens */
         }
 
         .hero-content {
-            flex: 1;
-            max-width: 650px;
-            padding-right: 3rem;
+            flex: 1.2;
+            padding-right: 2rem;
             opacity: 0;
-            transform: translateY(40px);
+            transform: translateY(50px);
             animation: fadeUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start; /* Ensure clean left-alignment */
         }
 
-        .hero-content h1 {
-            font-size: 4.2rem;
-            line-height: 1.1;
-            margin-bottom: 1.5rem;
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 143, 163, 0.15);
+            border: 1px solid var(--primary-pink);
             color: var(--dark-pink);
-            background: linear-gradient(135deg, var(--dark-pink), var(--primary-pink));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+        }
+
+        .badge svg { width: 14px; height: 14px; fill: currentColor; }
+
+        .hero-content h1 {
+            font-size: 5rem;
+            line-height: 1.05;
+            margin-bottom: 1.5rem;
+            font-weight: 900;
+            color: var(--deep-red);
         }
 
         .hero-content p {
-            font-size: 1.25rem;
+            font-size: 1.3rem;
             color: var(--text-light);
-            margin-bottom: 2.5rem;
-            line-height: 1.7;
+            margin-bottom: 3rem; /* Plenty of space below text so buttons never overlap */
+            line-height: 1.6;
+            font-weight: 600;
+            max-width: 600px;
         }
 
         .hero-image {
@@ -200,289 +412,271 @@
             display: flex;
             justify-content: center;
             position: relative;
-            opacity: 0;
-            animation: fadeIn 1.5s ease forwards 0.4s;
+            perspective: 1000px;
         }
 
-        .img-placeholder {
+        .glass-panel {
             width: 100%;
             max-width: 550px;
-            height: 550px;
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(10px);
-            border: 2px solid var(--white);
-            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-            box-shadow: 0 25px 50px rgba(255, 143, 163, 0.15);
+            height: 650px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.7), rgba(255,255,255,0.2));
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255,255,255,0.6);
+            border-radius: 40px;
+            box-shadow: 0 30px 60px rgba(201, 24, 74, 0.1);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            color: var(--dark-pink);
-            font-weight: 800;
-            font-size: 1.5rem;
-            animation: morph 12s ease-in-out infinite alternate;
             text-align: center;
             padding: 3rem;
-            position: relative;
-            overflow: hidden;
+            transform-style: preserve-3d;
+            transition: transform 0.2s ease-out;
+            animation: fadeInRight 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.3s;
+            opacity: 0;
         }
 
-        /* SVG Icons */
-        .icon {
-            width: 48px;
-            height: 48px;
-            margin-bottom: 1.5rem;
-            fill: none;
+        .glass-panel svg {
+            width: 100px;
+            height: 100px;
             stroke: var(--primary-pink);
-            stroke-width: 2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-            transition: var(--transition-smooth);
+            fill: none;
+            stroke-width: 1.5;
+            margin-bottom: 1.5rem;
+            transform: translateZ(50px);
         }
 
-        .img-placeholder svg {
-            width: 80px;
-            height: 80px;
-            stroke: var(--light-pink);
+        .glass-panel h3 {
+            font-size: 1.8rem;
+            color: var(--dark-pink);
+            transform: translateZ(40px);
             margin-bottom: 1rem;
         }
 
-        /* Shared Section Styles */
-        section {
-            padding: 7rem 5%;
+        .glass-panel p {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            transform: translateZ(30px);
+            font-weight: 600;
+        }
+
+        /* Perfect Grid Layouts for Balance */
+        .section-padding {
+            padding: 8rem 5%;
             position: relative;
             z-index: 1;
         }
 
         .section-header {
             text-align: center;
-            max-width: 700px;
-            margin: 0 auto 4rem;
+            max-width: 800px;
+            margin: 0 auto 5rem;
         }
 
         .section-title {
-            font-size: 3rem;
-            color: var(--dark-pink);
+            font-size: 3.5rem;
+            color: var(--deep-red);
+            font-weight: 900;
             margin-bottom: 1.5rem;
         }
 
         .section-subtitle {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             color: var(--text-light);
             line-height: 1.6;
+            font-weight: 600;
         }
 
-        /* Mission / Long Form Content Section */
-        .mission {
-            background: var(--white);
-            border-radius: 40px;
-            margin: 0 2%;
-            box-shadow: 0 20px 40px rgba(255, 143, 163, 0.05);
-            display: flex;
-            align-items: center;
-            gap: 4rem;
-        }
-
-        .mission-content {
-            flex: 1;
-        }
-
-        .mission-content h2 {
-            font-size: 2.8rem;
-            color: var(--dark-pink);
-            margin-bottom: 1.5rem;
-        }
-
-        .mission-content p {
-            font-size: 1.15rem;
-            color: var(--text-light);
-            line-height: 1.8;
-            margin-bottom: 1.5rem;
-        }
-
-        .mission-visual {
-            flex: 1;
-            height: 400px;
-            background: var(--bg-color);
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px dashed var(--primary-pink);
-        }
-
-        /* Features Section */
-        .features {
-            background: transparent;
-        }
-
-        .grid {
+        /* Features Grid - 4 Perfectly Balanced Boxes */
+        .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2.5rem;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            max-width: 1600px;
+            margin: 0 auto;
         }
 
         .feature-card {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            padding: 3rem 2.5rem;
-            border-radius: 24px;
-            text-align: left;
-            transition: var(--transition-smooth);
-            border: 1px solid rgba(255, 255, 255, 1);
-            box-shadow: 0 10px 30px rgba(201, 24, 74, 0.05);
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            padding: 3rem 2rem;
+            border-radius: 30px;
+            transition: var(--transition-bounce);
+            text-align: center;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 10px 30px rgba(255, 143, 163, 0.05);
         }
 
-        .feature-card::before {
+        .feature-card::after {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, var(--light-pink), var(--primary-pink));
-            transform: scaleX(0);
-            transform-origin: left;
+            height: 100%;
+            background: radial-gradient(circle at top right, rgba(255,143,163,0.2), transparent 60%);
+            opacity: 0;
             transition: var(--transition-smooth);
         }
 
-        .feature-card:hover::before {
-            transform: scaleX(1);
-        }
-
         .feature-card:hover {
-            transform: translateY(-15px);
-            box-shadow: 0 20px 40px rgba(255, 143, 163, 0.15);
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(201, 24, 74, 0.15);
+            border-color: var(--primary-pink);
             background: var(--white);
         }
 
-        .feature-card:hover .icon {
-            transform: scale(1.1) translateY(-5px);
-            stroke: var(--dark-pink);
+        .feature-card:hover::after {
+            opacity: 1;
         }
 
-        .feature-card h3 {
-            color: var(--dark-pink);
-            font-size: 1.6rem;
-            margin-bottom: 1rem;
-        }
-
-        .feature-card p {
-            color: var(--text-light);
-            line-height: 1.7;
-            font-size: 1.05rem;
-        }
-
-        /* Economy & Payouts Detail Section */
-        .economy-section {
-            background: linear-gradient(180deg, var(--white) 0%, var(--bg-color) 100%);
-            text-align: center;
-        }
-
-        .economy-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-            margin-top: 4rem;
-        }
-
-        .economy-step {
-            padding: 2rem;
-        }
-
-        .step-number {
-            width: 60px;
-            height: 60px;
-            background: var(--primary-pink);
-            color: var(--white);
+        .icon-wrapper {
+            width: 80px;
+            height: 80px;
+            background: var(--white);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
-            font-weight: 800;
             margin: 0 auto 1.5rem;
-            box-shadow: 0 10px 20px rgba(255, 143, 163, 0.3);
+            box-shadow: 0 10px 25px rgba(255, 143, 163, 0.2);
+            transition: var(--transition-bounce);
+            position: relative;
+            z-index: 2;
         }
 
-        .economy-step h4 {
-            color: var(--dark-pink);
-            font-size: 1.4rem;
+        .feature-card:hover .icon-wrapper {
+            transform: scale(1.1) rotate(5deg);
+            background: var(--primary-pink);
+        }
+
+        .icon-wrapper svg {
+            width: 36px;
+            height: 36px;
+            stroke: var(--dark-pink);
+            fill: none;
+            stroke-width: 2;
+            transition: var(--transition-smooth);
+        }
+
+        .feature-card:hover .icon-wrapper svg {
+            stroke: var(--white);
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            color: var(--deep-red);
             margin-bottom: 1rem;
+            font-weight: 800;
+            position: relative;
+            z-index: 2;
         }
 
-        .economy-step p {
+        .feature-card p {
+            font-size: 1.05rem;
             color: var(--text-light);
             line-height: 1.6;
+            font-weight: 600;
+            position: relative;
+            z-index: 2;
         }
 
-        /* Bottom CTA */
-        .bottom-cta {
+        /* 2-Column Split Section (Mission) */
+        .split-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            align-items: center;
+        }
+
+        .split-image {
+            width: 100%;
+            height: 500px;
+            background: linear-gradient(135deg, var(--white), var(--bg-color));
+            border: 2px dashed var(--primary-pink);
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .split-image svg {
+            width: 150px;
+            height: 150px;
+            stroke: var(--light-pink);
+            fill: none;
+            stroke-width: 1;
+        }
+
+        /* Footer CTA */
+        .footer-cta {
+            background: linear-gradient(180deg, var(--bg-color) 0%, var(--dark-pink) 100%);
             text-align: center;
-            padding: 8rem 5%;
-            background: var(--dark-pink);
+            padding: 10rem 5% 6rem;
             color: var(--white);
-            border-radius: 40px 40px 0 0;
             position: relative;
             overflow: hidden;
         }
 
-        .bottom-cta::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
-            animation: rotate 20s linear infinite;
+        .footer-cta h2 {
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 2rem;
+            color: var(--white);
+            text-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
-        .bottom-cta h2 {
-            font-size: 3.5rem;
-            margin-bottom: 1.5rem;
-            position: relative;
-            z-index: 2;
-        }
-
-        .bottom-cta p {
+        .footer-cta p {
             font-size: 1.3rem;
-            margin-bottom: 3rem;
             color: var(--light-pink);
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            position: relative;
-            z-index: 2;
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            font-weight: 600;
+        }
+        
+        .footer-cta .invite-wrapper {
+            align-items: center;
+            max-width: 400px;
+            margin: 0 auto;
         }
 
-        .bottom-cta .btn-primary {
+        .footer-cta .btn-primary {
             background: var(--white);
             color: var(--dark-pink);
-            font-size: 1.2rem;
-            padding: 1rem 3rem;
-            z-index: 2;
         }
 
-        .bottom-cta .btn-primary:hover {
-            background: var(--light-pink);
+        .footer-cta .invite-dropdown {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+        
+        .footer-cta .invite-input {
+            color: var(--white);
+        }
+        
+        .footer-cta .invite-input::placeholder {
+            color: rgba(255,255,255,0.6);
+        }
+        
+        .footer-cta .invite-dropdown .btn-outline {
+            background: var(--white);
             color: var(--dark-pink);
+            border: none;
         }
 
-        footer {
-            background: var(--text-dark);
-            color: var(--light-pink);
-            text-align: center;
-            padding: 3rem 5%;
-        }
-
-        /* Animation Classes */
+        /* Animations & Observers */
         .reveal {
             opacity: 0;
-            transform: translateY(50px);
-            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateY(60px);
+            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .reveal.active {
@@ -494,159 +688,223 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        @keyframes fadeIn {
-            to { opacity: 1; }
+        @keyframes fadeInRight {
+            from { opacity: 0; transform: translateX(50px) rotateY(10deg); }
+            to { opacity: 1; transform: translateX(0) rotateY(0); }
         }
 
-        @keyframes morph {
-            0% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
-            33% { border-radius: 58% 42% 75% 25% / 76% 46% 54% 24%; }
-            66% { border-radius: 50% 50% 33% 67% / 55% 27% 73% 45%; }
-            100% { border-radius: 33% 67% 58% 42% / 63% 68% 32% 37%; }
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(30px, -50px) scale(1.05); }
         }
 
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        @keyframes floatY {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-30px); }
+        }
+
+        @keyframes floatX {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(30px); }
+        }
+
+        @keyframes marqueeScroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
         }
 
         /* Responsive */
-        @media (max-width: 992px) {
-            .hero h1 { font-size: 3.2rem; }
-            .mission { flex-direction: column; padding: 4rem 2rem; gap: 2rem; }
-            .economy-grid { grid-template-columns: 1fr; gap: 3rem; }
+        @media (max-width: 1200px) {
+            .features-grid { grid-template-columns: repeat(2, 1fr); }
+            .hero h1 { font-size: 4rem; }
         }
 
-        @media (max-width: 768px) {
-            .hero { flex-direction: column; text-align: center; padding-top: 10rem; }
-            .hero-content { padding-right: 0; margin-bottom: 4rem; }
-            .nav-logo, .nav-actions { display: none; }
-            .nav-title { text-align: left; }
-            .hero-content h1 { font-size: 2.8rem; }
-            .section-title { font-size: 2.4rem; }
-            .mission-visual { width: 100%; }
+        @media (max-width: 900px) {
+            .hero { flex-direction: column; text-align: center; padding-top: 12rem; gap: 3rem; }
+            .hero-content { padding-right: 0; margin-bottom: 2rem; align-items: center; } /* Switch back to center for mobile */
+            .nav-actions { display: none; } /* Could map to hamburger in prod */
+            .split-section { grid-template-columns: 1fr; text-align: center; }
+        }
+
+        @media (max-width: 600px) {
+            .features-grid { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 3rem; }
+            .section-title { font-size: 2.5rem; }
+            .footer-cta h2 { font-size: 2.5rem; }
+            .glass-panel { padding: 2rem; height: 500px; }
+            .invite-dropdown { min-width: 280px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Parallax Background Elements -->
+    <div class="scroll-progress" id="scrollBar"></div>
+
     <div class="parallax-bg">
-        <div class="blob blob-1 parallax-element" data-speed="0.2"></div>
-        <div class="blob blob-2 parallax-element" data-speed="-0.3"></div>
-        <div class="blob blob-3 parallax-element" data-speed="0.15"></div>
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <!-- Floating Background Hearts -->
+    <div class="floating-icons-bg">
+        <svg class="bg-icon parallax-el" data-speed="0.2" style="top: 15%; left: 8%; width: 45px; height: 45px; opacity: 0.5; fill: var(--primary-pink);" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+        <svg class="bg-icon parallax-el" data-speed="-0.15" style="top: 25%; right: 12%; width: 35px; height: 35px; opacity: 0.3; fill: var(--light-pink);" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+        <svg class="bg-icon parallax-el" data-speed="0.3" style="top: 65%; left: 15%; width: 60px; height: 60px; opacity: 0.15; fill: var(--dark-pink);" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+        <svg class="bg-icon parallax-el" data-speed="-0.1" style="top: 80%; right: 8%; width: 40px; height: 40px; opacity: 0.4; fill: var(--primary-pink);" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+        <svg class="bg-icon parallax-el" data-speed="0.12" style="top: 45%; left: 55%; width: 25px; height: 25px; opacity: 0.25; fill: var(--light-pink);" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+    </div>
+
+    <!-- Floating Atmosphere Elements -->
+    <div class="floating-feature float-1 parallax-el" data-speed="0.1">
+        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span>Encrypted</span>
+    </div>
+    <div class="floating-feature float-2 parallax-el" data-speed="-0.15">
+        <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+        <span>Verified Moms</span>
+    </div>
+    <div class="floating-feature float-3 parallax-el" data-speed="0.08">
+        <svg viewBox="0 0 24 24"><path d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/></svg>
+        <span>Live Audio</span>
     </div>
 
     <nav id="navbar">
         <div class="nav-logo">MC.</div>
         <div class="nav-title">Mommychat</div>
         <div class="nav-actions">
-            <a href="" class="btn btn-outline">Log In</a>
-            <a href="" class="btn btn-primary">Sign Up</a>
+            <a href="" class="btn btn-outline" style="border:none;">Log In</a>
+            <div class="invite-wrapper">
+                <button class="btn btn-primary toggle-invite">Verify your invite code</button>
+                <div class="invite-dropdown">
+                    <input type="text" class="invite-input" placeholder="Enter Code..." maxlength="8">
+                    <button class="btn btn-outline submit-invite">Verify</button>
+                </div>
+            </div>
         </div>
     </nav>
 
     <header class="hero">
         <div class="hero-content">
-            <h1>Find Your Village. <br>Find Your Voice.</h1>
-            <p>A private, supportive progressive web community designed entirely for mothers. Connect through our social feed, message privately, or use tokens to speak live with a mother trained to listen and empathize when you need it most.</p>
-            <a href="" class="btn btn-primary" style="font-size: 1.1rem; padding: 1rem 2.5rem;">Join the Community</a>
+            <div class="badge">
+                <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                Strictly Invitation-Only
+            </div>
+            <h1>The Village<br>Has Evolved.</h1>
+            <p>A private, highly secure network built entirely for verified mothers. Escape the public algorithms. Access our encrypted direct messaging, live peer audio support, and private token economy.</p>
+            
+            <div class="invite-wrapper">
+                <button class="btn btn-primary toggle-invite" style="padding: 1rem 2.5rem; font-size: 1.1rem;">Verify your invite code</button>
+                <div class="invite-dropdown">
+                    <input type="text" class="invite-input" placeholder="Code..." maxlength="8">
+                    <button class="btn btn-primary submit-invite">Access Securely</button>
+                </div>
+            </div>
         </div>
-        <div class="hero-image parallax-element" data-speed="0.05">
-            <div class="img-placeholder">
-                <svg viewBox="0 0 24 24">
-                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                </svg>
-                <br>
-                <span>[ Image Placeholder:<br> Mothers Supporting Mothers ]</span>
+        <div class="hero-image parallax-el" data-speed="0.05">
+            <div class="glass-panel" id="glassPanel">
+                <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 7a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+                <h3>End-to-End Secure</h3>
+                <p>Because maternal support requires radical vulnerability, and vulnerability requires absolute privacy.</p>
             </div>
         </div>
     </header>
 
-    <section class="mission reveal">
-        <div class="mission-content">
-            <h2>More Than Just a Forum. It's a Lifeline.</h2>
-            <p>Motherhood is beautiful, but it can also be profoundly isolating. We built Mommychat because we realized that the modern village doesn't exist by default anymore—we have to build it ourselves.</p>
-            <p>Here, you are not defined by curated highlight reels. This is a sanctuary for the raw, real, and unfiltered moments of raising children. Whether you are navigating postpartum anxiety, toddler tantrums, or simply need an adult conversation, there is another mother here ready to listen.</p>
-            <a href="" class="btn btn-outline" style="margin-top: 1rem;">Read Our Story</a>
+    <div class="marquee-container">
+        <div class="marquee-content">
+            <!-- Repeated for seamless loop -->
+            <span>Strictly Invitation-Only</span>
+            <span>No Bots</span>
+            <span>Zero Algorithmic Feeds</span>
+            <span>Verified Mothers Only</span>
+            <span>Encrypted Direct Messaging</span>
+            <span>Peer-to-Peer Economy</span>
+            <span>Strictly Invitation-Only</span>
+            <span>No Bots</span>
+            <span>Zero Algorithmic Feeds</span>
+            <span>Verified Mothers Only</span>
+            <span>Encrypted Direct Messaging</span>
+            <span>Peer-to-Peer Economy</span>
         </div>
-        <div class="mission-visual parallax-element" data-speed="-0.08">
-            <span style="color: var(--primary-pink); font-weight: 800;">[ Lifestyle / App Interface Visual ]</span>
-        </div>
-    </section>
+    </div>
 
-    <section class="features">
+    <section class="section-padding">
         <div class="section-header reveal">
-            <h2 class="section-title">Core Community Features</h2>
-            <p class="section-subtitle">Everything you need to build meaningful connections, get advice, and find support in a secure, peer-to-peer environment.</p>
+            <h2 class="section-title">The Four Pillars of Privacy</h2>
+            <p class="section-subtitle">We perfectly balanced the ecosystem to ensure every interaction remains confidential, supportive, and strictly between verified mothers.</p>
         </div>
-        
-        <div class="grid">
+
+        <div class="features-grid">
             <div class="feature-card reveal" style="transition-delay: 0.1s;">
-                <svg class="icon" viewBox="0 0 24 24">
-                    <path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
-                </svg>
-                <h3>The Mother Feed</h3>
-                <p>Scroll, post, and engage in our global community feed. Share daily milestones, vent your frustrations securely, and connect with moms who understand exactly what you are experiencing.</p>
+                <div class="icon-wrapper">
+                    <svg viewBox="0 0 24 24"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                </div>
+                <h3>The Private Feed</h3>
+                <p>A chronological, algorithm-free space. Share daily milestones or vent securely with a curated network of mothers who genuinely understand.</p>
             </div>
 
             <div class="feature-card reveal" style="transition-delay: 0.2s;">
-                <svg class="icon" viewBox="0 0 24 24">
-                    <path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-                </svg>
-                <h3>Private Messaging</h3>
-                <p>Build deeper connections using a collapsible friends list and secure, one-on-one direct messaging for confidential peer-to-peer conversations away from the public feed.</p>
+                <div class="icon-wrapper">
+                    <svg viewBox="0 0 24 24"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+                </div>
+                <h3>Encrypted DMs</h3>
+                <p>Build a secure, collapsible roster of trusted confidantes. One-on-one direct messaging ensures your most sensitive conversations stay locked down.</p>
             </div>
 
             <div class="feature-card reveal" style="transition-delay: 0.3s;">
-                <svg class="icon" viewBox="0 0 24 24">
-                    <path d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/>
-                </svg>
+                <div class="icon-wrapper">
+                    <svg viewBox="0 0 24 24"><path d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/></svg>
+                </div>
                 <h3>Live Audio Support</h3>
-                <p>Sometimes text isn't enough. Initiate a live audio call with a trained mother who can view your profile context and offer immediate, empathetic vocal support in real-time.</p>
+                <p>Bypass text when it's urgent. Initiate real-time, encrypted voice calls with peer-listeners trained in empathy, all while retaining your anonymity.</p>
+            </div>
+
+            <div class="feature-card reveal" style="transition-delay: 0.4s;">
+                <div class="icon-wrapper">
+                    <svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+                </div>
+                <h3>Token Economy</h3>
+                <p>Support the network and be rewarded. Use tokens to tip incredible advice, or cash out the tokens you earn by providing dedicated live audio listening.</p>
             </div>
         </div>
     </section>
 
-    <section class="economy-section reveal">
-        <div class="section-header">
-            <h2 class="section-title">Support and Be Supported</h2>
-            <p class="section-subtitle">Mommychat operates on a unique token economy designed to reward empathy and ensure help is always available.</p>
+    <section class="section-padding split-section reveal">
+        <div class="split-content">
+            <h2 class="section-title" style="text-align:left; font-size: 3rem;">Why Invite-Only?</h2>
+            <p class="section-subtitle" style="text-align:left; margin-bottom: 2rem;">Because modern motherhood shouldn't be a spectator sport for data brokers and anonymous trolls.</p>
+            <p style="font-size: 1.1rem; color: var(--text-light); line-height: 1.8; font-weight: 600;">
+                By enforcing a strict peer-to-peer invitation model, Mommychat guarantees that every member of the network is vetted by an existing, trusted mother. This establishes an immediate baseline of trust, allowing us to strip away the toxicity of public forums and focus entirely on radical, empathetic support.
+            </p>
         </div>
-
-        <div class="economy-grid">
-            <div class="economy-step reveal" style="transition-delay: 0.1s;">
-                <div class="step-number">1</div>
-                <h4>Free Core Access</h4>
-                <p>Browsing, posting, and engaging with the public social feed is completely free. Community should never have a paywall.</p>
-            </div>
-            
-            <div class="economy-step reveal" style="transition-delay: 0.2s;">
-                <div class="step-number">2</div>
-                <h4>Purchase & Tip</h4>
-                <p>Acquire tokens to access premium tools like initiating live audio calls, or use them to tip a fellow mother who gave you incredible advice on the feed.</p>
-            </div>
-
-            <div class="economy-step reveal" style="transition-delay: 0.3s;">
-                <div class="step-number">3</div>
-                <h4>Helper Payouts</h4>
-                <p>Mothers who dedicate their time to providing live audio support or receiving tips can accumulate tokens and cash them out through our secure payout mechanisms.</p>
-            </div>
+        <div class="split-image parallax-el" data-speed="-0.08">
+            <svg viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
         </div>
     </section>
 
-    <section class="bottom-cta reveal">
-        <h2>You don't have to do this alone.</h2>
-        <p>Create your profile, securely set up your family context, and instantly tap into the support network you deserve.</p>
-        <a href="" class="btn btn-primary">Create Your Free Account</a>
+    <section class="footer-cta reveal">
+        <h2>Protect Your Peace.</h2>
+        <p>If you have received an invitation from a verified mother, enter your code below to securely initialize your profile and join the private network.</p>
+        
+        <div class="invite-wrapper">
+            <button class="btn btn-primary toggle-invite" style="padding: 1.2rem 3rem; font-size: 1.2rem;">Verify your invite code</button>
+            <div class="invite-dropdown">
+                <input type="text" class="invite-input" placeholder="Enter your 8-digit code..." maxlength="8">
+                <button class="btn btn-outline submit-invite">Initialize Account</button>
+            </div>
+        </div>
     </section>
-
-    <footer>
-        <p>&copy; 2026 Mommychat. Built for mothers, by mothers.</p>
-    </footer>
 
     <script>
-        // Navbar Scroll Effect
+        // Scroll Progress Bar
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById("scrollBar").style.width = scrolled + "%";
+        });
+
+        // Glass Navbar Effect
         const navbar = document.getElementById('navbar');
         window.addEventListener('scroll', () => {
             if (window.scrollY > 50) {
@@ -656,9 +914,53 @@
             }
         });
 
-        // Intersection Observer for Reveal Animations
-        const revealElements = document.querySelectorAll('.reveal');
-        
+        // Invite Dropdown Toggle Logic
+        document.querySelectorAll('.toggle-invite').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const wrapper = btn.closest('.invite-wrapper');
+                // Close others
+                document.querySelectorAll('.invite-wrapper').forEach(w => {
+                    if(w !== wrapper) w.classList.remove('active');
+                });
+                wrapper.classList.toggle('active');
+                
+                // Focus input if opened
+                if(wrapper.classList.contains('active')) {
+                    setTimeout(() => {
+                        wrapper.querySelector('.invite-input').focus();
+                    }, 300);
+                }
+            });
+        });
+
+        // 3D Glass Panel Mouse Tracking
+        const panel = document.getElementById('glassPanel');
+        document.addEventListener('mousemove', (e) => {
+            if(window.innerWidth > 900) {
+                const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+                const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+                panel.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+            }
+        });
+        panel.addEventListener('mouseleave', () => {
+            panel.style.transform = `rotateY(0deg) rotateX(0deg)`;
+        });
+
+        // Scroll Parallax Elements
+        const parallaxEls = document.querySelectorAll('.parallax-el');
+        window.addEventListener('scroll', () => {
+            requestAnimationFrame(() => {
+                const scrolled = window.pageYOffset;
+                parallaxEls.forEach(el => {
+                    const speed = el.getAttribute('data-speed');
+                    const yPos = -(scrolled * speed);
+                    el.style.transform = `translateY(${yPos}px)`;
+                });
+            });
+        });
+
+        // Staggered Scroll Reveals
         const revealObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -666,26 +968,10 @@
                     observer.unobserve(entry.target);
                 }
             });
-        }, {
-            threshold: 0.15,
-            rootMargin: "0px 0px -50px 0px"
-        });
+        }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
 
-        revealElements.forEach(el => {
+        document.querySelectorAll('.reveal').forEach(el => {
             revealObserver.observe(el);
-        });
-
-        // Mouse/Scroll Parallax Effect for Background Elements
-        const parallaxElements = document.querySelectorAll('.parallax-element');
-        
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            
-            parallaxElements.forEach(el => {
-                const speed = el.getAttribute('data-speed');
-                const yPos = -(scrolled * speed);
-                el.style.transform = `translateY(${yPos}px)`;
-            });
         });
     </script>
 </body>
