@@ -1,356 +1,466 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mommychat | Authentication</title>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        :root {
-            --bg-color: #fff5f7;
-            --primary-pink: #ff8fa3;
-            --light-pink: #ffb3c1;
-            --dark-pink: #c9184a;
-            --text-dark: #590d22;
-            --text-light: #800f2f;
-            --white: #ffffff;
-            --glass-bg: rgba(255, 255, 255, 0.85);
-            --input-border: #f8cdda;
-        }
+      :root {
+        --bg-color: #fff5f7;
+        --primary-pink: #ff8fa3;
+        --light-pink: #ffb3c1;
+        --dark-pink: #c9184a;
+        --text-dark: #590d22;
+        --text-light: #800f2f;
+        --white: #ffffff;
+        --glass-bg: rgba(255, 255, 255, 0.85);
+        --input-border: #f8cdda;
+      }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Nunito', sans-serif;
-        }
+      * {
+        margin: 0; 
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Nunito", sans-serif;
+      }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-dark);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            overflow: hidden;
-        }
+      body {
+        background-color: var(--bg-color);
+        color: var(--text-dark);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        overflow: hidden;
+      }
 
-        /* Page Loader */
-        #page-loader {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
-        }
-        #page-loader.hidden {
-            opacity: 0;
-            visibility: hidden;
-        }
+      /* Page Loader */
+      #page-loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--bg-color);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        transition: opacity 0.5s ease, visibility 0.5s ease;
+      }
+      #page-loader.hidden {
+        opacity: 0;
+        visibility: hidden;
+      }
 
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid var(--light-pink);
-            border-top: 4px solid var(--dark-pink);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
+      .spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid var(--light-pink);
+        border-top: 4px solid var(--dark-pink);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
 
-        /* Auth Container */
-        .auth-container {
-            width: 100%;
-            max-width: 420px;
-            background: var(--glass-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(255, 143, 163, 0.2);
-            overflow: hidden;
-            position: relative;
-        }
+      /* Auth Container */
+      .auth-container {
+        width: 100%;
+        max-width: 420px;
+        background: var(--glass-bg);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(255, 143, 163, 0.2);
+        overflow: hidden;
+        position: relative;
+      }
 
-        /* Nav Header inside Card */
-        .auth-header {
-            text-align: center;
-            padding: 2rem 2rem 1rem;
-        }
-        .auth-logo {
-            font-weight: 800;
-            font-size: 1.8rem;
-            color: var(--primary-pink);
-            letter-spacing: 1px;
-            margin-bottom: 0.5rem;
-        }
+      /* Nav Header inside Card */
+      .auth-header {
+        text-align: center;
+        padding: 2rem 2rem 1rem;
+      }
+      .auth-logo {
+        font-weight: 800;
+        font-size: 1.8rem;
+        color: var(--primary-pink);
+        letter-spacing: 1px;
+        margin-bottom: 0.5rem;
+      }
 
-        /* Slider mechanism */
-        .auth-slider-window {
-            overflow: hidden;
-            width: 100%;
-        }
-        .auth-slider {
-            display: flex;
-            width: 200%;
-            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .auth-panel {
-            width: 50%;
-            padding: 1rem 2.5rem 2.5rem;
-        }
+      /* Slider mechanism */
+      .auth-slider-window {
+        overflow: hidden;
+        width: 100%;
+      }
 
-        /* Form Elements */
-        .form-group {
-            margin-bottom: 1.2rem;
-            position: relative;
-        }
-        .form-group label {
-            display: block;
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-bottom: 0.3rem;
-            color: var(--text-dark);
-        }
-        .form-control {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            border: 2px solid var(--input-border);
-            border-radius: 10px;
-            font-size: 1rem;
-            background: var(--white);
-            color: var(--text-dark);
-            outline: none;
-            transition: border-color 0.3s ease;
-        }
-        .form-control:focus {
-            border-color: var(--primary-pink);
-        }
+      .auth-slider {
+        display: flex;
+        width: 300%;
+        transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .auth-panel {
+        width: 33.3333%;
+        padding: 1rem 2.5rem 2.5rem;
+      }
 
-        /* Password Toggle */
-        .password-toggle {
-            position: absolute;
-            right: 12px;
-            top: 36px;
-            cursor: pointer;
-            color: var(--text-light);
-            background: none;
-            border: none;
-            padding: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .password-toggle svg {
-            width: 20px;
-            height: 20px;
-            fill: currentColor;
-        }
+      /* Form Elements */
+      .form-group {
+        margin-bottom: 1.2rem;
+        position: relative;
+      }
+      .form-group label {
+        display: block;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 0.3rem;
+        color: var(--text-dark);
+      }
+      .form-control {
+        width: 100%;
+        padding: 0.8rem 1rem;
+        border: 2px solid var(--input-border);
+        border-radius: 10px;
+        font-size: 1rem;
+        background: var(--white);
+        color: var(--text-dark);
+        outline: none;
+        transition: border-color 0.3s ease;
+      }
+      .form-control:focus {
+        border-color: var(--primary-pink);
+      }
 
-        /* Buttons */
-        .btn {
-            width: 100%;
-            padding: 0.9rem;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            font-weight: 800;
-            text-align: center;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-        }
-        .btn-primary {
-            background: var(--primary-pink);
-            color: var(--white);
-            box-shadow: 0 4px 15px rgba(255, 143, 163, 0.4);
-        }
-        
-        /* Context Aware States */
-        .btn:disabled {
-            background: var(--light-pink);
-            cursor: not-allowed;
-            box-shadow: none;
-            opacity: 0.6;
-        }
-        .btn-primary:not(:disabled):hover {
-            background: var(--dark-pink);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(201, 24, 74, 0.5);
-        }
+      /* Password Toggle */
+      .password-toggle {
+        position: absolute;
+        right: 12px;
+        top: 36px;
+        cursor: pointer;
+        color: var(--text-light);
+        background: none;
+        border: none;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .password-toggle svg {
+        width: 20px;
+        height: 20px;
+        fill: currentColor;
+      }
 
-        /* Switch Text */
-        .switch-text {
-            text-align: center;
-            margin-top: 1.5rem;
-            font-size: 0.95rem;
-            color: var(--text-light);
-        }
-        .switch-text a {
-            color: var(--dark-pink);
-            font-weight: 800;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        .switch-text a:hover {
-            text-decoration: underline;
-        }
+      /* Buttons */
+      .btn {
+        width: 100%;
+        padding: 0.9rem;
+        border-radius: 10px;
+        font-size: 1.1rem;
+        font-weight: 800;
+        text-align: center;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+      }
+      .btn-primary {
+        background: var(--primary-pink);
+        color: var(--white);
+        box-shadow: 0 4px 15px rgba(255, 143, 163, 0.4);
+      }
 
-        /* Button Spinner */
-        .btn-spinner {
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,0.3);
-            border-top: 3px solid var(--white);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            display: none;
-        }
+      /* Context Aware States */
+      .btn:disabled {
+        background: var(--light-pink);
+        cursor: not-allowed;
+        box-shadow: none;
+        opacity: 0.6;
+      }
+      .btn-primary:not(:disabled):hover {
+        background: var(--dark-pink);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(201, 24, 74, 0.5);
+      }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+      /* Switch Text */
+      .switch-text {
+        text-align: center;
+        margin-top: 1.5rem;
+        font-size: 0.95rem;
+        color: var(--text-light);
+      }
+      .switch-text a {
+        color: var(--dark-pink);
+        font-weight: 800;
+        text-decoration: none;
+        cursor: pointer;
+      }
+      .switch-text a:hover {
+        text-decoration: underline;
+      }
+
+      /* Button Spinner */
+      .btn-spinner {
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-top: 3px solid var(--white);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        display: none;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
         }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
     </style>
-  
-  
-  <!-- Firebase SDKs -->
+
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
-  
-  
-  
-  
-  
-  
-</head>
-<body>
-
+  </head>
+  <body>
     <!-- Initial Page Load Spinner -->
     <div id="page-loader">
-        <div class="spinner"></div>
+      <div class="spinner"></div>
     </div>
 
     <div class="auth-container">
-        <div class="auth-header">
-            <div class="auth-logo">Mommychat.</div>
-            <h2 id="auth-title">Welcome Back</h2>
-        </div>
+      <div class="auth-header">
+        <div class="auth-logo">Mommychat.</div>
 
-        <div class="auth-slider-window">
-            <div class="auth-slider" id="auth-slider">
-                
-                <!-- Login Panel -->
-                <div class="auth-panel" id="panel-login">
-                    <form id="login-form">
-                        <div class="form-group">
-                            <label>Email Address</label>
-                            <input type="email" class="form-control" id="login-email" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Password</label>
-                            <input type="password" class="form-control" id="login-password" required>
-                            <button type="button" class="password-toggle" onclick="togglePassword('login-password')">
-                                <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
-                            </button>
-                        </div>
-                        <button type="submit" class="btn btn-primary" id="login-btn" disabled>
-                            <span class="btn-text">Sign In</span>
-                            <div class="btn-spinner" id="login-spinner"></div>
-                        </button>
-                    </form>
-                    <div class="switch-text">
-                        New here? <a onclick="slideTo('signup')">Create an account</a>
-                    </div>
-                </div>
+        <h2 id="auth-title">Private Access</h2>
+      </div>
 
-                <!-- Sign Up Panel -->
-                <div class="auth-panel" id="panel-signup">
-                    <form id="signup-form">
-                        <div class="form-group">
-                            <label>Full Name</label>
-                            <input type="text" class="form-control" id="signup-name" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Email Address</label>
-                            <input type="email" class="form-control" id="signup-email" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Password</label>
-                            <input type="password" class="form-control" id="signup-password" required>
-                            <button type="button" class="password-toggle" onclick="togglePassword('signup-password')">
-                                <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
-                            </button>
-                        </div>
-                        <div class="form-group">
-                            <label>Confirm Password</label>
-                            <input type="password" class="form-control" id="signup-confirm" required>
-                            <button type="button" class="password-toggle" onclick="togglePassword('signup-confirm')">
-                                <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
-                            </button>
-                        </div>
-                        <button type="submit" class="btn btn-primary" id="signup-btn" disabled>
-                            <span class="btn-text">Sign Up</span>
-                            <div class="btn-spinner" id="signup-spinner"></div>
-                        </button>
-                    </form>
-                    <div class="switch-text">
-                        Already have an account? <a onclick="slideTo('login')">Sign In</a>
-                    </div>
-                </div>
-
+      <div class="auth-slider-window">
+        <div class="auth-slider" id="auth-slider">
+          <!-- Verify Panel (New) -->
+          <div class="auth-panel" id="panel-verify">
+            <form id="verify-form">
+              <div class="form-group">
+                <label>Invite Code</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="verify-code"
+                  placeholder="Enter 8-digit code"
+                  maxlength="8"
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                class="btn btn-primary"
+                id="verify-btn"
+                disabled
+              >
+                <span class="btn-text">Verify Code</span>
+                <div class="btn-spinner" id="verify-spinner"></div>
+              </button>
+            </form>
+            <div class="switch-text">
+              Returning user? <a onclick="slideTo('login')">Sign In</a>
             </div>
+          </div>
+
+          <!-- Login Panel -->
+          <div class="auth-panel" id="panel-login">
+            <form id="login-form">
+              <div class="form-group">
+                <label>Email Address</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="login-email"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label>Password</label>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="login-password"
+                  required
+                />
+                <button
+                  type="button"
+                  class="password-toggle"
+                  onclick="togglePassword('login-password')"
+                >
+                  <svg viewBox="0 0 24 24">
+                    <path
+                      d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <button
+                type="submit"
+                class="btn btn-primary"
+                id="login-btn"
+                disabled
+              >
+                <span class="btn-text">Sign In</span>
+                <div class="btn-spinner" id="login-spinner"></div>
+              </button>
+            </form>
+            <div class="switch-text">
+              Have an invite code? <a onclick="slideTo('verify')">Verify it</a>
+            </div>
+          </div>
+
+          <!-- Sign Up Panel -->
+          <div class="auth-panel" id="panel-signup">
+            <form id="signup-form">
+              <div class="form-group">
+                <label>Full Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="signup-name"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label>Email Address</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="signup-email"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label>Password</label>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="signup-password"
+                  required
+                />
+                <button
+                  type="button"
+                  class="password-toggle"
+                  onclick="togglePassword('signup-password')"
+                >
+                  <svg viewBox="0 0 24 24">
+                    <path
+                      d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <div class="form-group">
+                <label>Confirm Password</label>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="signup-confirm"
+                  required
+                />
+                <button
+                  type="button"
+                  class="password-toggle"
+                  onclick="togglePassword('signup-confirm')"
+                >
+                  <svg viewBox="0 0 24 24">
+                    <path
+                      d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <button
+                type="submit"
+                class="btn btn-primary"
+                id="signup-btn"
+                disabled
+              >
+                <span class="btn-text">Sign Up</span>
+                <div class="btn-spinner" id="signup-spinner"></div>
+              </button>
+            </form>
+            <div class="switch-text">
+              Already have an account? <a onclick="slideTo('login')">Sign In</a>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
 
     <script>
-        // Page Load Spinner Removal
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.getElementById('page-loader').classList.add('hidden');
-            }, 400); // Slight delay to ensure smooth paint
-        });
+      // Page Load Spinner Removal
+      window.addEventListener("load", () => {
+        setTimeout(() => {
+          document.getElementById("page-loader").classList.add("hidden");
+        }, 400); // Slight delay to ensure smooth paint
+      });
 
-        // Sliding Logic
-        const slider = document.getElementById('auth-slider');
-        const authTitle = document.getElementById('auth-title');
+      // Sliding Logic
+      const slider = document.getElementById("auth-slider");
+      const authTitle = document.getElementById("auth-title");
 
-        function slideTo(panel) {
-            if (panel === 'signup') {
-                slider.style.transform = 'translateX(-50%)';
-                authTitle.innerText = "Create Account";
-            } else {
-                slider.style.transform = 'translateX(0)';
-                authTitle.innerText = "Welcome Back";
-            }
+      function slideTo(panel) {
+        if (panel === "signup") {
+          slider.style.transform = "translateX(-66.6666%)";
+          authTitle.innerText = "Create Account";
+        } else if (panel === "login") {
+          slider.style.transform = "translateX(-33.3333%)";
+          authTitle.innerText = "Welcome Back";
+        } else {
+          slider.style.transform = "translateX(0)";
+          authTitle.innerText = "Private Access";
         }
+      }
 
-        // Password Visibility Toggle
-        function togglePassword(inputId) {
-            const input = document.getElementById(inputId);
-            if (input.type === "password") {
-                input.type = "text";
-            } else {
-                input.type = "password";
-            }
+      // Password Visibility Toggle
+      function togglePassword(inputId) {
+        const input = document.getElementById(inputId);
+        if (input.type === "password") {
+          input.type = "text";
+        } else {
+          input.type = "password";
         }
+      }
 
-        // Context Aware Buttons (Validation)
-        const loginEmail = document.getElementById('login-email');
-        const loginPass = document.getElementById('login-password');
-        const loginBtn = document.getElementById('login-btn');
+      // Context Aware Buttons (Validation)
+      const loginEmail = document.getElementById("login-email");
+      const loginPass = document.getElementById("login-password");
+      const loginBtn = document.getElementById("login-btn");
+      
+      
+      const verifyCode = document.getElementById('verify-code');
+        const verifyBtn = document.getElementById('verify-btn');
 
         const signupName = document.getElementById('signup-name');
         const signupEmail = document.getElementById('signup-email');
         const signupPass = document.getElementById('signup-password');
         const signupConfirm = document.getElementById('signup-confirm');
         const signupBtn = document.getElementById('signup-btn');
+
+        function validateVerify() {
+            if (verifyCode.value.trim().length >= 6) { // Enable button if 6+ chars
+                verifyBtn.disabled = false;
+            } else {
+                verifyBtn.disabled = true;
+            }
+        }
 
         function validateLogin() {
             if (loginEmail.value.trim() !== '' && loginPass.value.trim() !== '') {
@@ -374,6 +484,8 @@
 
         // Attach listeners for dynamic validation
         ['input', 'keyup'].forEach(evt => {
+            verifyCode.addEventListener(evt, validateVerify);
+
             loginEmail.addEventListener(evt, validateLogin);
             loginPass.addEventListener(evt, validateLogin);
             
@@ -382,10 +494,8 @@
             signupPass.addEventListener(evt, validateSignup);
             signupConfirm.addEventListener(evt, validateSignup);
         });
-      
-      
-      
-      // Firebase Initialization
+
+        // Firebase Initialization
         const firebaseConfig = {
             apiKey: "AIzaSyAQLpT8HHjE_wcjo7psPvT0igkew6iMqgw",
             authDomain: "mommychat-b6e3c.firebaseapp.com",
@@ -423,75 +533,122 @@
             return errEl;
         }
 
-        // Production Sign In
-        document.getElementById('login-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = loginEmail.value.trim();
-            const password = loginPass.value;
+        // Database Verification Process
+        document.getElementById('verify-form').addEventListener('submit', async (e) => {
+            e.preventDefault(); 
+            const code = verifyCode.value.trim();
 
-            loginBtn.disabled = true;
-            document.querySelector('#login-btn .btn-text').style.display = 'none';
-            document.getElementById('login-spinner').style.display = 'block';
+            verifyBtn.disabled = true;
+            document.querySelector('#verify-btn .btn-text').style.display = 'none';
+            document.getElementById('verify-spinner').style.display = 'block';
 
-            const existingErr = document.getElementById('login-error-msg');
+            const existingErr = document.getElementById('verify-error-msg');
             if (existingErr) existingErr.remove();
 
             try {
-                await auth.signInWithEmailAndPassword(email, password);
-                window.location.href = 'profile.html';
+                // Checks the 'inviteCodes' collection for a document matching the entered code
+                const codeDoc = await db.collection('inviteCodes').doc(code).get();
+                
+                if (codeDoc.exists) {
+                    // Success: Slide to Create Account
+                    slideTo('signup');
+                } else {
+                    throw new Error("Invalid or expired invite code.");
+                }
             } catch (error) {
-                const errNode = displayAuthError('login-error-msg', error.message);
-                loginBtn.parentNode.insertBefore(errNode, loginBtn);
-                loginBtn.disabled = false;
-                document.querySelector('#login-btn .btn-text').style.display = 'block';
-                document.getElementById('login-spinner').style.display = 'none';
+                const errNode = displayAuthError('verify-error-msg', error.message);
+                verifyBtn.parentNode.insertBefore(errNode, verifyBtn);
+            } finally {
+                verifyBtn.disabled = false;
+                document.querySelector('#verify-btn .btn-text').style.display = 'block';
+                document.getElementById('verify-spinner').style.display = 'none';
             }
         });
+      
 
-        // Production Sign Up with Firestore User Document Provisioning
-        document.getElementById('signup-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const name = signupName.value.trim();
-            const email = signupEmail.value.trim();
-            const password = signupPass.value;
 
-            signupBtn.disabled = true;
-            document.querySelector('#signup-btn .btn-text').style.display = 'none';
-            document.getElementById('signup-spinner').style.display = 'block';
+      // Production Sign In
+      document
+        .getElementById("login-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const email = loginEmail.value.trim();
+          const password = loginPass.value;
 
-            const existingErr = document.getElementById('signup-error-msg');
-            if (existingErr) existingErr.remove();
+          loginBtn.disabled = true;
+          document.querySelector("#login-btn .btn-text").style.display = "none";
+          document.getElementById("login-spinner").style.display = "block";
 
-            try {
-                const cred = await auth.createUserWithEmailAndPassword(email, password);
-                const user = cred.user;
+          const existingErr = document.getElementById("login-error-msg");
+          if (existingErr) existingErr.remove();
 
-                await user.updateProfile({ displayName: name });
-
-                await db.collection('users').doc(user.uid).set({
-                    uid: user.uid,
-                    displayName: name,
-                    email: email,
-                    avatarUrl: '',
-                    avatarLetter: name.charAt(0).toUpperCase() || 'M',
-                    tokens: 0,
-                    childrenContext: 'Mother of 2 (Ages 3, 5). Navigating the chaos of toddlerhood!',
-                    privateNotes: '',
-                    isHelper: false,
-                    friends: [],
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-
-                window.location.href = 'profile.html';
-            } catch (error) {
-                const errNode = displayAuthError('signup-error-msg', error.message);
-                signupBtn.parentNode.insertBefore(errNode, signupBtn);
-                signupBtn.disabled = false;
-                document.querySelector('#signup-btn .btn-text').style.display = 'block';
-                document.getElementById('signup-spinner').style.display = 'none';
-            }
+          try {
+            await auth.signInWithEmailAndPassword(email, password);
+            window.location.href = "profile.html";
+          } catch (error) {
+            const errNode = displayAuthError("login-error-msg", error.message);
+            loginBtn.parentNode.insertBefore(errNode, loginBtn);
+            loginBtn.disabled = false;
+            document.querySelector("#login-btn .btn-text").style.display =
+              "block";
+            document.getElementById("login-spinner").style.display = "none";
+          }
         });
 
+      // Production Sign Up with Firestore User Document Provisioning
+      document
+        .getElementById("signup-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const name = signupName.value.trim();
+          const email = signupEmail.value.trim();
+          const password = signupPass.value;
+
+          signupBtn.disabled = true;
+          document.querySelector("#signup-btn .btn-text").style.display =
+            "none";
+          document.getElementById("signup-spinner").style.display = "block";
+
+          const existingErr = document.getElementById("signup-error-msg");
+          if (existingErr) existingErr.remove();
+
+          try {
+            const cred = await auth.createUserWithEmailAndPassword(
+              email,
+              password
+            );
+            const user = cred.user;
+
+            await user.updateProfile({ displayName: name });
+
+            await db
+              .collection("users")
+              .doc(user.uid)
+              .set({
+                uid: user.uid,
+                displayName: name,
+                email: email,
+                avatarUrl: "",
+                avatarLetter: name.charAt(0).toUpperCase() || "M",
+                tokens: 0,
+                childrenContext:
+                  "Mother of 2 (Ages 3, 5). Navigating the chaos of toddlerhood!",
+                privateNotes: "",
+                isHelper: false,
+                friends: [],
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+              });
+
+            window.location.href = "profile.html";
+          } catch (error) {
+            const errNode = displayAuthError("signup-error-msg", error.message);
+            signupBtn.parentNode.insertBefore(errNode, signupBtn);
+            signupBtn.disabled = false;
+            document.querySelector("#signup-btn .btn-text").style.display =
+              "block";
+            document.getElementById("signup-spinner").style.display = "none";
+          }
+        });
     </script>
-</body>
+  </body>
 </html>
