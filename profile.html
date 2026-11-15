@@ -2,6 +2,31 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" id="app-viewport" />
+    <script>
+      // Dynamically "zoom out" the entire HTML page on narrow phones
+      (function() {
+        var screenWidth = window.screen.width || window.innerWidth;
+        var idealWidth = 430; // The benchmark large-phone width
+        
+        if (screenWidth > 0 && screenWidth < idealWidth) {
+          var scaleRatio = (screenWidth / idealWidth).toFixed(2);
+          var metaTag = document.getElementById('app-viewport');
+          if (metaTag) {
+            metaTag.setAttribute(
+              'content', 
+              'width=device-width, initial-scale=' + scaleRatio + ', maximum-scale=' + scaleRatio + ', user-scalable=no'
+            );
+          }
+        }
+      })();
+    </script>
+    
+     
+    
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mommychat | Feed</title>
     <link
