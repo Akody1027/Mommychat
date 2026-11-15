@@ -8,24 +8,24 @@
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
       id="app-viewport"
     />
-    <script>
+    <script> 
       // Dynamically "zoom out" the entire HTML page on narrow phones
       (function () {
         var screenWidth = window.screen.width || window.innerWidth;
         var idealWidth = 450; // The benchmark large-phone width
 
         if (screenWidth > 0 && screenWidth < idealWidth) {
-          var scaleRatio = (screenWidth / idealWidth).toFixed(2);
+          var scaleRatio = (screenWidth / idealWidth).toFixed(2); 
           var metaTag = document.getElementById("app-viewport");
           if (metaTag) {
             metaTag.setAttribute(
               "content",
-              "width=device-width, initial-scale=" +
-                scaleRatio + 
-                ", maximum-scale=" +   
+              "width=device-width, initial-scale=" + 
                 scaleRatio +
+                ", maximum-scale=" +  
+                scaleRatio + 
                 ", user-scalable=no"
-            );
+            ); 
           }
         }
       })();
@@ -1853,7 +1853,7 @@
       .clips-feed-view::-webkit-scrollbar {
         display: none; /* Chrome, Safari, Opera */
       }
-      .clip-feed-item { 
+      .clip-feed-item {
         height: 100%;
         width: 100%;
         scroll-snap-align: start;
@@ -1966,6 +1966,11 @@
         gap: 15px;
         width: 100%;
         max-width: 250px;
+      }
+
+      #copy-btn:hover {
+        color: white !important;
+        background-color: #2a9d8f;
       }
     </style>
 
@@ -2299,9 +2304,11 @@
           </div>
           <div class="upm-tab" data-target="tab-account">Account</div>
           <div class="upm-tab" data-target="tab-helper">Helper Payouts</div>
+          <div class="upm-tab" data-target="tab-invites">Invitations</div>
         </div>
 
         <!-- TAB 1: Household Details (Your existing form) -->
+
         <div id="tab-household" class="upm-tab-content active">
           <div class="avatar-upload-container">
             <div class="avatar-edit-wrapper">
@@ -2478,6 +2485,39 @@
             >
               Request Cash Out
             </button>
+          </div>
+        </div>
+
+        <!-- TAB 4: Invite Codes -->
+        <div id="tab-invites" class="upm-tab-content">
+          <div class="helper-pitch">
+            <h3>Generate Access</h3>
+            <p style="color: var(--text-dark); margin-bottom: 1rem">
+              Create private 8-digit invite codes to grant friends access to the
+              community.
+            </p>
+          </div>
+          <div class="upm-form-group">
+            <label>Person's Name</label>
+            <input
+              type="text"
+              id="invite-person-name"
+              placeholder="e.g., Sarah Jenkins"
+            />
+          </div>
+          <button
+            class="btn-modal-action"
+            id="btn-generate-code"
+            style="margin-bottom: 2rem"
+          >
+            Generate Code
+          </button>
+
+          <div class="settings-section-title">Active Codes</div>
+          <div id="active-invites-list">
+            <p style="color: var(--text-muted); font-size: 0.9rem">
+              Loading...
+            </p>
           </div>
         </div>
       </div>
@@ -3217,6 +3257,7 @@
         listenToInbox();
         listenToStories(); // Added initialization for the dynamic stories feed
         listenToAllClips(); // Initialize the dynamic clips engine
+        listenToInviteCodes();
       });
 
       function listenToUserProfile(uid) {
@@ -4371,6 +4412,118 @@
             });
           });
       }
+
+      function listenToInviteCodes() {
+        if (!currentUser) return;
+        db.collection("inviteCodes")
+          .where("createdBy", "==", currentUser.uid)
+          .onSnapshot((snapshot) => {
+            const list = document.getElementById("active-invites-list");
+            if (!list) return;
+
+            if (snapshot.empty) {
+              list.innerHTML =
+                '<p style="color: var(--text-muted); font-size: 0.9rem;">No active invite codes.</p>';
+              return;
+            }
+
+            let html = "";
+            snapshot.forEach((doc) => {
+              const data = doc.data();
+              html += `
+                        <div class="blocked-user-row">
+                            <div>
+                                <div class="blocked-user-name">${escapeHTML(
+                                  data.name || "Unknown"
+                                )}</div>
+                                <div style="font-size: 0.85rem; color: var(--dark-pink); font-weight: 800; letter-spacing: 1px;">${
+                                  doc.id
+                                }</div>
+                               </div>
+                               <div style="display: flex; gap: 8px;">
+     
+                               <button class="btn-danger-outline" id="copy-btn" onclick="copyInviteCode('${
+                                 doc.id
+                               }')" style="padding: 0.3rem 0.8rem; font-size: 0.85rem; border-color: #2a9d8f; color: #2a9d8f;">Copy Code</button>
+ 
+                                <button class="btn-danger-outline" onclick="deleteInviteCode('${
+                                  doc.id
+                                }')" style="padding: 0.3rem 0.8rem; font-size: 0.85rem;">Revoke</button>
+                            </div>
+                        </div>
+                    `;
+            });
+            list.innerHTML = html;
+          });
+      }
+
+      window.deleteInviteCode = async function (code) {
+        showCustomConfirm(
+          "Are you sure you want to revoke this invite code? It will no longer work for anyone.",
+          async () => {
+            try {
+              await db.collection("inviteCodes").doc(code).delete();
+              showCustomAlert("Invite code revoked successfully.");
+            } catch (err) {
+              console.error("Error revoking code:", err);
+              showCustomAlert("Failed to revoke invite code.");
+            }
+          }
+        );
+      };
+
+      window.copyInviteCode = function (code) {
+        navigator.clipboard
+          .writeText(code)
+          .then(() => {
+            showCustomAlert("Code copied to clipboard!");
+          })
+          .catch((err) => {
+            console.error("Could not copy text: ", err);
+            showCustomAlert("Failed to copy code.");
+          });
+      };
+
+      document
+        .getElementById("btn-generate-code")
+        .addEventListener("click", async () => {
+          if (!currentUser) return;
+
+          const nameInput = document.getElementById("invite-person-name");
+          const name = nameInput.value.trim();
+
+          if (!name) {
+            showCustomAlert("Please enter a name for the invite.");
+            return;
+          }
+
+          const btn = document.getElementById("btn-generate-code");
+          const originalText = btn.innerText;
+          btn.innerText = "Generating...";
+          btn.disabled = true;
+
+          const firstLetter = name.charAt(0).toUpperCase();
+          const randomPart = Math.random()
+            .toString(36)
+            .substring(2, 9)
+            .toUpperCase();
+          const hybridCode = firstLetter + randomPart;
+
+          try {
+            await db.collection("inviteCodes").doc(hybridCode).set({
+              name: name,
+              createdBy: currentUser.uid,
+              createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            });
+            nameInput.value = "";
+          } catch (err) {
+            console.error("Error generating code:", err);
+            showCustomAlert("Failed to generate code.");
+          } finally {
+            btn.innerText = originalText;
+            btn.disabled = false;
+          }
+        });
 
       // Atomic Token Deduction Logic
       async function chargeTokens(amount, description) {
