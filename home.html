@@ -16,13 +16,13 @@
         --dark-pink: #c9184a;
         --text-dark: #590d22;
         --text-light: #800f2f;
-        --white: #ffffff;
+        --white: #ffffff; 
         --glass-bg: rgba(255, 255, 255, 0.85);
         --input-border: #f8cdda;
       }
 
       * {
-        margin: 0; 
+        margin: 0;
         padding: 0;
         box-sizing: border-box;
         font-family: "Nunito", sans-serif;
@@ -443,129 +443,136 @@
       const loginEmail = document.getElementById("login-email");
       const loginPass = document.getElementById("login-password");
       const loginBtn = document.getElementById("login-btn");
-      
-      
-      const verifyCode = document.getElementById('verify-code');
-        const verifyBtn = document.getElementById('verify-btn');
 
-        const signupName = document.getElementById('signup-name');
-        const signupEmail = document.getElementById('signup-email');
-        const signupPass = document.getElementById('signup-password');
-        const signupConfirm = document.getElementById('signup-confirm');
-        const signupBtn = document.getElementById('signup-btn');
+      const verifyCode = document.getElementById("verify-code");
+      const verifyBtn = document.getElementById("verify-btn");
 
-        function validateVerify() {
-            if (verifyCode.value.trim().length >= 6) { // Enable button if 6+ chars
-                verifyBtn.disabled = false;
+      const signupName = document.getElementById("signup-name");
+      const signupEmail = document.getElementById("signup-email");
+      const signupPass = document.getElementById("signup-password");
+      const signupConfirm = document.getElementById("signup-confirm");
+      const signupBtn = document.getElementById("signup-btn");
+
+      function validateVerify() {
+        if (verifyCode.value.trim().length >= 6) {
+          // Enable button if 6+ chars
+          verifyBtn.disabled = false;
+        } else {
+          verifyBtn.disabled = true;
+        }
+      }
+
+      function validateLogin() {
+        if (loginEmail.value.trim() !== "" && loginPass.value.trim() !== "") {
+          loginBtn.disabled = false;
+        } else {
+          loginBtn.disabled = true;
+        }
+      }
+
+      function validateSignup() {
+        if (
+          signupName.value.trim() !== "" &&
+          signupEmail.value.trim() !== "" &&
+          signupPass.value.trim() !== "" &&
+          signupConfirm.value.trim() !== "" &&
+          signupPass.value === signupConfirm.value
+        ) {
+          signupBtn.disabled = false;
+        } else {
+          signupBtn.disabled = true;
+        }
+      }
+
+      // Attach listeners for dynamic validation
+      ["input", "keyup"].forEach((evt) => {
+        verifyCode.addEventListener(evt, validateVerify);
+
+        loginEmail.addEventListener(evt, validateLogin);
+        loginPass.addEventListener(evt, validateLogin);
+
+        signupName.addEventListener(evt, validateSignup);
+        signupEmail.addEventListener(evt, validateSignup);
+        signupPass.addEventListener(evt, validateSignup);
+        signupConfirm.addEventListener(evt, validateSignup);
+      });
+
+      // Firebase Initialization
+      const firebaseConfig = {
+        apiKey: "AIzaSyAQLpT8HHjE_wcjo7psPvT0igkew6iMqgw",
+        authDomain: "mommychat-b6e3c.firebaseapp.com",
+        projectId: "mommychat-b6e3c",
+        storageBucket: "mommychat-b6e3c.firebasestorage.app",
+        messagingSenderId: "355234858731",
+        appId: "1:355234858731:web:9d730c1154d10102d6a0ae",
+      };
+
+      if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+      }
+      const auth = firebase.auth();
+      const db = firebase.firestore();
+
+      // Redirect active sessions immediately
+      auth.onAuthStateChanged((user) => {
+        if (user) {
+          window.location.href = "profile.html";
+        }
+      });
+
+      function displayAuthError(containerId, message) {
+        let errEl = document.getElementById(containerId);
+        if (!errEl) {
+          errEl = document.createElement("div");
+          errEl.id = containerId;
+          errEl.style.color = "var(--dark-pink)";
+          errEl.style.fontSize = "0.85rem";
+          errEl.style.fontWeight = "700";
+          errEl.style.marginBottom = "1rem";
+          errEl.style.textAlign = "center";
+        }
+        errEl.textContent = message;
+        return errEl;
+      }
+
+      let validInviteCode = null;
+
+      // Database Verification Process
+      document
+        .getElementById("verify-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const code = verifyCode.value.trim().toUpperCase();
+
+          verifyBtn.disabled = true;
+          document.querySelector("#verify-btn .btn-text").style.display =
+            "none";
+          document.getElementById("verify-spinner").style.display = "block";
+
+          const existingErr = document.getElementById("verify-error-msg");
+          if (existingErr) existingErr.remove();
+
+          try {
+            // Checks the 'inviteCodes' collection for a document matching the entered code
+            const codeDoc = await db.collection("inviteCodes").doc(code).get();
+
+            if (codeDoc.exists) {
+              validInviteCode = code;
+              // Success: Slide to Create Account
+              slideTo("signup");
             } else {
-                verifyBtn.disabled = true;
+              throw new Error("Invalid or expired invite code.");
             }
-        }
-
-        function validateLogin() {
-            if (loginEmail.value.trim() !== '' && loginPass.value.trim() !== '') {
-                loginBtn.disabled = false;
-            } else {
-                loginBtn.disabled = true;
-            }
-        }
-
-        function validateSignup() {
-            if (signupName.value.trim() !== '' && 
-                signupEmail.value.trim() !== '' && 
-                signupPass.value.trim() !== '' && 
-                signupConfirm.value.trim() !== '' &&
-                signupPass.value === signupConfirm.value) {
-                signupBtn.disabled = false;
-            } else {
-                signupBtn.disabled = true;
-            }
-        }
-
-        // Attach listeners for dynamic validation
-        ['input', 'keyup'].forEach(evt => {
-            verifyCode.addEventListener(evt, validateVerify);
-
-            loginEmail.addEventListener(evt, validateLogin);
-            loginPass.addEventListener(evt, validateLogin);
-            
-            signupName.addEventListener(evt, validateSignup);
-            signupEmail.addEventListener(evt, validateSignup);
-            signupPass.addEventListener(evt, validateSignup);
-            signupConfirm.addEventListener(evt, validateSignup);
+          } catch (error) {
+            const errNode = displayAuthError("verify-error-msg", error.message);
+            verifyBtn.parentNode.insertBefore(errNode, verifyBtn);
+          } finally {
+            verifyBtn.disabled = false;
+            document.querySelector("#verify-btn .btn-text").style.display =
+              "block";
+            document.getElementById("verify-spinner").style.display = "none";
+          }
         });
-
-        // Firebase Initialization
-        const firebaseConfig = {
-            apiKey: "AIzaSyAQLpT8HHjE_wcjo7psPvT0igkew6iMqgw",
-            authDomain: "mommychat-b6e3c.firebaseapp.com",
-            projectId: "mommychat-b6e3c",
-            storageBucket: "mommychat-b6e3c.firebasestorage.app",
-            messagingSenderId: "355234858731",
-            appId: "1:355234858731:web:9d730c1154d10102d6a0ae"
-        };
-
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
-        const auth = firebase.auth();
-        const db = firebase.firestore();
-
-        // Redirect active sessions immediately
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                window.location.href = 'profile.html';
-            }
-        });
-
-        function displayAuthError(containerId, message) {
-            let errEl = document.getElementById(containerId);
-            if (!errEl) {
-                errEl = document.createElement('div');
-                errEl.id = containerId;
-                errEl.style.color = 'var(--dark-pink)';
-                errEl.style.fontSize = '0.85rem';
-                errEl.style.fontWeight = '700';
-                errEl.style.marginBottom = '1rem';
-                errEl.style.textAlign = 'center';
-            }
-            errEl.textContent = message;
-            return errEl;
-        }
-
-        // Database Verification Process
-        document.getElementById('verify-form').addEventListener('submit', async (e) => {
-            e.preventDefault(); 
-            const code = verifyCode.value.trim();
-
-            verifyBtn.disabled = true;
-            document.querySelector('#verify-btn .btn-text').style.display = 'none';
-            document.getElementById('verify-spinner').style.display = 'block';
-
-            const existingErr = document.getElementById('verify-error-msg');
-            if (existingErr) existingErr.remove();
-
-            try {
-                // Checks the 'inviteCodes' collection for a document matching the entered code
-                const codeDoc = await db.collection('inviteCodes').doc(code).get();
-                
-                if (codeDoc.exists) {
-                    // Success: Slide to Create Account
-                    slideTo('signup');
-                } else {
-                    throw new Error("Invalid or expired invite code.");
-                }
-            } catch (error) {
-                const errNode = displayAuthError('verify-error-msg', error.message);
-                verifyBtn.parentNode.insertBefore(errNode, verifyBtn);
-            } finally {
-                verifyBtn.disabled = false;
-                document.querySelector('#verify-btn .btn-text').style.display = 'block';
-                document.getElementById('verify-spinner').style.display = 'none';
-            }
-        });
-      
-
 
       // Production Sign In
       document
@@ -638,6 +645,10 @@
                 friends: [],
                 createdAt: firebase.firestore.FieldValue.serverTimestamp(),
               });
+
+            if (validInviteCode) {
+              await db.collection("inviteCodes").doc(validInviteCode).delete();
+            }
 
             window.location.href = "profile.html";
           } catch (error) {
