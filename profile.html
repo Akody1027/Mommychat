@@ -12,7 +12,7 @@
       :root {
         --bg-color: #fff5f7;
         --primary-pink: #ff8fa3; 
-        --light-pink: #ffb3c1; 
+        --light-pink: #ffb3c1;  
         --dark-pink: #c9184a;
         --text-dark: #590d22;
         --text-light: #800f2f;
@@ -603,15 +603,7 @@
       }
 
       /* Edge-to-Edge Post Card */
-      .post-card {
-        background: var(--white);
-        border-radius: 0;
-        padding: 1.5rem;
-        margin-bottom: 8px;
-        box-shadow: none;
-        border: none;
-        animation: fadeInDown 0.5s ease forwards;
-      }
+
 
       @keyframes fadeInDown {
         from {
@@ -844,9 +836,7 @@
       /* Post Card */
       .post-card {
         background: var(--white);
-        border-radius: 20px;
         padding: 1.5rem;
-        margin-bottom: 1.5rem;
         box-shadow: 0 4px 15px rgba(255, 143, 163, 0.1);
         border: 1px solid var(--border-color);
         animation: fadeInDown 0.5s ease forwards;
@@ -3088,8 +3078,8 @@
                                 }>
                                     <button class="post-options-btn" onclick="togglePostOptions('${postId}', event)">⋮</button>
                                     <div class="post-options-menu" id="options-${postId}">
-                                        <button onclick="startEditPost('${postId}')">✏️ Edit Post</button>
-                                        <button class="delete-btn" onclick="deletePost('${postId}')">🗑️ Delete</button>
+                                        <button onclick="startEditPost('${postId}')">Edit Post</button>
+                                        <button class="delete-btn" onclick="deletePost('${postId}')">Delete</button>
                                     </div>
                                 </div>
                             </div>
