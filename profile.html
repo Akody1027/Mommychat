@@ -15,12 +15,12 @@
         --light-pink: #ffb3c1;
         --dark-pink: #c9184a;
         --text-dark: #590d22;
-        --text-light: #800f2f;
+        --text-light: #800f2f; 
         --text-muted: #a47381;
         --white: #ffffff;
         --glass-bg: rgba(255, 255, 255, 0.85);
         --border-color: #f8cdda;
-      }
+      } 
 
       * {
         margin: 0;
@@ -323,7 +323,7 @@
         padding-bottom: 2rem;
         display: flex;
         justify-content: center;
-        background: #ebebeb;
+        background: var(--border-color);
       }
 
       .feed-container {
@@ -497,7 +497,7 @@
       }
 
       .helper-card {
-        height: 300px;
+        height:300px;
         min-width: 300px;
         border: 1px solid var(--border-color);
         border-radius: 10px;
@@ -553,6 +553,7 @@
       .reels-section {
         background: var(--white);
         padding: 1rem 0;
+        margin-bottom: 8px;
       }
       .reels-header {
         padding: 0 1.5rem 1rem;
@@ -655,17 +656,7 @@
       }
 
       /* Edge-to-Edge Post Image Breakout */
-      .post-feed-image {
-        width: calc(100% + 3rem);
-        margin-left: -1.5rem;
-        margin-right: -1.5rem;
-        border-radius: 0;
-        margin-bottom: 1rem;
-        border: none;
-        max-height: 500px;
-        object-fit: cover;
-        display: block;
-      }
+
 
       .post-actions {
         display: flex;
@@ -944,7 +935,6 @@
       /* Post Image & Upload Preview */
       .post-feed-image {
         width: 100%;
-        border-radius: 15px;
         margin-bottom: 1.5rem;
         border: 1px solid var(--border-color);
         max-height: 400px;
@@ -1528,11 +1518,7 @@
         .post-card {
           padding: 1rem;
         }
-        .post-feed-image {
-          width: calc(100% + 2rem);
-          margin-left: -1rem;
-          margin-right: -1rem;
-        }
+ 
         .create-post {
           padding: 1rem;
         }
@@ -3113,7 +3099,7 @@
                       ${window.helperHTML || ""}
                     </div>
                   </div>
-                `;
+                `; 
                 feedPosts.insertAdjacentHTML("beforeend", communityBlock);
               }
 
