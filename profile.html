@@ -12,7 +12,7 @@
       // Dynamically "zoom out" the entire HTML page on narrow phones
       (function () {
         var screenWidth = window.screen.width || window.innerWidth;
-        var idealWidth = 430; // The benchmark large-phone width
+        var idealWidth = 450; // The benchmark large-phone width
 
         if (screenWidth > 0 && screenWidth < idealWidth) {
           var scaleRatio = (screenWidth / idealWidth).toFixed(2);
@@ -31,7 +31,6 @@
       })();
     </script>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mommychat | Feed</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap"
