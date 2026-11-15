@@ -2,31 +2,36 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" id="app-viewport" />
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+      id="app-viewport"
+    />
     <script>
       // Dynamically "zoom out" the entire HTML page on narrow phones
-      (function() {
+      (function () {
         var screenWidth = window.screen.width || window.innerWidth;
         var idealWidth = 430; // The benchmark large-phone width
-        
+
         if (screenWidth > 0 && screenWidth < idealWidth) {
           var scaleRatio = (screenWidth / idealWidth).toFixed(2);
-          var metaTag = document.getElementById('app-viewport');
+          var metaTag = document.getElementById("app-viewport");
           if (metaTag) {
             metaTag.setAttribute(
-              'content', 
-              'width=device-width, initial-scale=' + scaleRatio + ', maximum-scale=' + scaleRatio + ', user-scalable=no'
+              "content",
+              "width=device-width, initial-scale=" +
+                scaleRatio +
+                ", maximum-scale=" +  
+                scaleRatio +
+                ", user-scalable=no"
             );
           }
         }
       })();
     </script>
-    
-     
-    
-    
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Mommychat | Feed</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap"
@@ -46,7 +51,7 @@
         --border-color: #f8cdda;
       }
 
-      * { 
+      * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
@@ -1810,9 +1815,9 @@
       }
       /* Grid View */
       .clips-grid-view {
+        gap: 0;
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 2px;
         height: 100%;
         overflow-y: auto;
         padding: 0; /* Flushes grid directly to the top edge */
@@ -1822,15 +1827,17 @@
       .clips-grid-view::-webkit-scrollbar {
         display: none;
       }
+
       .clip-grid-item {
         aspect-ratio: 9/16;
-        background: var(--border-color);
+        background: #000; /* Hides fractional sub-pixel bleeding */
         position: relative;
         cursor: pointer;
       }
 
       .clip-grid-item video,
       .clip-grid-item img {
+        display: block; /* Removes the 4px baseline text gap */
         width: 100%;
         height: 100%;
         object-fit: cover;
@@ -1849,7 +1856,7 @@
       .clips-feed-view::-webkit-scrollbar {
         display: none; /* Chrome, Safari, Opera */
       }
-      .clip-feed-item {
+      .clip-feed-item { 
         height: 100%;
         width: 100%;
         scroll-snap-align: start;
@@ -1864,7 +1871,7 @@
       .clip-feed-item img {
         height: 100%;
         width: 100%;
-        object-fit: cover;
+        object-fit: contain;
       }
       .clip-overlay-info {
         position: absolute;
@@ -4200,6 +4207,7 @@
       });
 
       // Dynamic Stories Carousel Listener
+
       function listenToStories() {
         const container = document.getElementById("stories-container");
         if (!container) return;
@@ -4209,10 +4217,10 @@
           .onSnapshot((snapshot) => {
             let myBgHTML = `<img src="${
               currentUserDoc?.avatarUrl || currentUser?.photoURL || ""
-            }" style="width:100%; height:120px; object-fit:cover; background:var(--light-pink); border-bottom-left-radius:0; border-bottom-right-radius:0;">`;
+            }" style="width:100%; height:120px; object-fit:cover; object-position: center 20%; background:var(--light-pink); border-bottom-left-radius:0; border-bottom-right-radius:0;">`;
 
             if (currentUserDoc && currentUserDoc.beYourselfLoopUrl) {
-              myBgHTML = `<video src="${currentUserDoc.beYourselfLoopUrl}" class="story-bg" autoplay loop muted playsinline style="transform: scaleX(-1); width:100%; height:120px; object-fit:cover; border-bottom-left-radius:0; border-bottom-right-radius:0;"></video>`;
+              myBgHTML = `<video src="${currentUserDoc.beYourselfLoopUrl}" class="story-bg" autoplay loop muted playsinline style="transform: scaleX(-1); width:100%; height:120px; object-fit:cover; object-position: center 20%; border-bottom-left-radius:0; border-bottom-right-radius:0;"></video>`;
             }
 
             let html = `
@@ -4237,11 +4245,11 @@
               // Render active looping video if available
               let bgHTML = "";
               if (user.beYourselfLoopUrl) {
-                bgHTML = `<video src="${user.beYourselfLoopUrl}" class="story-bg" autoplay loop muted playsinline style="transform: scaleX(-1);"></video>`;
+                bgHTML = `<video src="${user.beYourselfLoopUrl}" class="story-bg" autoplay loop muted playsinline style="transform: scaleX(-1); object-fit: cover; object-position: center 20%; width: 100%; height: 100%;"></video>`;
               } else if (user.storyUrl) {
-                bgHTML = `<img src="${user.storyUrl}" class="story-bg">`;
+                bgHTML = `<img src="${user.storyUrl}" class="story-bg" style="object-fit: cover; object-position: center 20%;">`;
               } else if (user.avatarUrl) {
-                bgHTML = `<img src="${user.avatarUrl}" class="story-bg">`;
+                bgHTML = `<img src="${user.avatarUrl}" class="story-bg" style="object-fit: cover; object-position: center 20%;">`;
               } else {
                 bgHTML = `<div class="story-bg" style="width: 100%; height: 100%; background: linear-gradient(135deg, var(--light-pink), var(--primary-pink));"></div>`;
               }
