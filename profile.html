@@ -15,17 +15,17 @@
         --light-pink: #ffb3c1;
         --dark-pink: #c9184a;
         --text-dark: #590d22;
-        --text-light: #800f2f;  
+        --text-light: #800f2f;
         --text-muted: #a47381;
-        --white: #ffffff; 
+        --white: #ffffff;
         --glass-bg: rgba(255, 255, 255, 0.85);
         --border-color: #f8cdda;
-      } 
+      }
 
       * {
         margin: 0;
-        padding: 0;
-        box-sizing: border-box;
+        padding: 0; 
+        box-sizing: border-box; 
         font-family: "Nunito", sans-serif;
       }
 
@@ -496,7 +496,7 @@
       }
 
       .helper-card {
-        height:300px;
+        height: 300px;
         min-width: 300px;
         border: 1px solid var(--border-color);
         border-radius: 10px;
@@ -572,6 +572,7 @@
         display: none;
       }
       .reel-card {
+        max-width: 300px;
         min-width: 300px;
         height: 400px;
         border-radius: 10px;
@@ -654,7 +655,6 @@
       }
 
       /* Edge-to-Edge Post Image Breakout */
-
 
       .post-actions {
         display: flex;
@@ -1516,7 +1516,7 @@
         .post-card {
           padding: 1rem;
         }
- 
+
         .create-post {
           padding: 1rem;
         }
@@ -1711,6 +1711,135 @@
       .inbox-delete-btn:hover {
         background: var(--light-pink) !important;
       }
+
+      /* --- Clips Ecosystem CSS --- */
+      .clips-header-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+        background: var(--white);
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+      }
+      .clips-toggle-group {
+        display: flex;
+        background: var(--bg-color);
+        border-radius: 25px;
+        padding: 4px;
+        border: 1px solid var(--border-color);
+      }
+      .clip-toggle-btn {
+        padding: 0.4rem 1.2rem;
+        border-radius: 20px;
+        border: none;
+        background: transparent;
+        color: var(--text-muted);
+        font-weight: 800;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+      .clip-toggle-btn.active {
+        background: var(--white);
+        color: var(--dark-pink);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      }
+      .clips-body {
+        flex: 1;
+        overflow: hidden;
+        background: var(--bg-color);
+        position: relative;
+      }
+      /* Grid View */
+      .clips-grid-view {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2px;
+        height: 100%;
+        overflow-y: auto;
+        padding: 2px;
+      }
+      .clip-grid-item {
+        aspect-ratio: 9/16;
+        background: #000;
+        position: relative;
+        cursor: pointer;
+      }
+      .clip-grid-item video,
+      .clip-grid-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      
+      
+      /* Feed View (TikTok Style) */
+      .clips-feed-view {
+        height: 100%;
+        overflow-y: scroll;
+        scroll-snap-type: y mandatory;
+        display: none;
+        background: #000;
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE/Edge */
+      }
+      .clips-feed-view::-webkit-scrollbar {
+        display: none; /* Chrome, Safari, Opera */
+      }
+      .clip-feed-item {
+        height: 100%;
+        width: 100%;
+        scroll-snap-align: start;
+        scroll-snap-stop: always; /* Forces strict 1-by-1 snapping */
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      
+      
+      
+
+      .clip-feed-item video,
+      .clip-feed-item img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+      }
+      .clip-overlay-info {
+        position: absolute;
+        bottom: 20px;
+        left: 15px;
+        right: 60px;
+        color: var(--white);
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+      }
+      .clip-author-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 5px;
+        font-weight: 800;
+      }
+      .creator-upload-area {
+        border: 2px dashed var(--primary-pink);
+        border-radius: 15px;
+        padding: 2rem;
+        text-align: center;
+        background: var(--white);
+        margin-bottom: 1.5rem;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+      .creator-upload-area:hover {
+        background: var(--bg-color);
+      }
+      .my-clips-list {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 5px;
+      }
     </style>
 
     <!-- Firebase SDKs -->
@@ -1747,6 +1876,16 @@
           <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor">
             <path
               d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+            />
+          </svg>
+        </button>
+      </div>
+
+      <div class="toolbar-group">
+        <button class="toolbar-btn" id="clips-open-btn">
+          <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor">
+            <path
+              d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8 12.5v-9l6 4.5-6 4.5z"
             />
           </svg>
         </button>
@@ -2337,6 +2476,153 @@
     </div>
 
     <div class="app-container">
+      <!-- Clips Viewer Modal -->
+      <div
+        class="user-profile-modal"
+        id="clips-main-modal"
+        style="z-index: 2002"
+      >
+        <div class="clips-header-container">
+          <button
+            class="btn-close-modal"
+            onclick="closeClipsModal()"
+            style="background: var(--bg-color); color: var(--dark-pink)"
+          >
+            ←
+          </button>
+          <div class="clips-toggle-group">
+            <button class="clip-toggle-btn active" id="btn-clip-grid">
+              Grid
+            </button>
+            <button class="clip-toggle-btn" id="btn-clip-feed">Feed</button>
+          </div>
+          <div
+            class="fm-header-avatar"
+            id="clips-user-avatar"
+            onclick="openCreatorModal()"
+            style="
+              width: 35px;
+              height: 35px;
+              font-size: 1rem;
+              cursor: pointer;
+              box-shadow: none;
+            "
+          >
+            M
+          </div>
+        </div>
+        <div class="clips-body">
+          <div class="clips-grid-view" id="clips-grid-container"></div>
+          <div class="clips-feed-view" id="clips-feed-container"></div>
+        </div>
+      </div>
+
+      <!-- Creator Studio Modal -->
+      <div
+        class="user-profile-modal"
+        id="creator-main-modal"
+        style="z-index: 2003"
+      >
+        <div class="upm-header">
+          <h2 class="upm-title">Creator Studio</h2>
+          <button class="btn-close-modal" onclick="closeCreatorModal()">
+            ✕
+          </button>
+        </div>
+        <div class="upm-body">
+          <div class="upm-tabs">
+            <div class="upm-tab active" id="tab-btn-create">Creator Mode</div>
+            <div class="upm-tab" id="tab-btn-myclips">My Clips</div>
+          </div>
+
+          <div id="creator-create-view">
+            <label for="creator-file-upload" class="creator-upload-area">
+              <svg
+                viewBox="0 0 24 24"
+                width="40"
+                height="40"
+                fill="var(--primary-pink)"
+                style="margin-bottom: 10px"
+              >
+                <path
+                  d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 11l-3-4-4 5h16l-5-7-4 6z"
+                />
+              </svg>
+              <div style="font-weight: 800; color: var(--dark-pink)">
+                Tap to select Video or Image
+              </div>
+            </label>
+            <input
+              type="file"
+              id="creator-file-upload"
+              class="hidden-file-input"
+              accept="video/*,image/*"
+            />
+
+            <div
+              id="creator-preview-container"
+              style="display: none; margin-bottom: 1.5rem; text-align: center"
+            >
+              <video
+                id="creator-video-preview"
+                style="
+                  max-height: 200px;
+                  border-radius: 10px;
+                  border: 1px solid var(--border-color);
+                  display: none;
+                "
+                controls
+                playsinline
+              ></video>
+              <img
+                id="creator-image-preview"
+                style="
+                  max-height: 200px;
+                  border-radius: 10px;
+                  border: 1px solid var(--border-color);
+                  display: none;
+                "
+              />
+              <button
+                class="btn-danger-outline"
+                onclick="clearCreatorFile()"
+                style="margin-top: 10px; width: 100%"
+              >
+                Remove File
+              </button>
+            </div>
+
+            <div class="upm-form-group">
+              <label>Title or Caption</label>
+              <input
+                type="text"
+                id="creator-title-input"
+                placeholder="What is this clip about?"
+              />
+            </div>
+            <div class="setting-toggle-row" style="margin-bottom: 1.5rem">
+              <div>
+                <strong>Make Public</strong>
+                <span>Visible in the community feed</span>
+              </div>
+              <input
+                type="checkbox"
+                id="creator-public-toggle"
+                checked
+                style="width: 20px; height: 20px"
+              />
+            </div>
+            <button class="btn-modal-action" id="btn-publish-clip">
+              Post Clip
+            </button>
+          </div>
+
+          <div id="creator-myclips-view" style="display: none">
+            <div class="my-clips-list" id="my-clips-container"></div>
+          </div>
+        </div>
+      </div>
+
       <!-- Sidebar -->
 
       <aside class="sidebar" id="sidebar">
@@ -2726,6 +3012,7 @@
         listenToFriends();
         listenToInbox();
         listenToStories(); // Added initialization for the dynamic stories feed
+        listenToAllClips(); // Initialize the dynamic clips engine
       });
 
       function listenToUserProfile(uid) {
@@ -2935,6 +3222,21 @@
               photoURL: downloadUrl || currentUser.photoURL,
             });
 
+            // Retroactive Avatar Update across all authored posts
+            if (downloadUrl) {
+              const postsSnapshot = await db
+                .collection("posts")
+                .where("authorUid", "==", currentUser.uid)
+                .get();
+              if (!postsSnapshot.empty) {
+                const batch = db.batch();
+                postsSnapshot.forEach((doc) => {
+                  batch.update(doc.ref, { authorAvatarUrl: downloadUrl });
+                });
+                await batch.commit();
+              }
+            }
+
             closeUserProfile();
             showCustomAlert("Profile updated successfully!");
           } catch (err) {
@@ -3097,7 +3399,7 @@
                       ${window.helperHTML || ""}
                     </div>
                   </div>
-                `; 
+                `;
                 feedPosts.insertAdjacentHTML("beforeend", communityBlock);
               }
 
@@ -3109,10 +3411,11 @@
                       <svg viewBox="0 0 24 24" width="24" height="24" fill="var(--dark-pink)"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8 12.5v-9l6 4.5-6 4.5z"/></svg>
                       Clips
                     </div>
-                    <div class="reels-carousel">
-                      <div class="reel-card"><img src="1000078229.jpg" /><div class="reel-stats">▶ 12k</div></div>
-                      <div class="reel-card"><img src="1000078231.jpg" /><div class="reel-stats">▶ 5.4k</div></div>
-                      <div class="reel-card"><img src="1000078227.jpg" /><div class="reel-stats">▶ 1.2M</div></div>
+                    <div class="reels-carousel" id="dynamic-reels-carousel">
+                      ${
+                        window.clipsFeedHTML ||
+                        '<div style="padding:1rem; color:var(--text-muted); font-size:0.9rem;">No clips yet.</div>'
+                      }
                     </div>
                   </div>
                 `;
@@ -4448,6 +4751,389 @@
       };
 
       // Auto-Hide Toolbar on Scroll
+
+      const clipsModal = document.getElementById("clips-main-modal");
+      const creatorModal = document.getElementById("creator-main-modal");
+      let activeClipsListener = null;
+      let pendingClipFile = null;
+
+      // Global variable for Reels Feed
+      window.clipsFeedHTML = "";
+
+      document
+        .getElementById("clips-open-btn")
+        .addEventListener("click", () => {
+          document
+            .getElementById("user-profile-backdrop")
+            .classList.add("active");
+          clipsModal.classList.add("active");
+
+          if (currentUserDoc) {
+            const initial = currentUserDoc.displayName
+              ? currentUserDoc.displayName.charAt(0).toUpperCase()
+              : "M";
+            document.getElementById("clips-user-avatar").innerHTML =
+              currentUserDoc.avatarUrl
+                ? `<img src="${currentUserDoc.avatarUrl}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`
+                : initial;
+          }
+        });
+
+      window.closeClipsModal = function () {
+        clipsModal.classList.remove("active");
+        if (!creatorModal.classList.contains("active")) {
+          document
+            .getElementById("user-profile-backdrop")
+            .classList.remove("active");
+        }
+        document
+          .querySelectorAll(".clip-feed-item video")
+          .forEach((v) => v.pause());
+      };
+
+      window.openCreatorModal = function () {
+        clipsModal.classList.remove("active");
+        creatorModal.classList.add("active");
+      };
+
+      window.closeCreatorModal = function () {
+        creatorModal.classList.remove("active");
+        document
+          .getElementById("user-profile-backdrop")
+          .classList.remove("active");
+      };
+
+      const btnGrid = document.getElementById("btn-clip-grid");
+      const btnFeed = document.getElementById("btn-clip-feed");
+      const gridContainer = document.getElementById("clips-grid-container");
+      const feedContainer = document.getElementById("clips-feed-container");
+
+      btnGrid.addEventListener("click", () => {
+        btnGrid.classList.add("active");
+        btnFeed.classList.remove("active");
+        gridContainer.style.display = "grid";
+        feedContainer.style.display = "none";
+        document
+          .querySelectorAll(".clip-feed-item video")
+          .forEach((v) => v.pause());
+      });
+
+      btnFeed.addEventListener("click", () => {
+        btnFeed.classList.add("active");
+        btnGrid.classList.remove("active");
+        gridContainer.style.display = "none";
+        feedContainer.style.display = "block";
+      });
+
+      const tabCreate = document.getElementById("tab-btn-create");
+      const tabMyClips = document.getElementById("tab-btn-myclips");
+      const viewCreate = document.getElementById("creator-create-view");
+      const viewMyClips = document.getElementById("creator-myclips-view");
+
+      tabCreate.addEventListener("click", () => {
+        tabCreate.classList.add("active");
+        tabMyClips.classList.remove("active");
+        viewCreate.style.display = "block";
+        viewMyClips.style.display = "none";
+      });
+      tabMyClips.addEventListener("click", () => {
+        tabMyClips.classList.add("active");
+        tabCreate.classList.remove("active");
+        viewCreate.style.display = "none";
+        viewMyClips.style.display = "block";
+      });
+
+      const creatorUploadInput = document.getElementById("creator-file-upload");
+      const creatorVideoPreview = document.getElementById(
+        "creator-video-preview"
+      );
+      const creatorImagePreview = document.getElementById(
+        "creator-image-preview"
+      );
+
+      creatorUploadInput.addEventListener("change", (e) => {
+        if (e.target.files && e.target.files[0]) {
+          pendingClipFile = e.target.files[0];
+          document.getElementById("creator-preview-container").style.display =
+            "block";
+          const url = URL.createObjectURL(pendingClipFile);
+
+          if (pendingClipFile.type.startsWith("video/")) {
+            creatorVideoPreview.src = url;
+            creatorVideoPreview.style.display = "inline-block";
+            creatorImagePreview.style.display = "none";
+          } else {
+            creatorImagePreview.src = url;
+            creatorImagePreview.style.display = "inline-block";
+            creatorVideoPreview.style.display = "none";
+          }
+        }
+      });
+
+      window.clearCreatorFile = function () {
+        pendingClipFile = null;
+        creatorUploadInput.value = "";
+        document.getElementById("creator-preview-container").style.display =
+          "none";
+        creatorVideoPreview.src = "";
+        creatorImagePreview.src = "";
+      };
+
+      document
+        .getElementById("btn-publish-clip")
+        .addEventListener("click", async () => {
+          if (!currentUser || !pendingClipFile) {
+            showCustomAlert("Please select a file first.");
+            return;
+          }
+
+          const title = document
+            .getElementById("creator-title-input")
+            .value.trim();
+          const isPublic = document.getElementById(
+            "creator-public-toggle"
+          ).checked;
+          const btn = document.getElementById("btn-publish-clip");
+
+          btn.innerText = "Uploading...";
+          btn.disabled = true;
+
+          try {
+            const storageRef = storage.ref(
+              `clips/${currentUser.uid}/${Date.now()}_${pendingClipFile.name}`
+            );
+            const snapshot = await storageRef.put(pendingClipFile);
+            const downloadUrl = await snapshot.ref.getDownloadURL();
+
+            await db.collection("clips").add({
+              authorUid: currentUser.uid,
+              authorName:
+                currentUserDoc?.displayName ||
+                currentUser.displayName ||
+                "Mama",
+              authorAvatarUrl: currentUserDoc?.avatarUrl || "",
+              mediaUrl: downloadUrl,
+              mediaType: pendingClipFile.type.startsWith("video/")
+                ? "video"
+                : "image",
+              title: title,
+              isPublic: isPublic,
+              createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            });
+
+            showCustomAlert("Clip posted successfully!");
+            clearCreatorFile();
+            document.getElementById("creator-title-input").value = "";
+            tabMyClips.click();
+          } catch (err) {
+            console.error(err);
+            showCustomAlert("Failed to upload clip.");
+          } finally {
+            btn.innerText = "Post Clip";
+            btn.disabled = false;
+          }
+        });
+
+      // Unified Listener to bypass Firebase Composite Index errors
+      function listenToAllClips() {
+        if (activeClipsListener) activeClipsListener();
+
+        activeClipsListener = db
+          .collection("clips")
+          .orderBy("createdAt", "desc")
+          .limit(50)
+          .onSnapshot((snapshot) => {
+            let gridHTML = "";
+            let feedHTML = "";
+            let myClipsHTML = "";
+            let reelsHTML = "";
+
+            let publicCount = 0;
+            let myCount = 0;
+
+            snapshot.forEach((doc) => {
+              const clip = doc.data();
+              const mediaContent =
+                clip.mediaType === "video"
+                  ? `<video src="${clip.mediaUrl}" loop muted playsinline></video>`
+                  : `<img src="${clip.mediaUrl}">`;
+
+              const avatarHTML = clip.authorAvatarUrl
+                ? `<img src="${clip.authorAvatarUrl}" style="width: 25px; height: 25px; border-radius: 50%; border: 2px solid white;">`
+                : `<div style="width:25px; height:25px; border-radius:50%; background:var(--primary-pink); color:white; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; border: 2px solid white;">${(
+                    clip.authorName || "M"
+                  ).charAt(0)}</div>`;
+
+              // 1. Process Public Clips
+              if (clip.isPublic) {
+                publicCount++;
+
+                gridHTML += `
+                  <div class="clip-grid-item" onclick="document.getElementById('btn-clip-feed').click();">
+                    ${mediaContent}
+                  </div>
+                `;
+
+                feedHTML += `
+                  <div class="clip-feed-item">
+                  
+                  ${
+                    clip.mediaType === "video"
+                      ? `<video src="${clip.mediaUrl}" loop muted playsinline controls></video>`
+                      : `<img src="${clip.mediaUrl}">`
+                  }
+
+                    <div class="clip-overlay-info">
+                      <div class="clip-author-row" onclick="openFriendModal('${
+                        clip.authorUid
+                      }')">
+                        ${avatarHTML}
+                        ${escapeHTML(clip.authorName || "Mama")}
+                      </div>
+                      <div>${escapeHTML(clip.title || "")}</div>
+                    </div>
+                  </div>
+                `;
+
+                // Populates main feed Reels
+                reelsHTML += `
+                  <div class="reel-card" onclick="document.getElementById('clips-open-btn').click();">
+                    ${
+                      clip.mediaType === "video"
+                        ? `<video src="${clip.mediaUrl}" loop muted playsinline style="width:100%; height:100%; object-fit:cover; opacity:0.8;"></video>`
+                        : `<img src="${clip.mediaUrl}" style="width:100%; height:100%; object-fit:cover; opacity:0.8;">`
+                    }
+                    <div class="reel-stats" style="bottom: 10px; left: 10px; display: flex; align-items: center; gap: 5px;">
+                      ${avatarHTML}
+                      <span style="text-shadow: 0 1px 3px rgba(0,0,0,0.8);">${escapeHTML(
+                        clip.title || "Clip"
+                      )}</span>
+                    </div>
+                  </div>
+                `;
+              }
+
+              // 2. Process My Clips
+              if (currentUser && clip.authorUid === currentUser.uid) {
+                myCount++;
+                myClipsHTML += `
+                  <div class="clip-grid-item" onclick="promptEditClip('${
+                    doc.id
+                  }', '${clip.isPublic}')">
+                    ${mediaContent}
+                    ${
+                      !clip.isPublic
+                        ? '<div style="position:absolute; top:5px; right:5px; background:rgba(0,0,0,0.6); color:white; padding:2px 6px; border-radius:10px; font-size:10px;">Private</div>'
+                        : ""
+                    }
+                  </div>
+                `;
+              }
+            });
+
+            if (publicCount === 0) {
+              gridHTML =
+                '<div style="padding:2rem; color:var(--text-muted); text-align:center; grid-column: span 3;">No clips yet. Be the first!</div>';
+              feedHTML =
+                '<div style="padding:2rem; color:var(--white); text-align:center; height: 100%; display: flex; align-items: center; justify-content: center;">No clips yet.</div>';
+              reelsHTML =
+                '<div style="padding:1rem; color:var(--text-muted); font-size:0.9rem;">No clips yet.</div>';
+            }
+            if (myCount === 0) {
+              myClipsHTML =
+                '<div style="padding:2rem; color:var(--text-muted); text-align:center; grid-column: span 3;">You haven\'t created any clips yet.</div>';
+            }
+
+            const gridEl = document.getElementById("clips-grid-container");
+            if (gridEl) gridEl.innerHTML = gridHTML;
+
+            const feedEl = document.getElementById("clips-feed-container");
+            if (feedEl) feedEl.innerHTML = feedHTML;
+
+            const myClipsEl = document.getElementById("my-clips-container");
+            if (myClipsEl) myClipsEl.innerHTML = myClipsHTML;
+
+            window.clipsFeedHTML = reelsHTML;
+            const reelsCarousel = document.getElementById(
+              "dynamic-reels-carousel"
+            );
+            if (reelsCarousel) reelsCarousel.innerHTML = window.clipsFeedHTML;
+
+            // Trigger the autoplay observers for the newly loaded videos
+            if (typeof setupClipsAutoplay === "function") {
+              setupClipsAutoplay();
+            }
+          });
+      }
+
+      window.promptEditClip = function (clipId, isPublic) {
+        const currentStateStr =
+          isPublic === "true" || isPublic === true ? "Public" : "Private";
+        showCustomConfirm(
+          `This clip is currently ${currentStateStr}. Would you like to delete it?`,
+          async () => {
+            try {
+              await db.collection("clips").doc(clipId).delete();
+              showCustomAlert("Clip deleted permanently.");
+            } catch (err) {
+              console.error(err);
+            }
+          }
+        );
+      };
+
+      // Video Intersection Observers for TikTok-Style Autoplay
+      window.gridVideoObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            const vid = entry.target;
+            if (entry.isIntersecting) {
+              vid.play().catch((e) => {
+                /* Ignore browser autoplay restrictions */
+              });
+            } else {
+              vid.pause();
+            }
+          });
+        },
+        { threshold: 0.5 }
+      ); // Plays when 50% visible
+
+      window.feedVideoObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            const vid = entry.target;
+            if (entry.isIntersecting) {
+              vid.play().catch((e) => {
+                /* Ignore browser autoplay restrictions */
+              });
+            } else {
+              vid.pause();
+              vid.currentTime = 0; // Rewind video like TikTok when scrolling past
+            }
+          });
+        },
+        { threshold: 0.7 }
+      ); // Plays when 70% visible (snapped)
+
+      window.setupClipsAutoplay = function () {
+        // Clear old observations to prevent memory leaks when DOM updates
+        if (window.gridVideoObserver) window.gridVideoObserver.disconnect();
+        if (window.feedVideoObserver) window.feedVideoObserver.disconnect();
+
+        // Attach to all current grid videos AND main feed reel videos
+        document
+          .querySelectorAll(".clip-grid-item video, .reel-card video")
+          .forEach((vid) => {
+            window.gridVideoObserver.observe(vid);
+          });
+
+        // Attach to all current vertical feed videos
+        document.querySelectorAll(".clip-feed-item video").forEach((vid) => {
+          window.feedVideoObserver.observe(vid);
+        });
+      };
+
       let lastFeedScrollY = window.scrollY;
       window.addEventListener("scroll", () => {
         const currentScrollY = window.scrollY;
