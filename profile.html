@@ -11,8 +11,8 @@
     <style>
       :root {
         --bg-color: #fff5f7;
-        --primary-pink: #ff8fa3; 
-        --light-pink: #ffb3c1;  
+        --primary-pink: #ff8fa3;
+        --light-pink: #ffb3c1;
         --dark-pink: #c9184a;
         --text-dark: #590d22;
         --text-light: #800f2f;
@@ -478,7 +478,6 @@
       .community-section {
         background: var(--white);
         padding: 1rem 0;
-        margin-bottom: 8px;
       }
       .community-header {
         padding: 0 1.5rem 1rem;
@@ -603,7 +602,6 @@
       }
 
       /* Edge-to-Edge Post Card */
-
 
       @keyframes fadeInDown {
         from {
@@ -2264,40 +2262,16 @@
 
         <div class="personal-feed-title">Recent Posts</div>
 
-        <!-- Personal Feed Post (TikTok/Instagram style) -->
-        <div class="post-card">
-          <div class="post-header">
-            <div class="post-avatar" id="personal-feed-avatar">S</div>
-            <div class="post-author-info">
-              <div class="post-author" id="personal-feed-name">
-                Sarah Jenkins
-              </div>
-              <div class="post-time">1 day ago</div>
-            </div>
-          </div>
-          <div class="post-content">
-            Found an amazing sensory-friendly park in the west end! The kids
-            played for 2 hours straight without getting overwhelmed. Highly
-            recommend for any moms dealing with SPD.
-          </div>
-          <div class="post-actions">
-            <button class="action-btn" onclick="toggleHeart(this)">
-              <svg viewBox="0 0 24 24">
-                <path
-                  d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
-                />
-              </svg>
-              <span>32</span>
-            </button>
-            <button class="action-btn">
-              <svg viewBox="0 0 24 24">
-                <path
-                  d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"
-                />
-              </svg>
-              <span>5</span>
-            </button>
-          </div>
+        <div
+          id="personal-feed-posts"
+          style="
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            padding: 2rem 0;
+          "
+        >
+          No recent posts.
         </div>
       </div>
 
@@ -2569,13 +2543,6 @@
       const modalName = document.getElementById("modal-name-disp");
       const btnAddFriend = document.getElementById("btn-add-friend");
 
-      // Personal Feed elements to sync with opened profile
-      const personalFeedAvatar = document.getElementById(
-        "personal-feed-avatar"
-      );
-
-      const personalFeedName = document.getElementById("personal-feed-name");
-
       let currentFriendModalUid = null;
 
       async function openFriendModal(targetUid) {
@@ -2622,10 +2589,6 @@
             : `<strong>Bio & Needs:</strong><br>Looking to connect!`;
           document.getElementById("modal-bio-disp").innerHTML = bioText;
 
-          // Sync Personal Feed Author
-          personalFeedAvatar.innerHTML = avatarMarkup;
-          personalFeedName.innerText = targetData.displayName || "Mama";
-
           // Basic friend check
           const isFriend =
             currentUserDoc &&
@@ -2646,7 +2609,7 @@
             );
             btnCall.style.display = "block";
           } else {
-            btnDm.innerHTML = "Message (Free)";
+            btnDm.innerHTML = "Message";
             btnDm.setAttribute(
               "onclick",
               `startDirectMessage('${targetUid}', false)`
@@ -3746,7 +3709,7 @@
           );
       });
 
-      // Dynamic Stories Carousel Listener 
+      // Dynamic Stories Carousel Listener
       function listenToStories() {
         const container = document.getElementById("stories-container");
         if (!container) return;
