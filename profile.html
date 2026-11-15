@@ -19,7 +19,7 @@
         --text-muted: #a47381;
         --white: #ffffff;
         --glass-bg: rgba(255, 255, 255, 0.85);
-        --border-color: #f8cdda; 
+        --border-color: #f8cdda;
       }
 
       * {
@@ -1872,6 +1872,70 @@
         grid-template-columns: repeat(3, 1fr);
         gap: 5px;
       }
+
+      /* --- Be Yourself Loop CSS --- */
+      .by-modal-body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        background: var(--bg-color);
+        position: relative;
+      }
+      .by-viewfinder-container {
+        width: 250px;
+        height: 350px;
+        border-radius: 20px;
+        overflow: hidden;
+        background: #000;
+        position: relative;
+        box-shadow: 0 10px 30px rgba(255, 143, 163, 0.3);
+        border: 4px solid var(--white);
+        margin-bottom: 2rem;
+      }
+      .by-video-element {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transform: scaleX(-1); /* Mirror effect for native selfie feel */
+      }
+      .by-record-btn {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        background: #e63946;
+        border: 4px solid var(--white);
+        box-shadow: 0 0 0 4px #e63946;
+        cursor: pointer;
+        transition: transform 0.2s;
+        display: block;
+        margin: 0 auto;
+      }
+      .by-record-btn:active {
+        transform: scale(0.9);
+      }
+      .by-record-btn.recording {
+        animation: pulseRecord 1s infinite;
+        border-radius: 20%;
+      }
+      @keyframes pulseRecord {
+        0% {
+          box-shadow: 0 0 0 0 rgba(230, 57, 70, 0.7);
+        }
+        70% {
+          box-shadow: 0 0 0 15px rgba(230, 57, 70, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(230, 57, 70, 0);
+        }
+      }
+      .by-action-row {
+        display: none;
+        gap: 15px;
+        width: 100%;
+        max-width: 250px;
+      }
     </style>
 
     <!-- Firebase SDKs -->
@@ -2673,6 +2737,67 @@
         </div>
       </div>
 
+      <!-- Be Yourself Camera Modal -->
+      <div
+        class="user-profile-modal"
+        id="be-yourself-modal"
+        style="z-index: 2004"
+      >
+        <div class="upm-header">
+          <h2 class="upm-title">Be Yourself</h2>
+          <button class="btn-close-modal" onclick="closeBeYourselfModal()">
+            ✕
+          </button>
+        </div>
+        <div class="upm-body by-modal-body">
+          <div class="by-viewfinder-container">
+            <video
+              id="by-camera-feed"
+              class="by-video-element"
+              autoplay
+              playsinline
+              muted
+            ></video>
+            <video
+              id="by-preview-feed"
+              class="by-video-element"
+              autoplay
+              loop
+              playsinline
+              muted
+              style="display: none"
+            ></video>
+          </div>
+
+          <div id="by-record-container" style="width: 100%">
+            <button class="by-record-btn" id="btn-by-record"></button>
+            <p
+              style="
+                text-align: center;
+                color: var(--text-muted);
+                margin-top: 15px;
+                font-weight: 800;
+              "
+            >
+              Tap to record a 2-second loop
+            </p>
+          </div>
+
+          <div class="by-action-row" id="by-action-container">
+            <button
+              class="btn-danger-outline"
+              id="btn-by-retake"
+              style="flex: 1"
+            >
+              Retake
+            </button>
+            <button class="btn-modal-action" id="btn-by-save" style="flex: 1">
+              Post Loop
+            </button>
+          </div>
+        </div>
+      </div>
+
       <!-- Sidebar -->
 
       <aside class="sidebar" id="sidebar">
@@ -3381,13 +3506,13 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             ${imageMarkup}
-                            
+
                             <div class="post-content" id="content-${postId}">
                                 ${escapeHTML(post.content)}
                             </div>
-                            
+
                             <div class="post-actions">
                                 <button class="action-btn ${
                                   isLiked ? "liked" : ""
@@ -3399,18 +3524,18 @@
                                     <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
                                     <span>${post.commentsCount || 0}</span>
                                 </button>
-                                
-                                
+
+
                                 <button class="action-btn premium-action" onclick="openFriendModal('${
                                   post.authorUid
                                 }')">
                                     Message
                                 </button>
-                                
-                                
-                    
+
+
+
                             </div>
-                            
+
                             <!-- Hidden Inline Comments Section -->
                             <div class="comments-container" id="comments-section-${postId}">
                                 <div id="comments-list-${postId}">
@@ -3861,7 +3986,7 @@
                                           }')">${escapeHTML(
                     comment.authorName
                   )}</div>
-                                          
+
                                           <div class="post-options-container" ${
                                             isCommentOwner
                                               ? ""
@@ -4055,11 +4180,17 @@
         db.collection("users")
           .limit(15)
           .onSnapshot((snapshot) => {
+            let myBgHTML = `<img src="${
+              currentUserDoc?.avatarUrl || currentUser?.photoURL || ""
+            }" style="width:100%; height:120px; object-fit:cover; background:var(--light-pink); border-bottom-left-radius:0; border-bottom-right-radius:0;">`;
+
+            if (currentUserDoc && currentUserDoc.beYourselfLoopUrl) {
+              myBgHTML = `<video src="${currentUserDoc.beYourselfLoopUrl}" class="story-bg" autoplay loop muted playsinline style="transform: scaleX(-1); width:100%; height:120px; object-fit:cover; border-bottom-left-radius:0; border-bottom-right-radius:0;"></video>`;
+            }
+
             let html = `
-            <div class="story-card" style="background: var(--bg-color);" onclick="showCustomAlert('Be Yourself coming soon!')">
-              <img src="${
-                currentUserDoc?.avatarUrl || currentUser?.photoURL || ""
-              }" style="width:100%; height:120px; object-fit:cover; background:var(--light-pink); border-bottom-left-radius:0; border-bottom-right-radius:0;">
+            <div class="story-card" style="background: var(--bg-color);" onclick="openBeYourselfModal()">
+              ${myBgHTML}
               <div class="story-create-btn">+</div>
               <div class="story-name" style="color: var(--text-dark); text-align: center; text-shadow: none; bottom: 5px;">Be Yourself</div>
             </div>
@@ -4076,9 +4207,11 @@
                 ? `<img src="${user.avatarUrl}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`
                 : initial;
 
-              // Fallback: If no official story, stretch the avatar. If no avatar, use a gradient block.
+              // Render active looping video if available
               let bgHTML = "";
-              if (user.storyUrl) {
+              if (user.beYourselfLoopUrl) {
+                bgHTML = `<video src="${user.beYourselfLoopUrl}" class="story-bg" autoplay loop muted playsinline style="transform: scaleX(-1);"></video>`;
+              } else if (user.storyUrl) {
                 bgHTML = `<img src="${user.storyUrl}" class="story-bg">`;
               } else if (user.avatarUrl) {
                 bgHTML = `<img src="${user.avatarUrl}" class="story-bg">`;
@@ -4197,10 +4330,10 @@
                                     friend.displayName || "Mom"
                                   )}</span>
                                   <span class="friend-status">Online</span>
-                                  
-                                  
-                                  
-                                  
+
+
+
+
                                   </div>
                         </div>
                     `;
@@ -5028,7 +5161,7 @@
 
                 feedHTML += `
                   <div class="clip-feed-item">
-                  
+
                   ${
                     clip.mediaType === "video"
                       ? `<video src="${clip.mediaUrl}" loop muted playsinline controls></video>`
@@ -5185,6 +5318,137 @@
           window.feedVideoObserver.observe(vid);
         });
       };
+
+      // --- Be Yourself Camera Engine ---
+      let byStream = null;
+      let byMediaRecorder = null;
+      let byChunks = [];
+      let byBlob = null;
+
+      window.openBeYourselfModal = async function () {
+        document.getElementById("be-yourself-modal").classList.add("active");
+        document
+          .getElementById("user-profile-backdrop")
+          .classList.add("active");
+
+        // Reset UI
+        document.getElementById("by-record-container").style.display = "block";
+        document.getElementById("by-action-container").style.display = "none";
+        document.getElementById("by-camera-feed").style.display = "block";
+        document.getElementById("by-preview-feed").style.display = "none";
+        byBlob = null;
+        byChunks = [];
+
+        try {
+          byStream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: "user" },
+            audio: false,
+          });
+          document.getElementById("by-camera-feed").srcObject = byStream;
+        } catch (err) {
+          console.error("Camera access denied:", err);
+          showCustomAlert("Camera access is required for Be Yourself.");
+        }
+      };
+
+      window.closeBeYourselfModal = function () {
+        document.getElementById("be-yourself-modal").classList.remove("active");
+        document
+          .getElementById("user-profile-backdrop")
+          .classList.remove("active");
+
+        if (byStream) {
+          byStream.getTracks().forEach((track) => track.stop());
+          byStream = null;
+        }
+        document.getElementById("by-camera-feed").srcObject = null;
+        document.getElementById("by-preview-feed").src = "";
+      };
+
+      document.getElementById("btn-by-record").addEventListener("click", () => {
+        if (!byStream) return;
+        const recordBtn = document.getElementById("btn-by-record");
+        recordBtn.classList.add("recording");
+
+        byChunks = [];
+        byMediaRecorder = new MediaRecorder(byStream);
+
+        byMediaRecorder.ondataavailable = (e) => {
+          if (e.data.size > 0) byChunks.push(e.data);
+        };
+
+        byMediaRecorder.onstop = () => {
+          recordBtn.classList.remove("recording");
+          const mimeType = byMediaRecorder.mimeType || "video/mp4";
+          byBlob = new Blob(byChunks, { type: mimeType });
+
+          const previewUrl = URL.createObjectURL(byBlob);
+          const previewVid = document.getElementById("by-preview-feed");
+          previewVid.src = previewUrl;
+
+          document.getElementById("by-camera-feed").style.display = "none";
+          previewVid.style.display = "block";
+
+          document.getElementById("by-record-container").style.display = "none";
+          document.getElementById("by-action-container").style.display = "flex";
+        };
+
+        byMediaRecorder.start();
+
+        // Exact 2-Second Constraints
+        setTimeout(() => {
+          if (byMediaRecorder.state === "recording") {
+            byMediaRecorder.stop();
+          }
+        }, 2000);
+      });
+
+      document.getElementById("btn-by-retake").addEventListener("click", () => {
+        document.getElementById("by-record-container").style.display = "block";
+        document.getElementById("by-action-container").style.display = "none";
+        document.getElementById("by-camera-feed").style.display = "block";
+        document.getElementById("by-preview-feed").style.display = "none";
+        byBlob = null;
+      });
+
+      document
+        .getElementById("btn-by-save")
+        .addEventListener("click", async () => {
+          if (!currentUser || !byBlob) return;
+
+          const btn = document.getElementById("btn-by-save");
+          const originalText = btn.innerText;
+          btn.innerText = "Saving...";
+          btn.disabled = true;
+          document.getElementById("btn-by-retake").disabled = true;
+
+          try {
+            const ext = byBlob.type.includes("webm") ? "webm" : "mp4";
+            const storageRef = storage.ref(
+              `be_yourself_loops/${currentUser.uid}/${Date.now()}.${ext}`
+            );
+            const snapshot = await storageRef.put(byBlob);
+            const downloadUrl = await snapshot.ref.getDownloadURL();
+
+            await db.collection("users").doc(currentUser.uid).update({
+              beYourselfLoopUrl: downloadUrl,
+            });
+
+            if (currentUserDoc) {
+              currentUserDoc.beYourselfLoopUrl = downloadUrl;
+            }
+
+            showCustomAlert("Be Yourself loop posted!");
+            closeBeYourselfModal();
+          } catch (err) {
+            console.error("Error saving loop:", err);
+            showCustomAlert("Failed to post loop. Please try again.");
+          } finally {
+            btn.innerText = originalText;
+            btn.disabled = false;
+            document.getElementById("btn-by-retake").disabled = false;
+          }
+        });
 
       const mainContentArea = document.querySelector(".main-content");
       let lastFeedScrollY = mainContentArea.scrollTop;
