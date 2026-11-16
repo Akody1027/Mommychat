@@ -8,24 +8,24 @@
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
       id="app-viewport"
     />
-    <script> 
+    <script>
       // Dynamically "zoom out" the entire HTML page on narrow phones
       (function () {
         var screenWidth = window.screen.width || window.innerWidth;
         var idealWidth = 450; // The benchmark large-phone width
 
         if (screenWidth > 0 && screenWidth < idealWidth) {
-          var scaleRatio = (screenWidth / idealWidth).toFixed(2); 
+          var scaleRatio = (screenWidth / idealWidth).toFixed(2);
           var metaTag = document.getElementById("app-viewport");
           if (metaTag) {
             metaTag.setAttribute(
               "content",
-              "width=device-width, initial-scale=" + 
+              "width=device-width, initial-scale=" +
                 scaleRatio +
-                ", maximum-scale=" +  
-                scaleRatio + 
+                ", maximum-scale=" + 
+                scaleRatio +
                 ", user-scalable=no"
-            ); 
+            );
           }
         }
       })();
@@ -1909,7 +1909,9 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
+        padding-top: 2rem;
+        overflow-y: auto;
         height: 100%;
         background: var(--bg-color);
         position: relative;
@@ -1971,6 +1973,57 @@
       #copy-btn:hover {
         color: white !important;
         background-color: #2a9d8f;
+      }
+
+      .my-loops-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 5px;
+        margin-top: 1rem;
+      }
+      .loop-grid-item {
+        aspect-ratio: 9/16;
+        background: #000;
+        position: relative;
+        border-radius: 10px;
+        overflow: hidden;
+      }
+      .loop-grid-item video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .delete-loop-btn {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: rgba(230, 57, 70, 0.9);
+        color: var(--white);
+        border: none;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        font-weight: 800;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+      }
+      .view-all-loops-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(255, 255, 255, 0.85);
+        color: var(--dark-pink);
+        font-size: 0.75rem;
+        font-weight: 800;
+        padding: 4px 8px;
+        border-radius: 10px;
+        z-index: 10;
+        cursor: pointer;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       }
     </style>
 
@@ -2547,6 +2600,24 @@
           understand the overwhelmed days.
         </div>
 
+        <div class="personal-feed-title">Past Loops</div>
+        <div
+          class="my-loops-grid"
+          id="public-loops-container"
+          style="margin-bottom: 2rem"
+        >
+          <p
+            style="
+              color: var(--text-muted);
+              font-size: 0.95rem;
+              grid-column: span 3;
+              text-align: center;
+            "
+          >
+            Loading loops...
+          </p>
+        </div>
+
         <div class="personal-feed-title">Recent Posts</div>
 
         <div
@@ -2594,6 +2665,23 @@
         >
           🚫 Block User
         </button>
+      </div>
+    </div>
+
+    <!-- Global Loops Modal -->
+    <div
+      class="user-profile-modal"
+      id="global-loops-modal"
+      style="z-index: 2005"
+    >
+      <div class="upm-header">
+        <h2 class="upm-title">Community Loops</h2>
+        <button class="btn-close-modal" onclick="closeGlobalLoopsModal()">
+          ✕
+        </button>
+      </div>
+      <div class="upm-body" style="padding: 10px">
+        <div class="my-loops-grid" id="global-loops-container"></div>
       </div>
     </div>
 
@@ -2864,6 +2952,38 @@
               Post Loop
             </button>
           </div>
+
+          <div
+            style="
+              width: 100%;
+              margin-top: 3rem;
+              border-top: 1px solid var(--border-color);
+              padding-top: 1.5rem;
+            "
+          >
+            <h3
+              style="
+                color: var(--dark-pink);
+                margin-bottom: 1rem;
+                text-align: center;
+                font-weight: 800;
+              "
+            >
+              My Past Loops
+            </h3>
+            <div class="my-loops-grid" id="my-loops-container">
+              <p
+                style="
+                  color: var(--text-muted);
+                  font-size: 0.9rem;
+                  grid-column: span 3;
+                  text-align: center;
+                "
+              >
+                Loading loops...
+              </p>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -3066,12 +3186,6 @@
           return;
         }
 
-        // If you click your own name, open your own profile settings instead of the friend modal
-        if (currentUser && targetUid === currentUser.uid) {
-          openUserProfile();
-          return;
-        }
-
         currentFriendModalUid = targetUid;
 
         try {
@@ -3085,7 +3199,6 @@
           const initial = targetData.displayName
             ? targetData.displayName.charAt(0).toUpperCase()
             : "M";
-
           const avatarMarkup = targetData.avatarUrl
             ? `<img src="${targetData.avatarUrl}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`
             : initial;
@@ -3102,37 +3215,164 @@
             : `<strong>Bio & Needs:</strong><br>Looking to connect!`;
           document.getElementById("modal-bio-disp").innerHTML = bioText;
 
-          // Basic friend check
           const isFriend =
             currentUserDoc &&
             currentUserDoc.friends &&
             currentUserDoc.friends.includes(targetUid);
-          btnAddFriend.style.display = isFriend ? "none" : "block";
 
-          // Hybrid Economy Logic: Free P2P vs Paid Helper
+          // Hide add friend if they are already a friend OR if you are viewing yourself
+          btnAddFriend.style.display =
+            isFriend || targetUid === currentUser.uid ? "none" : "block";
+
           const btnDm = document.getElementById("btn-dm-friend");
           const btnCall = document.getElementById("btn-call-friend");
+          const btnBlock = document.getElementById("btn-block-user");
 
-          if (targetData.isHelper) {
-            btnDm.innerHTML =
-              'Message (10 <img src="Mtoken.PNG" class="token-icon" alt="Token">)';
-            btnDm.setAttribute(
-              "onclick",
-              `startDirectMessage('${targetUid}', true)`
-            );
-            btnCall.style.display = "block";
+          // Hide action buttons if viewing your own profile
+          if (targetUid === currentUser.uid) {
+            btnDm.style.display = "none";
+            btnCall.style.display = "none";
+            btnBlock.style.display = "none";
           } else {
-            btnDm.innerHTML = "Message";
-            btnDm.setAttribute(
-              "onclick",
-              `startDirectMessage('${targetUid}', false)`
-            );
-            btnCall.style.display = "none"; // Hide live calls for standard moms
+            btnDm.style.display = "block";
+            btnBlock.style.display = "block";
+            if (targetData.isHelper) {
+              btnDm.innerHTML =
+                'Message (10 <img src="Mtoken.PNG" class="token-icon" alt="Token">)';
+              btnDm.setAttribute(
+                "onclick",
+                `startDirectMessage('${targetUid}', true)`
+              );
+              btnCall.style.display = "block";
+            } else {
+              btnDm.innerHTML = "Message";
+              btnDm.setAttribute(
+                "onclick",
+                `startDirectMessage('${targetUid}', false)`
+              );
+              btnCall.style.display = "none";
+            }
           }
+
+          // Fetch the user's public loop history AND active loop
+          const publicLoopsContainer = document.getElementById(
+            "public-loops-container"
+          );
+          publicLoopsContainer.innerHTML = `<p style="color: var(--text-muted); font-size: 0.95rem; grid-column: span 3; text-align: center;">Loading loops...</p>`;
+
+          db.collection("users")
+            .doc(targetUid)
+            .collection("loops")
+            .get()
+            .then((snapshot) => {
+              let loops = [];
+
+              // 1. ALWAYS grab their current active loop first so legacy loops aren't lost
+              if (targetData.beYourselfLoopUrl) {
+                loops.push({
+                  loopUrl: targetData.beYourselfLoopUrl,
+                  createdAt: { toMillis: () => Date.now() }, // Force to top of list
+                });
+              }
+
+              // 2. Add history from the subcollection
+              if (!snapshot.empty) {
+                snapshot.forEach((doc) => {
+                  const loopData = doc.data();
+                  // Prevent duplicates if their active loop is also saved in their history
+                  if (loopData.loopUrl !== targetData.beYourselfLoopUrl) {
+                    loops.push(loopData);
+                  }
+                });
+              }
+
+              if (loops.length === 0) {
+                publicLoopsContainer.innerHTML = `<p style="color: var(--text-muted); font-size: 0.95rem; grid-column: span 3; text-align: center;">No past loops.</p>`;
+              } else {
+                // Sort all loops by newest first in memory
+                loops.sort((a, b) => {
+                  const timeA =
+                    a.createdAt && a.createdAt.toMillis
+                      ? a.createdAt.toMillis()
+                      : 0;
+                  const timeB =
+                    b.createdAt && b.createdAt.toMillis
+                      ? b.createdAt.toMillis()
+                      : 0;
+                  return timeB - timeA;
+                });
+
+                let loopsHTML = "";
+                loops.forEach((loopData) => {
+                  loopsHTML += `
+                  <div class="loop-grid-item">
+                    <video src="${loopData.loopUrl}" autoplay loop muted playsinline style="transform: scaleX(-1);"></video>
+                  </div>
+                `;
+                });
+                publicLoopsContainer.innerHTML = loopsHTML;
+              }
+            })
+            .catch((err) => {
+              console.error("Error fetching loops:", err);
+              publicLoopsContainer.innerHTML = `<p style="color: var(--text-muted); font-size: 0.95rem; grid-column: span 3; text-align: center;">Could not load loops.</p>`;
+            });
+
+          // Fetch the user's personal posts (Bypassing Firestore Index requirements via JS sorting)
+          const feedContainer = document.getElementById("personal-feed-posts");
+          feedContainer.innerHTML = `<div style="text-align:center; padding: 2rem; color: var(--text-muted);">Loading posts...</div>`;
+
+          db.collection("posts")
+            .where("authorUid", "==", targetUid)
+            .limit(30)
+            .get()
+            .then((snapshot) => {
+              if (snapshot.empty) {
+                feedContainer.innerHTML = `<div style="text-align:center; padding: 2rem; color: var(--text-muted);">No recent posts.</div>`;
+                return;
+              }
+
+              let posts = [];
+              snapshot.forEach((postDoc) => posts.push(postDoc.data()));
+
+              // Sort posts by newest first strictly in the browser
+              posts.sort((a, b) => {
+                const timeA =
+                  a.createdAt && a.createdAt.toMillis
+                    ? a.createdAt.toMillis()
+                    : 0;
+                const timeB =
+                  b.createdAt && b.createdAt.toMillis
+                    ? b.createdAt.toMillis()
+                    : 0;
+                return timeB - timeA;
+              });
+
+              feedContainer.innerHTML = "";
+              posts.forEach((post) => {
+                const imgHTML = post.postImageUrl
+                  ? `<img src="${post.postImageUrl}" style="width: 100%; border-radius: 10px; margin-top: 10px; max-height: 250px; object-fit: cover;">`
+                  : "";
+                const timeString = post.createdAt
+                  ? formatRelativeTime(post.createdAt.toDate())
+                  : "Just now";
+
+                const postHTML = `
+                      <div style="background: var(--white); border: 1px solid var(--border-color); border-radius: 15px; padding: 1rem; margin-bottom: 1rem; text-align: left;">
+                          <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px;">${timeString}</div>
+                          <div style="font-size: 1rem; color: var(--text-dark); line-height: 1.5;">${escapeHTML(
+                            post.content
+                          )}</div>
+                          ${imgHTML}
+                      </div>
+                  `;
+                feedContainer.insertAdjacentHTML("beforeend", postHTML);
+              });
+            });
 
           friendModal.classList.add("active");
           friendModalOverlay.classList.add("active");
-          sidebar.classList.remove("expanded"); // Auto-close sidebar
+          sidebar.classList.remove("expanded");
         } catch (err) {
           console.error("Error fetching user profile:", err);
         }
@@ -4260,15 +4500,16 @@
             }
 
             let html = `
-            <div class="story-card" style="background: var(--bg-color);" onclick="openBeYourselfModal()">
-              ${myBgHTML}
-              <div class="story-create-btn">+</div>
-              <div class="story-name" style="color: var(--text-dark); text-align: center; text-shadow: none; bottom: 5px;">Be Yourself</div>
-            </div>
-          `;
+          <div class="story-card" style="background: var(--bg-color);" onclick="openBeYourselfModal()">
+            <div class="view-all-loops-btn" onclick="event.stopPropagation(); openGlobalLoopsModal();">View All</div>
+            ${myBgHTML}
+            <div class="story-create-btn">+</div>
+            <div class="story-name" style="color: var(--text-dark); text-align: center; text-shadow: none; bottom: 5px;">Be Yourself</div>
+          </div>
+        `;
 
             snapshot.forEach((doc) => {
-              if (currentUser && doc.id === currentUser.uid) return; // Skip self
+              if (currentUser && doc.id === currentUser.uid) return;
 
               const user = doc.data();
               const initial = user.displayName
@@ -4278,7 +4519,6 @@
                 ? `<img src="${user.avatarUrl}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`
                 : initial;
 
-              // Render active looping video if available
               let bgHTML = "";
               if (user.beYourselfLoopUrl) {
                 bgHTML = `<video src="${user.beYourselfLoopUrl}" class="story-bg" autoplay loop muted playsinline style="transform: scaleX(-1); object-fit: cover; object-position: center 20%; width: 100%; height: 100%;"></video>`;
@@ -4291,14 +4531,14 @@
               }
 
               html += `
-              <div class="story-card" onclick="openFriendModal('${doc.id}')">
-                ${bgHTML}
-                <div class="story-avatar">${avatarMarkup}</div>
-                <div class="story-name">${escapeHTML(
-                  user.displayName || "Mama"
-                )}</div>
-              </div>
-            `;
+            <div class="story-card" onclick="openFriendModal('${doc.id}')">
+              ${bgHTML}
+              <div class="story-avatar">${avatarMarkup}</div>
+              <div class="story-name">${escapeHTML(
+                user.displayName || "Mama"
+              )}</div>
+            </div>
+          `;
             });
             container.innerHTML = html;
           });
@@ -5516,6 +5756,9 @@
 
         // Reset UI
         document.getElementById("by-record-container").style.display = "block";
+
+        loadMyLoops();
+
         document.getElementById("by-action-container").style.display = "none";
         document.getElementById("by-camera-feed").style.display = "block";
         document.getElementById("by-preview-feed").style.display = "none";
@@ -5613,6 +5856,17 @@
             const snapshot = await storageRef.put(byBlob);
             const downloadUrl = await snapshot.ref.getDownloadURL();
 
+            // Save to loop history subcollection
+            await db
+              .collection("users")
+              .doc(currentUser.uid)
+              .collection("loops")
+              .add({
+                loopUrl: downloadUrl,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+              });
+
+            // Update active profile
             await db.collection("users").doc(currentUser.uid).update({
               beYourselfLoopUrl: downloadUrl,
             });
@@ -5633,7 +5887,112 @@
           }
         });
 
+      window.loadMyLoops = function () {
+        if (!currentUser) return;
+        const container = document.getElementById("my-loops-container");
+        db.collection("users")
+          .doc(currentUser.uid)
+          .collection("loops")
+          .orderBy("createdAt", "desc")
+          .onSnapshot((snapshot) => {
+            if (snapshot.empty) {
+              container.innerHTML =
+                '<p style="color: var(--text-muted); font-size: 0.9rem; grid-column: span 3; text-align: center;">No loops saved yet.</p>';
+              return;
+            }
+            let html = "";
+            snapshot.forEach((doc) => {
+              const data = doc.data();
+              html += `
+                      <div class="loop-grid-item">
+                          <video src="${data.loopUrl}" autoplay loop muted playsinline style="transform: scaleX(-1);"></video>
+                          <button class="delete-loop-btn" onclick="deleteMyLoop('${doc.id}', '${data.loopUrl}')">✕</button>
+                      </div>
+                  `;
+            });
+            container.innerHTML = html;
+          });
+      };
+
+      window.deleteMyLoop = function (loopId, loopUrl) {
+        showCustomConfirm("Delete this loop permanently?", async () => {
+          try {
+            await db
+              .collection("users")
+              .doc(currentUser.uid)
+              .collection("loops")
+              .doc(loopId)
+              .delete();
+            // If they deleted their currently active loop, clear it from their profile automatically
+            if (
+              currentUserDoc &&
+              currentUserDoc.beYourselfLoopUrl === loopUrl
+            ) {
+              await db.collection("users").doc(currentUser.uid).update({
+                beYourselfLoopUrl: firebase.firestore.FieldValue.delete(),
+              });
+            }
+            showCustomAlert("Loop deleted.");
+          } catch (e) {
+            console.error(e);
+          }
+        });
+      };
+
+      window.openGlobalLoopsModal = async function () {
+        document.getElementById("global-loops-modal").classList.add("active");
+        document
+          .getElementById("user-profile-backdrop")
+          .classList.add("active");
+        const container = document.getElementById("global-loops-container");
+        container.innerHTML =
+          '<p style="color: var(--text-muted); font-size: 0.9rem; grid-column: span 3; text-align: center;">Loading community loops...</p>';
+
+        try {
+          const snapshot = await db
+            .collection("users")
+            .where("beYourselfLoopUrl", "!=", null)
+            .get();
+          if (snapshot.empty) {
+            container.innerHTML =
+              '<p style="color: var(--text-muted); font-size: 0.9rem; grid-column: span 3; text-align: center;">No community loops found.</p>';
+            return;
+          }
+          let html = "";
+          snapshot.forEach((doc) => {
+            const user = doc.data();
+            html += `
+                      <div class="loop-grid-item" onclick="closeGlobalLoopsModal(); openFriendModal('${
+                        doc.id
+                      }')" style="cursor:pointer;">
+                          <video src="${
+                            user.beYourselfLoopUrl
+                          }" autoplay loop muted playsinline style="transform: scaleX(-1);"></video>
+                          <div style="position: absolute; bottom: 5px; left: 5px; color: white; font-size: 0.75rem; font-weight: 800; text-shadow: 0 1px 3px rgba(0,0,0,0.8);">${escapeHTML(
+                            user.displayName || "Mama"
+                          )}</div>
+                      </div>
+                  `;
+          });
+          container.innerHTML = html;
+        } catch (e) {
+          console.error(e);
+          container.innerHTML =
+            '<p style="color: var(--text-muted); font-size: 0.9rem; grid-column: span 3; text-align: center;">Error loading loops.</p>';
+        }
+      };
+
+      window.closeGlobalLoopsModal = function () {
+        document
+          .getElementById("global-loops-modal")
+          .classList.remove("active");
+        document
+          .getElementById("user-profile-backdrop")
+          .classList.remove("active");
+      };
+
       const mainContentArea = document.querySelector(".main-content");
+
       let lastFeedScrollY = mainContentArea.scrollTop;
 
       mainContentArea.addEventListener("scroll", () => {
