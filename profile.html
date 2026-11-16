@@ -19,10 +19,10 @@
           var metaTag = document.getElementById("app-viewport");
           if (metaTag) {
             metaTag.setAttribute(
-              "content",
+              "content", 
               "width=device-width, initial-scale=" +
                 scaleRatio +
-                ", maximum-scale=" + 
+                ", maximum-scale=" +
                 scaleRatio +
                 ", user-scalable=no"
             );
@@ -4787,6 +4787,24 @@
         }
       }
 
+      // Global Notification Engine (Audio & Vibration)
+      window.triggerNewMessageAlert = function () {
+        try {
+          const audio = new Audio("Momchat.mp3");
+          audio
+            .play()
+            .catch((err) =>
+              console.warn("Audio autoplay blocked by browser:", err)
+            );
+
+          if ("vibrate" in navigator) {
+            navigator.vibrate([200, 100, 200]); // Double-buzz pattern
+          }
+        } catch (err) {
+          console.error("Notification engine error:", err);
+        }
+      };
+
       // Custom Alert Setup
       window.showCustomAlert = function (msg) {
         document.getElementById("custom-alert-text").innerText = msg;
@@ -4933,6 +4951,19 @@
         db.collection("chats")
           .where("participants", "array-contains", currentUser.uid)
           .onSnapshot(async (snapshot) => {
+            // Check for new incoming messages to trigger sound/vibration
+            snapshot.docChanges().forEach((change) => {
+              if (change.type === "modified") {
+                const data = change.doc.data();
+                if (
+                  data.lastSenderId &&
+                  data.lastSenderId !== currentUser.uid
+                ) {
+                  triggerNewMessageAlert();
+                }
+              }
+            });
+
             const container = document.getElementById(
               "inbox-threads-container"
             );
@@ -5170,6 +5201,8 @@
             .doc(currentActiveChatId)
             .update({
               lastMessage: text !== "" ? text : "📷 Image",
+              lastSenderId: currentUser.uid,
+
               updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
             });
 
