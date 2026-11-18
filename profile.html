@@ -36,6 +36,11 @@
       href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap"
       rel="stylesheet"
     />
+
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#fff5f7" />
+    <link rel="apple-touch-icon" href="Mlogo180.png" />
+
     <style>
       :root {
         --bg-color: #fff5f7;
@@ -3563,10 +3568,7 @@
       let currentUser = null;
       let currentUserDoc = null;
 
-      // Session Protection & Real-time Profile Listener
-
-
-// Instant Reactivation: Wake up Firebase the millisecond the tab becomes visible
+      // Instant Reactivation: Wake up Firebase the millisecond the tab becomes visible
       document.addEventListener("visibilitychange", () => {
         if (document.visibilityState === "visible") {
           db.enableNetwork().catch(() => {});
@@ -3580,8 +3582,7 @@
         }
       });
 
-
-
+      // Session Protection & Real-time Profile Listener
 
       auth.onAuthStateChanged((user) => {
         if (!user) {
@@ -6241,6 +6242,20 @@
         }
         lastFeedScrollY = currentScrollY;
       });
+
+      // Register Service Worker for PWA Offline Caching
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker
+            .register("sw.js")
+            .then((reg) =>
+              console.log("Service Worker registered successfully.", reg.scope)
+            )
+            .catch((err) =>
+              console.error("Service Worker registration failed:", err)
+            );
+        });
+      }
     </script>
   </body>
 </html>
