@@ -1916,7 +1916,9 @@
         background: var(--bg-color);
         position: relative;
       }
-.by-viewfinder-container {
+      
+      
+      .by-viewfinder-container {
         width: 250px;
         height: 350px;
         flex-shrink: 0;
@@ -1928,6 +1930,14 @@
         border: 4px solid var(--white);
         margin-bottom: 2rem;
       }
+      
+      
+      
+      
+      
+      
+      
+
       .by-video-element {
         width: 100%;
         height: 100%;
@@ -5974,9 +5984,16 @@
             if (currentUserDoc) {
               currentUserDoc.beYourselfLoopUrl = downloadUrl;
             }
-
+            
+            
+            
             showCustomAlert("Be Yourself loop posted!");
-            closeBeYourselfModal();
+            
+            // Reset the camera UI instead of closing the modal
+            document.getElementById("btn-by-retake").click();
+            
+
+            
           } catch (err) {
             console.error("Error saving loop:", err);
             showCustomAlert("Failed to post loop. Please try again.");
