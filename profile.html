@@ -19,7 +19,7 @@
           var metaTag = document.getElementById("app-viewport");
           if (metaTag) {
             metaTag.setAttribute(
-              "content", 
+              "content",
               "width=device-width, initial-scale=" +
                 scaleRatio +
                 ", maximum-scale=" +
@@ -27,7 +27,7 @@
                 ", user-scalable=no"
             );
           }
-        } 
+        }
       })();
     </script>
 
@@ -435,6 +435,25 @@
 
       .btn-post:hover {
         background: var(--dark-pink);
+      }
+
+      /* Stories Section & Loops Header */
+      .loops-header {
+        background: var(--white);
+        padding: 0 1.5rem 0.5rem 1.5rem;
+        font-weight: 800;
+        color: var(--text-dark);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .stories-section {
+        background: var(--white);
+        padding: 0 1.5rem 1rem 1.5rem; /* Removed top padding to absorb the new header */
+        display: flex;
+        gap: 10px;
+        overflow-x: auto;
+        scrollbar-width: none;
       }
 
       /* Stories Section */
@@ -1558,6 +1577,8 @@
         .create-post {
           padding: 1rem;
         }
+
+        .loops-header,
         .stories-section,
         .community-header,
         .helper-carousel,
@@ -1566,6 +1587,7 @@
           padding-left: 1rem;
           padding-right: 1rem;
         }
+
         .user-profile-modal,
         .friend-modal {
           width: 95%;
@@ -1916,8 +1938,7 @@
         background: var(--bg-color);
         position: relative;
       }
-      
-      
+
       .by-viewfinder-container {
         width: 250px;
         height: 350px;
@@ -1930,13 +1951,6 @@
         border: 4px solid var(--white);
         margin-bottom: 2rem;
       }
-      
-      
-      
-      
-      
-      
-      
 
       .by-video-element {
         width: 100%;
@@ -3104,6 +3118,21 @@
               />
               <button class="btn-post" id="publish-btn">Post</button>
             </div>
+          </div>
+
+          <!-- Loops Header -->
+          <div class="loops-header">
+            <span>Loops</span>
+            <span
+              style="
+                color: var(--text-muted);
+                cursor: pointer;
+                font-size: 0.9rem;
+                font-weight: 600;
+              "
+              onclick="openGlobalLoopsModal();"
+              >View all</span
+            >
           </div>
 
           <!-- Stories Section -->
@@ -4550,7 +4579,6 @@
 
             let html = `
           <div class="story-card" style="background: var(--bg-color);" onclick="openBeYourselfModal()">
-            <div class="view-all-loops-btn" onclick="event.stopPropagation(); openGlobalLoopsModal();">View All</div>
             ${myBgHTML}
             <div class="story-create-btn">+</div>
             <div class="story-name" style="color: var(--text-dark); text-align: center; text-shadow: none; bottom: 5px;">Be Yourself</div>
@@ -5984,16 +6012,11 @@
             if (currentUserDoc) {
               currentUserDoc.beYourselfLoopUrl = downloadUrl;
             }
-            
-            
-            
+
             showCustomAlert("Be Yourself loop posted!");
-            
+
             // Reset the camera UI instead of closing the modal
             document.getElementById("btn-by-retake").click();
-            
-
-            
           } catch (err) {
             console.error("Error saving loop:", err);
             showCustomAlert("Failed to post loop. Please try again.");
