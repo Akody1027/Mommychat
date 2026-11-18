@@ -4349,6 +4349,16 @@
                   return;
                 }
 
+                // Retrieve the post author's UID from the DOM
+                const postCard = document.querySelector(
+                  `.post-card[data-id="${postId}"]`
+                );
+                const postAuthorUid = postCard
+                  ? postCard.getAttribute("data-author-uid")
+                  : null;
+                const isPostOwner =
+                  currentUser && postAuthorUid === currentUser.uid;
+
                 snapshot.forEach((doc) => {
                   const comment = doc.data();
                   const initial = comment.authorName
@@ -4361,6 +4371,9 @@
                   const commentId = doc.id;
                   const isCommentOwner =
                     currentUser && comment.authorUid === currentUser.uid;
+
+                  // The menu is visible if they wrote the comment OR if they own the parent post
+                  const canManage = isCommentOwner || isPostOwner;
 
                   const commentHTML = `
                               <div class="comment-row">
@@ -4376,13 +4389,17 @@
                   )}</div>
 
                                           <div class="post-options-container" ${
-                                            isCommentOwner
+                                            canManage
                                               ? ""
                                               : 'style="display:none;"'
                                           }>
                                               <button class="post-options-btn" onclick="toggleCommentOptions('${commentId}', event)" style="font-size: 1.2rem; padding: 0;">⋮</button>
                                               <div class="post-options-menu" id="comment-options-${commentId}">
-                                                  <button onclick="startEditComment('${postId}', '${commentId}')"> Edit</button>
+                                                  ${
+                                                    isCommentOwner
+                                                      ? `<button onclick="startEditComment('${postId}', '${commentId}')"> Edit</button>`
+                                                      : ""
+                                                  }
                                                   <button class="delete-btn" onclick="deleteComment('${postId}', '${commentId}')"> Delete</button>
                                               </div>
                                           </div>
