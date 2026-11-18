@@ -27,7 +27,7 @@
                 ", user-scalable=no"
             );
           }
-        }
+        } 
       })();
     </script>
 
@@ -556,8 +556,8 @@
         );
       }
       .helper-avatar {
-        width: 70px;
-        height: 70px;
+        width: 200px;
+        height: 180px;
         border-radius: 50%;
         margin-top: -35px;
         border: 3px solid var(--white);
@@ -2013,7 +2013,7 @@
       .view-all-loops-btn {
         position: absolute;
         top: 10px;
-        right: 10px;
+        right: 20px;
         background: rgba(255, 255, 255, 0.85);
         color: var(--dark-pink);
         font-size: 0.75rem;
@@ -2024,6 +2024,44 @@
         cursor: pointer;
         border: 1px solid var(--border-color);
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Be Yourself Active Loop Styles */
+      .loop-grid-item.active-loop {
+        border: 3px solid var(--primary-pink);
+        box-shadow: 0 0 10px rgba(255, 143, 163, 0.3);
+      }
+      .active-loop-badge {
+        position: absolute;
+        bottom: 5px;
+        left: 5px;
+        background: var(--primary-pink);
+        color: var(--white);
+        font-size: 0.7rem;
+        font-weight: 800;
+        padding: 2px 6px;
+        border-radius: 10px;
+        z-index: 10;
+      }
+      .set-active-btn {
+        position: absolute;
+        bottom: 5px;
+        left: 5px;
+        background: rgba(255, 255, 255, 0.9);
+        color: var(--dark-pink);
+        border: 1px solid var(--border-color);
+        font-size: 0.7rem;
+        font-weight: 800;
+        padding: 2px 6px;
+        border-radius: 10px;
+        z-index: 10;
+        cursor: pointer;
+        transition: background 0.2s, color 0.2s;
+      }
+      .set-active-btn:hover {
+        background: var(--primary-pink);
+        color: var(--white);
+        border-color: var(--primary-pink);
       }
     </style>
 
@@ -5297,6 +5335,34 @@
             "Are you absolutely sure? This will permanently delete your Mommychat profile, posts, and remaining tokens. This cannot be undone.",
             async () => {
               try {
+                const batch = db.batch();
+                const scrubData = {
+                  authorName: "Deleted User",
+                  authorAvatarUrl: "",
+                  authorAvatarLetter: "M",
+                  authorContext: "",
+                };
+
+                const postsSnap = await db
+                  .collection("posts")
+                  .where("authorUid", "==", currentUser.uid)
+                  .get();
+                postsSnap.forEach((doc) => batch.update(doc.ref, scrubData));
+
+                const clipsSnap = await db
+                  .collection("clips")
+                  .where("authorUid", "==", currentUser.uid)
+                  .get();
+                clipsSnap.forEach((doc) => batch.update(doc.ref, scrubData));
+
+                const commentsSnap = await db
+                  .collectionGroup("comments")
+                  .where("authorUid", "==", currentUser.uid)
+                  .get();
+                commentsSnap.forEach((doc) => batch.update(doc.ref, scrubData));
+
+                await batch.commit();
+
                 await db.collection("users").doc(currentUser.uid).delete();
                 await currentUser.delete();
                 window.location.href = "home.html";
@@ -5920,10 +5986,19 @@
           }
         });
 
+      window.myLoopsListener = null;
+
       window.loadMyLoops = function () {
         if (!currentUser) return;
+
+        // Unsubscribe from any previous listeners to prevent duplicates
+        if (window.myLoopsListener) {
+          window.myLoopsListener();
+        }
+
         const container = document.getElementById("my-loops-container");
-        db.collection("users")
+        window.myLoopsListener = db
+          .collection("users")
           .doc(currentUser.uid)
           .collection("loops")
           .orderBy("createdAt", "desc")
@@ -5933,18 +6008,49 @@
                 '<p style="color: var(--text-muted); font-size: 0.9rem; grid-column: span 3; text-align: center;">No loops saved yet.</p>';
               return;
             }
+
+            const activeUrl = currentUserDoc
+              ? currentUserDoc.beYourselfLoopUrl
+              : null;
             let html = "";
+
             snapshot.forEach((doc) => {
               const data = doc.data();
+              const isActive = data.loopUrl === activeUrl;
+
+              const activeClass = isActive ? " active-loop" : "";
+              const badgeOrBtn = isActive
+                ? `<div class="active-loop-badge">Active</div>`
+                : `<button class="set-active-btn" onclick="setActiveLoop('${data.loopUrl}')">Set Active</button>`;
+
               html += `
-                      <div class="loop-grid-item">
+                      <div class="loop-grid-item${activeClass}">
                           <video src="${data.loopUrl}" autoplay loop muted playsinline style="transform: scaleX(-1);"></video>
                           <button class="delete-loop-btn" onclick="deleteMyLoop('${doc.id}', '${data.loopUrl}')">✕</button>
+                          ${badgeOrBtn}
                       </div>
                   `;
             });
             container.innerHTML = html;
           });
+      };
+
+      window.setActiveLoop = async function (loopUrl) {
+        if (!currentUser) return;
+        try {
+          await db.collection("users").doc(currentUser.uid).update({
+            beYourselfLoopUrl: loopUrl,
+          });
+
+          // Optimistically update local profile and re-render grid
+          if (currentUserDoc) currentUserDoc.beYourselfLoopUrl = loopUrl;
+          window.loadMyLoops();
+
+          showCustomAlert("Active loop updated!");
+        } catch (err) {
+          console.error("Error setting active loop:", err);
+          showCustomAlert("Failed to update active loop.");
+        }
       };
 
       window.deleteMyLoop = function (loopId, loopUrl) {
