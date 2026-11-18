@@ -3565,6 +3565,24 @@
 
       // Session Protection & Real-time Profile Listener
 
+
+// Instant Reactivation: Wake up Firebase the millisecond the tab becomes visible
+      document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible") {
+          db.enableNetwork().catch(() => {});
+        }
+      });
+
+      // Handle iOS/Safari "Back/Forward Cache" freezing
+      window.addEventListener("pageshow", (event) => {
+        if (event.persisted) {
+          db.enableNetwork().catch(() => {});
+        }
+      });
+
+
+
+
       auth.onAuthStateChanged((user) => {
         if (!user) {
           window.location.href = "home.html";
