@@ -23,7 +23,7 @@
               "width=device-width, initial-scale=" +
                 scaleRatio +
                 ", maximum-scale=" +
-                scaleRatio +
+                scaleRatio + 
                 ", user-scalable=no"
             );
           }
@@ -3970,10 +3970,18 @@
               if (postIndex === 5) {
                 const reelsBlock = `
                   <div class="reels-section">
-                    <div class="reels-header">
-                      <svg viewBox="0 0 24 24" width="24" height="24" fill="var(--dark-pink)"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8 12.5v-9l6 4.5-6 4.5z"/></svg>
-                      Clips
+                    <div class="reels-header" style="justify-content: space-between;">
+                      <div style="display: flex; align-items: center; gap: 8px;">
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="var(--dark-pink)"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8 12.5v-9l6 4.5-6 4.5z"/></svg>
+                        Clips
+                      </div>
+                      <span style="color: var(--text-muted); cursor: pointer; font-size: 0.9rem; font-weight: 600;" onclick="document.getElementById('clips-open-btn').click();">View all</span>
                     </div>
+                    
+                    
+                    
+                    
+                    
                     <div class="reels-carousel" id="dynamic-reels-carousel">
                       ${
                         window.clipsFeedHTML ||
