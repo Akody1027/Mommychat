@@ -24,7 +24,7 @@
                 scaleRatio +
                 ", maximum-scale=" +
                 scaleRatio +
-                ", user-scalable=no"
+                ", user-scalable=no" 
             );
           }
         }
@@ -534,6 +534,54 @@
         font-size: 1.5rem;
         font-weight: 800;
         border: 3px solid var(--white);
+      }
+
+      .story-card-self {
+        background: linear-gradient(
+          135deg,
+          var(--light-pink),
+          var(--primary-pink)
+        );
+      }
+      .story-card-self::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 55%;
+        background: linear-gradient(
+          to top,
+          rgba(0, 0, 0, 0.72) 0%,
+          rgba(0, 0, 0, 0.28) 55%,
+          transparent 100%
+        );
+        pointer-events: none;
+        z-index: 1;
+      }
+      .story-card-self img.story-bg,
+      .story-card-self video.story-bg {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center 20%;
+        opacity: 1;
+      }
+      .story-card-self video.story-bg {
+        transform: scaleX(-1);
+      }
+      .story-card-self .story-create-btn {
+        bottom: 34px;
+        z-index: 2;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.28);
+      }
+      .story-card-self .story-name {
+        bottom: 10px;
+        color: var(--white);
+        text-align: center;
+        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.85);
+        z-index: 2;
       }
 
       /* Community Slider (People You May Know) */
@@ -6396,19 +6444,21 @@
         db.collection("users")
           .limit(15)
           .onSnapshot((snapshot) => {
-            let myBgHTML = `<img src="${
-              currentUserDoc?.avatarUrl || currentUser?.photoURL || ""
-            }" style="width:100%; height:120px; object-fit:cover; object-position: center 20%; background:var(--light-pink); border-bottom-left-radius:0; border-bottom-right-radius:0;">`;
+            const myAvatarUrl =
+              currentUserDoc?.avatarUrl || currentUser?.photoURL || "";
+            let myBgHTML = "";
 
             if (currentUserDoc && currentUserDoc.beYourselfLoopUrl) {
-              myBgHTML = `<video src="${currentUserDoc.beYourselfLoopUrl}" class="story-bg" autoplay loop muted playsinline style="transform: scaleX(-1); width:100%; height:120px; object-fit:cover; object-position: center 20%; border-bottom-left-radius:0; border-bottom-right-radius:0;"></video>`;
+              myBgHTML = `<video src="${currentUserDoc.beYourselfLoopUrl}" class="story-bg" autoplay loop muted playsinline></video>`;
+            } else if (myAvatarUrl) {
+              myBgHTML = `<img src="${myAvatarUrl}" class="story-bg" alt="Be Yourself">`;
             }
 
             let html = `
-          <div class="story-card" style="background: var(--bg-color);" onclick="openBeYourselfModal()">
+          <div class="story-card story-card-self" onclick="openBeYourselfModal()">
             ${myBgHTML}
             <div class="story-create-btn">+</div>
-            <div class="story-name" style="color: var(--text-dark); text-align: center; text-shadow: none; bottom: 5px;">Be Yourself</div>
+            <div class="story-name">Be Yourself</div>
           </div>
         `;
 
