@@ -2093,6 +2093,1229 @@
         color: var(--white);
         border-color: var(--primary-pink);
       }
+
+      /* --- Mommychat Marketplace Ecosystem --- */
+      .mp-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          165deg,
+          #fff5f7 0%,
+          #ffe8ee 55%,
+          #fff9fa 100%
+        );
+        z-index: 1990;
+        display: flex;
+        flex-direction: column;
+        opacity: 0;
+        visibility: hidden;
+        transform: scale(0.97) translateY(14px);
+        transition: opacity 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+          transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.35s ease;
+        overflow: hidden;
+      }
+
+      .mp-modal.active {
+        opacity: 1;
+        visibility: visible;
+        transform: scale(1) translateY(0);
+      }
+
+      /* Multi-Depth Ambient Parallax Background Orbs */
+      .mp-bg-layer {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+        z-index: 0;
+      }
+
+      .mp-bg-orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(55px);
+        opacity: 0.42;
+        will-change: transform;
+      }
+
+      .mp-bg-orb-1 {
+        width: 340px;
+        height: 340px;
+        top: -80px;
+        left: -90px;
+        background: radial-gradient(circle, var(--light-pink), transparent 70%);
+      }
+
+      .mp-bg-orb-2 {
+        width: 380px;
+        height: 380px;
+        bottom: -100px;
+        right: -90px;
+        background: radial-gradient(
+          circle,
+          var(--primary-pink),
+          transparent 70%
+        );
+      }
+
+      /* Fixed Translucent Top Bar */
+      .mp-header {
+        position: relative;
+        z-index: 20;
+        height: 62px;
+        padding: 0 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: rgba(255, 255, 255, 0.78);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-bottom: 1px solid rgba(248, 205, 218, 0.65);
+        box-shadow: 0 4px 20px rgba(201, 24, 74, 0.05);
+        flex-shrink: 0;
+      }
+
+      .mp-header-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .mp-icon-btn {
+        position: relative;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 1px solid var(--border-color);
+        background: rgba(255, 255, 255, 0.9);
+        color: var(--dark-pink);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+          background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+        box-shadow: 0 2px 10px rgba(255, 143, 163, 0.14);
+      }
+
+      .mp-icon-btn:hover {
+        background: var(--primary-pink);
+        color: var(--white);
+        transform: translateY(-1px) scale(1.04);
+      }
+
+      .mp-icon-btn.active {
+        background: var(--dark-pink);
+        color: var(--white);
+        border-color: var(--dark-pink);
+      }
+
+      .mp-filter-dot {
+        position: absolute;
+        top: 6px;
+        right: 6px;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--dark-pink);
+        border: 2px solid var(--white);
+        display: none;
+      }
+
+      .mp-filter-dot.visible {
+        display: block;
+      }
+
+      .mp-header-title {
+        font-size: 1.2rem;
+        font-weight: 800;
+        color: var(--dark-pink);
+        letter-spacing: 0.3px;
+      }
+
+      .mp-user-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 2px solid var(--primary-pink);
+        background: linear-gradient(
+          135deg,
+          var(--light-pink),
+          var(--primary-pink)
+        );
+        color: var(--white);
+        font-weight: 800;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        cursor: pointer;
+        box-shadow: 0 3px 12px rgba(201, 24, 74, 0.2);
+        transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      .mp-user-btn:hover {
+        transform: scale(1.08);
+      }
+
+      .mp-user-btn img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      /* Top-Left Dropdown Filter Drawer */
+      .mp-filter-drawer {
+        position: absolute;
+        top: 62px;
+        left: 0;
+        width: 100%;
+        z-index: 19;
+        background: rgba(255, 255, 255, 0.94);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        border-bottom: 1px solid var(--border-color);
+        box-shadow: 0 14px 35px rgba(89, 13, 34, 0.12);
+        padding: 1rem 1.25rem 1.2rem;
+        transform: translateY(-115%);
+        opacity: 0;
+        visibility: hidden;
+        transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+          opacity 0.25s ease, visibility 0.35s ease;
+      }
+
+      .mp-filter-drawer.active {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .mp-filter-inner {
+        max-width: 960px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .mp-search-wrap {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+
+      .mp-search-icon {
+        position: absolute;
+        left: 14px;
+        color: var(--text-muted);
+        pointer-events: none;
+        display: flex;
+      }
+
+      .mp-search-input {
+        width: 100%;
+        padding: 0.72rem 2.6rem 0.72rem 2.7rem;
+        border: 2px solid var(--border-color);
+        border-radius: 50px;
+        background: var(--bg-color);
+        color: var(--text-dark);
+        font-size: 0.95rem;
+        font-weight: 600;
+        outline: none;
+        transition: border-color 0.2s ease, background 0.2s ease;
+      }
+
+      .mp-search-input:focus {
+        border-color: var(--primary-pink);
+        background: var(--white);
+      }
+
+      .mp-search-clear {
+        position: absolute;
+        right: 12px;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        border: none;
+        background: var(--light-pink);
+        color: var(--white);
+        font-weight: 800;
+        font-size: 0.75rem;
+        cursor: pointer;
+        display: none;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .mp-search-clear.visible {
+        display: flex;
+      }
+
+      .mp-filter-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .mp-filter-pills {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .mp-pill {
+        padding: 0.42rem 0.9rem;
+        border-radius: 50px;
+        border: 1.5px solid var(--border-color);
+        background: var(--white);
+        color: var(--text-dark);
+        font-size: 0.82rem;
+        font-weight: 800;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .mp-pill:hover {
+        border-color: var(--primary-pink);
+        color: var(--dark-pink);
+      }
+
+      .mp-pill.active {
+        background: var(--dark-pink);
+        border-color: var(--dark-pink);
+        color: var(--white);
+        box-shadow: 0 3px 10px rgba(201, 24, 74, 0.22);
+      }
+
+      .mp-sort-select {
+        padding: 0.45rem 0.9rem;
+        border-radius: 12px;
+        border: 1.5px solid var(--border-color);
+        background: var(--white);
+        color: var(--text-dark);
+        font-size: 0.85rem;
+        font-weight: 800;
+        outline: none;
+        cursor: pointer;
+      }
+
+      .mp-filter-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.82rem;
+        color: var(--text-muted);
+        font-weight: 700;
+      }
+
+      .mp-reset-btn {
+        background: none;
+        border: none;
+        color: var(--dark-pink);
+        font-weight: 800;
+        font-size: 0.82rem;
+        cursor: pointer;
+        text-decoration: underline;
+      }
+
+      /* Scrolling Marketplace Body & Product Grid */
+      .mp-scroll-body {
+        position: relative;
+        z-index: 5;
+        flex: 1;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 1rem 0.9rem 4rem;
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .mp-banner-note {
+        max-width: 1120px;
+        margin: 0 auto 1rem;
+        padding: 0.65rem 1rem;
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.72);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(248, 205, 218, 0.8);
+        font-size: 0.8rem;
+        color: var(--text-light);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 600;
+      }
+
+      .mp-banner-note svg {
+        flex-shrink: 0;
+        color: var(--dark-pink);
+      }
+
+      .mp-grid {
+        max-width: 1120px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+      }
+
+      @media (min-width: 720px) {
+        .mp-grid {
+          grid-template-columns: repeat(3, 1fr);
+          gap: 18px;
+        }
+      }
+
+      @media (min-width: 1080px) {
+        .mp-grid {
+          grid-template-columns: repeat(4, 1fr);
+          gap: 20px;
+        }
+      }
+
+      /* Product Card */
+      .mp-card {
+        background: rgba(255, 255, 255, 0.88);
+        backdrop-filter: blur(12px);
+        border-radius: 20px;
+        border: 1px solid rgba(248, 205, 218, 0.85);
+        overflow: hidden;
+        cursor: pointer;
+        box-shadow: 0 8px 24px rgba(89, 13, 34, 0.07);
+        opacity: 0;
+        transform: translateY(24px) scale(0.97);
+        transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+          transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .mp-card.mp-card-visible {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+
+      .mp-card:hover {
+        transform: translateY(-4px) scale(1.01);
+        box-shadow: 0 14px 32px rgba(201, 24, 74, 0.14);
+      }
+
+      .mp-card-media {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 4 / 5;
+        overflow: hidden;
+        background: linear-gradient(135deg, #ffe5ec, #ffd6e0);
+      }
+
+      .mp-card-img {
+        position: absolute;
+        left: 0;
+        top: -9%;
+        width: 100%;
+        height: 118%;
+        object-fit: cover;
+        will-change: transform;
+        transition: transform 0.08s linear;
+      }
+
+      .mp-card-scrim {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          to top,
+          rgba(89, 13, 34, 0.48) 0%,
+          rgba(89, 13, 34, 0) 38%,
+          rgba(89, 13, 34, 0.16) 100%
+        );
+        pointer-events: none;
+      }
+
+      .mp-price-tag {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(255, 255, 255, 0.92);
+        backdrop-filter: blur(8px);
+        color: var(--dark-pink);
+        font-weight: 800;
+        font-size: 0.88rem;
+        padding: 4px 10px;
+        border-radius: 50px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+      }
+
+      .mp-fulfill-badge {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: rgba(89, 13, 34, 0.68);
+        backdrop-filter: blur(6px);
+        color: var(--white);
+        font-weight: 800;
+        font-size: 0.68rem;
+        letter-spacing: 0.3px;
+        padding: 4px 8px;
+        border-radius: 50px;
+      }
+
+      /* Bottom-Left Round Seller Avatar */
+      .mp-card-seller-avatar {
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: 2.5px solid var(--white);
+        background: linear-gradient(
+          135deg,
+          var(--light-pink),
+          var(--primary-pink)
+        );
+        color: var(--white);
+        font-weight: 800;
+        font-size: 0.88rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+        z-index: 3;
+        transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      .mp-card-seller-avatar:hover {
+        transform: scale(1.14);
+      }
+
+      .mp-card-seller-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .mp-card-info {
+        padding: 0.75rem 0.85rem 0.85rem;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .mp-card-title {
+        font-weight: 800;
+        font-size: 0.94rem;
+        color: var(--text-dark);
+        line-height: 1.3;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .mp-card-meta {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        font-weight: 600;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .mp-empty-state {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 3.5rem 1.5rem;
+        background: rgba(255, 255, 255, 0.75);
+        border-radius: 22px;
+        border: 1px dashed var(--border-color);
+        color: var(--text-muted);
+      }
+
+      .mp-empty-state h3 {
+        color: var(--dark-pink);
+        margin-bottom: 0.5rem;
+        font-size: 1.15rem;
+      }
+
+      /* Full-Width Dropdown Seller Studio Modal */
+      .mp-sub-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(89, 13, 34, 0.42);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+      }
+
+      .mp-sub-backdrop.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      #mp-creator-backdrop {
+        z-index: 1993;
+      }
+
+      .mp-creator-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        max-height: 100%;
+        height: 100%;
+        background: var(--bg-color);
+        z-index: 1994;
+        display: flex;
+        flex-direction: column;
+        transform: translateY(-100%);
+        opacity: 0;
+        visibility: hidden;
+        transition: transform 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+          opacity 0.3s ease, visibility 0.42s ease;
+        box-shadow: 0 20px 50px rgba(89, 13, 34, 0.22);
+      }
+
+      .mp-creator-modal.active {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .mp-creator-header {
+        padding: 1rem 1.25rem;
+        background: var(--white);
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-shrink: 0;
+      }
+
+      .mp-creator-body {
+        flex: 1;
+        overflow-y: auto;
+        padding: 1.25rem;
+      }
+
+      .mp-creator-inner {
+        max-width: 720px;
+        margin: 0 auto;
+        padding-bottom: 3rem;
+      }
+
+      /* 4-Slot Styled Image Uploader (1 Large Main + 3 Sub) */
+      .mp-uploader-section {
+        margin-bottom: 1.25rem;
+      }
+
+      .mp-section-label {
+        display: block;
+        font-weight: 800;
+        font-size: 0.92rem;
+        color: var(--text-dark);
+        margin-bottom: 0.6rem;
+      }
+
+      .mp-img-slot {
+        position: relative;
+        border: 2px dashed var(--primary-pink);
+        border-radius: 18px;
+        background: var(--white);
+        cursor: pointer;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        color: var(--dark-pink);
+        transition: border-color 0.2s ease, background 0.2s ease,
+          transform 0.2s ease;
+      }
+
+      .mp-img-slot:hover {
+        background: #fff0f4;
+        border-color: var(--dark-pink);
+      }
+
+      .mp-img-slot.has-image {
+        border-style: solid;
+        border-color: var(--border-color);
+      }
+
+      .mp-img-slot-main {
+        width: 100%;
+        aspect-ratio: 16 / 10;
+        margin-bottom: 10px;
+      }
+
+      .mp-img-subgrid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+      }
+
+      .mp-img-slot-sub {
+        aspect-ratio: 1 / 1;
+      }
+
+      .mp-slot-preview {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: none;
+      }
+
+      .mp-img-slot.has-image .mp-slot-preview {
+        display: block;
+      }
+
+      .mp-slot-placeholder {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 8px;
+        font-weight: 800;
+        font-size: 0.85rem;
+        color: var(--dark-pink);
+      }
+
+      .mp-slot-placeholder span {
+        font-size: 0.72rem;
+        color: var(--text-muted);
+        font-weight: 600;
+        margin-top: 2px;
+      }
+
+      .mp-img-slot.has-image .mp-slot-placeholder {
+        display: none;
+      }
+
+      .mp-slot-remove {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        border: 2px solid var(--white);
+        background: rgba(230, 57, 70, 0.92);
+        color: var(--white);
+        font-weight: 800;
+        font-size: 0.82rem;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 4;
+      }
+
+      .mp-img-slot.has-image .mp-slot-remove {
+        display: flex;
+      }
+
+      .mp-slot-badge {
+        position: absolute;
+        bottom: 8px;
+        left: 8px;
+        background: rgba(89, 13, 34, 0.75);
+        color: var(--white);
+        font-size: 0.7rem;
+        font-weight: 800;
+        padding: 3px 9px;
+        border-radius: 50px;
+        pointer-events: none;
+      }
+
+      /* Price Input With Prefix */
+      .mp-price-wrap {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+
+      .mp-price-prefix {
+        position: absolute;
+        left: 14px;
+        font-weight: 800;
+        font-size: 1.05rem;
+        color: var(--dark-pink);
+      }
+
+      .mp-price-wrap input {
+        padding-left: 2rem !important;
+      }
+
+      /* Fulfillment Option Cards */
+      .mp-fulfill-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+      }
+
+      .mp-fulfill-opt {
+        padding: 0.75rem 0.5rem;
+        border-radius: 14px;
+        border: 2px solid var(--border-color);
+        background: var(--bg-color);
+        color: var(--text-dark);
+        font-weight: 800;
+        font-size: 0.82rem;
+        text-align: center;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.2s ease;
+      }
+
+      .mp-fulfill-opt.active {
+        border-color: var(--dark-pink);
+        background: var(--dark-pink);
+        color: var(--white);
+        box-shadow: 0 4px 14px rgba(201, 24, 74, 0.24);
+      }
+
+      .mp-policy-box {
+        background: #fff0f4;
+        border: 1px solid var(--border-color);
+        border-radius: 14px;
+        padding: 0.85rem 1rem;
+        font-size: 0.8rem;
+        color: var(--text-light);
+        line-height: 1.45;
+        margin-bottom: 1.25rem;
+      }
+
+      .mp-creator-actions {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 2.25rem;
+      }
+
+      .mp-btn-secondary {
+        padding: 0.75rem 1.25rem;
+        border-radius: 50px;
+        border: 2px solid var(--border-color);
+        background: var(--white);
+        color: var(--text-dark);
+        font-weight: 800;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .mp-btn-secondary:hover {
+        border-color: var(--primary-pink);
+        color: var(--dark-pink);
+      }
+
+      /* My Products Management Grid */
+      .mp-my-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-top: 2px solid var(--border-color);
+        padding-top: 1.75rem;
+        margin-bottom: 1rem;
+      }
+
+      .mp-my-header h3 {
+        color: var(--dark-pink);
+        font-size: 1.2rem;
+        font-weight: 800;
+      }
+
+      .mp-count-pill {
+        background: var(--white);
+        border: 1px solid var(--border-color);
+        color: var(--dark-pink);
+        padding: 3px 12px;
+        border-radius: 50px;
+        font-weight: 800;
+        font-size: 0.82rem;
+      }
+
+      .mp-my-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+
+      @media (min-width: 640px) {
+        .mp-my-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+
+      .mp-my-card {
+        background: var(--white);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 4px 14px rgba(89, 13, 34, 0.06);
+      }
+
+      .mp-my-card-media {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        background: var(--bg-color);
+        overflow: hidden;
+      }
+
+      .mp-my-card-media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .mp-status-overlay {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        padding: 3px 9px;
+        border-radius: 50px;
+        font-size: 0.7rem;
+        font-weight: 800;
+        color: var(--white);
+        background: #2a9d8f;
+      }
+
+      .mp-status-overlay.hidden-status {
+        background: rgba(89, 13, 34, 0.78);
+      }
+
+      .mp-status-overlay.review-status {
+        background: #e76f51;
+      }
+
+      .mp-my-card-body {
+        padding: 0.65rem 0.75rem;
+        flex: 1;
+      }
+
+      .mp-my-card-title {
+        font-weight: 800;
+        font-size: 0.88rem;
+        color: var(--text-dark);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .mp-my-card-price {
+        font-weight: 800;
+        font-size: 0.85rem;
+        color: var(--dark-pink);
+        margin-top: 2px;
+      }
+
+      .mp-my-card-actions {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        border-top: 1px solid var(--bg-color);
+      }
+
+      .mp-my-btn {
+        padding: 0.55rem 0.2rem;
+        border: none;
+        background: var(--white);
+        color: var(--text-dark);
+        font-weight: 800;
+        font-size: 0.74rem;
+        cursor: pointer;
+        border-right: 1px solid var(--bg-color);
+        transition: background 0.2s ease, color 0.2s ease;
+      }
+
+      .mp-my-btn:last-child {
+        border-right: none;
+      }
+
+      .mp-my-btn:hover {
+        background: var(--bg-color);
+        color: var(--dark-pink);
+      }
+
+      .mp-my-btn.danger {
+        color: #e63946;
+      }
+
+      /* Product Detail Modal */
+      #mp-detail-backdrop {
+        z-index: 1991;
+      }
+
+      .mp-detail-modal {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        width: 94%;
+        max-width: 560px;
+        max-height: 90%;
+        background: var(--white);
+        border-radius: 24px;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 24px 60px rgba(89, 13, 34, 0.26);
+        z-index: 1992;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        opacity: 0;
+        visibility: hidden;
+        transform: translate(-50%, -46%) scale(0.95);
+        transition: all 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      .mp-detail-modal.active {
+        opacity: 1;
+        visibility: visible;
+        transform: translate(-50%, -50%) scale(1);
+      }
+
+      .mp-detail-header {
+        padding: 0.9rem 1.2rem;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: var(--white);
+      }
+
+      .mp-detail-scroll {
+        flex: 1;
+        overflow-y: auto;
+        padding: 1.15rem;
+        background: var(--bg-color);
+      }
+
+      .mp-gallery-main {
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        border-radius: 16px;
+        overflow: hidden;
+        background: var(--white);
+        border: 1px solid var(--border-color);
+        margin-bottom: 10px;
+      }
+
+      .mp-gallery-main img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .mp-gallery-thumbs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 1rem;
+      }
+
+      .mp-gallery-thumb {
+        width: 64px;
+        height: 64px;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 2px solid transparent;
+        cursor: pointer;
+        opacity: 0.72;
+        transition: all 0.2s ease;
+      }
+
+      .mp-gallery-thumb.active {
+        border-color: var(--dark-pink);
+        opacity: 1;
+        transform: scale(1.04);
+      }
+
+      .mp-gallery-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .mp-detail-card {
+        background: var(--white);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 1rem 1.1rem;
+        margin-bottom: 1rem;
+      }
+
+      .mp-detail-top-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 6px;
+      }
+
+      .mp-detail-price {
+        font-size: 1.45rem;
+        font-weight: 800;
+        color: var(--dark-pink);
+      }
+
+      .mp-detail-pill {
+        background: var(--bg-color);
+        color: var(--dark-pink);
+        border: 1px solid var(--border-color);
+        padding: 4px 10px;
+        border-radius: 50px;
+        font-size: 0.78rem;
+        font-weight: 800;
+      }
+
+      .mp-detail-title {
+        font-size: 1.18rem;
+        font-weight: 800;
+        color: var(--text-dark);
+        margin-bottom: 4px;
+      }
+
+      .mp-detail-time {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        margin-bottom: 0.85rem;
+      }
+
+      .mp-detail-desc {
+        font-size: 0.95rem;
+        line-height: 1.55;
+        color: var(--text-dark);
+        white-space: pre-wrap;
+      }
+
+      .mp-seller-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: var(--white);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 0.85rem 1rem;
+        margin-bottom: 1rem;
+        cursor: pointer;
+        transition: border-color 0.2s ease;
+      }
+
+      .mp-seller-row:hover {
+        border-color: var(--primary-pink);
+      }
+
+      .mp-seller-avatar-lg {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: linear-gradient(
+          135deg,
+          var(--light-pink),
+          var(--primary-pink)
+        );
+        color: var(--white);
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        flex-shrink: 0;
+      }
+
+      .mp-seller-avatar-lg img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .mp-detail-footer {
+        padding: 0.95rem 1.2rem;
+        background: var(--white);
+        border-top: 1px solid var(--border-color);
+        display: flex;
+        gap: 10px;
+      }
+
+      /* Report Listing Modal */
+      #mp-report-backdrop {
+        z-index: 1995;
+      }
+
+      .mp-report-modal {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        width: 92%;
+        max-width: 420px;
+        background: var(--white);
+        border-radius: 22px;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 22px 55px rgba(89, 13, 34, 0.28);
+        padding: 1.4rem;
+        z-index: 1996;
+        opacity: 0;
+        visibility: hidden;
+        transform: translate(-50%, -46%) scale(0.94);
+        transition: all 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      .mp-report-modal.active {
+        opacity: 1;
+        visibility: visible;
+        transform: translate(-50%, -50%) scale(1);
+      }
+
+      .mp-report-reasons {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin: 1rem 0;
+      }
+
+      .mp-reason-btn {
+        text-align: left;
+        padding: 0.7rem 1rem;
+        border-radius: 12px;
+        border: 1.5px solid var(--border-color);
+        background: var(--bg-color);
+        color: var(--text-dark);
+        font-weight: 800;
+        font-size: 0.88rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .mp-reason-btn.active {
+        border-color: #e63946;
+        background: #ffe5e8;
+        color: #b5172a;
+      }
+
+      .mp-report-notes {
+        width: 100%;
+        padding: 0.75rem;
+        border-radius: 12px;
+        border: 1.5px solid var(--border-color);
+        font-family: inherit;
+        font-size: 0.9rem;
+        outline: none;
+        margin-bottom: 1rem;
+        resize: vertical;
+      }
     </style>
 
     <!-- Firebase SDKs -->
@@ -2139,6 +3362,18 @@
           <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor">
             <path
               d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8 12.5v-9l6 4.5-6 4.5z"
+            />
+          </svg>
+        </button>
+
+        <button
+          class="toolbar-btn"
+          id="marketplace-open-btn"
+          aria-label="Open Marketplace"
+        >
+          <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor">
+            <path
+              d="M18 6h-2c0-2.21-1.79-4-4-4S8 3.79 8 6H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6-2c1.1 0 2 .9 2 2h-4c0-1.1.9-2 2-2zm0 14.25l-.65-.59C9.03 15.56 7.5 14.18 7.5 12.48 7.5 11.09 8.59 10 9.98 10c.78 0 1.53.36 2.02.94.49-.58 1.24-.94 2.02-.94 1.39 0 2.48 1.09 2.48 2.48 0 1.7-1.53 3.08-3.85 5.18L12 18.25z"
             />
           </svg>
         </button>
@@ -2752,6 +3987,523 @@
       <div class="upm-body" style="padding: 10px">
         <div class="my-loops-grid" id="global-loops-container"></div>
       </div>
+    </div>
+
+    <!-- 100x100 Mommychat Marketplace Modal -->
+    <div class="mp-modal" id="marketplace-main-modal">
+      <div class="mp-bg-layer">
+        <div class="mp-bg-orb mp-bg-orb-1" id="mp-bg-orb-1"></div>
+        <div class="mp-bg-orb mp-bg-orb-2" id="mp-bg-orb-2"></div>
+      </div>
+
+      <!-- Fixed Top Header -->
+      <div class="mp-header">
+        <div class="mp-header-left">
+          <button
+            class="mp-icon-btn"
+            id="mp-close-btn"
+            aria-label="Close Marketplace"
+          >
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+              <path
+                d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"
+              />
+            </svg>
+          </button>
+          <button
+            class="mp-icon-btn"
+            id="mp-filter-toggle-btn"
+            aria-label="Filter Products"
+          >
+            <svg viewBox="0 0 24 24" width="21" height="21" fill="currentColor">
+              <path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z" />
+            </svg>
+            <span class="mp-filter-dot" id="mp-filter-dot"></span>
+          </button>
+        </div>
+
+        <div class="mp-header-title">Marketplace</div>
+
+        <button
+          class="mp-user-btn"
+          id="mp-user-avatar-btn"
+          aria-label="Seller Studio"
+        >
+          M
+        </button>
+      </div>
+
+      <!-- Top-Left Dropdown Filter Drawer -->
+      <div class="mp-filter-drawer" id="mp-filter-drawer">
+        <div class="mp-filter-inner">
+          <div class="mp-search-wrap">
+            <span class="mp-search-icon">
+              <svg
+                viewBox="0 0 24 24"
+                width="20"
+                height="20"
+                fill="currentColor"
+              >
+                <path
+                  d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+                />
+              </svg>
+            </span>
+            <input
+              type="text"
+              id="mp-search-input"
+              class="mp-search-input"
+              placeholder="Search dresses, handmade goods, maternity..."
+            />
+            <button
+              type="button"
+              class="mp-search-clear"
+              id="mp-search-clear-btn"
+              aria-label="Clear Search"
+            >
+              ✕
+            </button>
+          </div>
+
+          <div class="mp-filter-row">
+            <div class="mp-filter-pills" id="mp-filter-pills">
+              <button
+                type="button"
+                class="mp-pill active"
+                data-fulfillment="all"
+              >
+                All
+              </button>
+              <button
+                type="button"
+                class="mp-pill"
+                data-fulfillment="shipping_available"
+              >
+                Ships
+              </button>
+              <button
+                type="button"
+                class="mp-pill"
+                data-fulfillment="local_only"
+              >
+                Local Pickup
+              </button>
+              <button type="button" class="mp-pill" data-fulfillment="both">
+                Both
+              </button>
+            </div>
+
+            <select id="mp-sort-select" class="mp-sort-select">
+              <option value="newest">Sort: Newest</option>
+              <option value="price_asc">Price: Low to High</option>
+              <option value="price_desc">Price: High to Low</option>
+            </select>
+          </div>
+
+          <div class="mp-filter-footer">
+            <span id="mp-results-count">0 listings</span>
+            <button
+              type="button"
+              class="mp-reset-btn"
+              id="mp-reset-filters-btn"
+            >
+              Reset Filters
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scrolling Product Grid -->
+      <div class="mp-scroll-body" id="mp-scroll-container">
+        <div class="mp-banner-note">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+            <path
+              d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z"
+            />
+          </svg>
+          <span>
+            Community ad board only. Transactions are peer-to-peer at your own
+            risk. Medical equipment is strictly prohibited.
+          </span>
+        </div>
+
+        <div class="mp-grid" id="mp-grid-container"></div>
+      </div>
+    </div>
+
+    <!-- Full-Width Seller Studio Modal (Creator + My Products) -->
+    <div class="mp-sub-backdrop" id="mp-creator-backdrop"></div>
+    <div class="mp-creator-modal" id="mp-creator-modal">
+      <div class="mp-creator-header">
+        <h2 class="upm-title" id="mp-creator-title">Create Product Listing</h2>
+        <button type="button" class="btn-close-modal" id="mp-creator-close-btn">
+          ✕
+        </button>
+      </div>
+
+      <div class="mp-creator-body" id="mp-creator-body">
+        <div class="mp-creator-inner">
+          <!-- 4-Image Styled Uploader -->
+          <div class="mp-uploader-section">
+            <label class="mp-section-label">Product Photos (Up to 4)</label>
+            <input
+              type="file"
+              id="mp-image-file-input"
+              class="hidden-file-input"
+              accept="image/*"
+            />
+
+            <div
+              class="mp-img-slot mp-img-slot-main"
+              id="mp-slot-0"
+              onclick="mpTriggerSlotUpload(0)"
+            >
+              <img src="" alt="Main product" class="mp-slot-preview" />
+              <div class="mp-slot-placeholder">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="36"
+                  height="36"
+                  fill="currentColor"
+                >
+                  <circle cx="12" cy="12" r="3.2" />
+                  <path
+                    d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"
+                  />
+                </svg>
+                Tap to add Main Image
+                <span>Cover photo shown in Marketplace</span>
+              </div>
+              <span class="mp-slot-badge">Main Photo</span>
+              <button
+                type="button"
+                class="mp-slot-remove"
+                onclick="mpRemoveImageSlot(0, event)"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div class="mp-img-subgrid">
+              <div
+                class="mp-img-slot mp-img-slot-sub"
+                id="mp-slot-1"
+                onclick="mpTriggerSlotUpload(1)"
+              >
+                <img src="" alt="Product angle 2" class="mp-slot-preview" />
+                <div class="mp-slot-placeholder">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="24"
+                    height="24"
+                    fill="currentColor"
+                  >
+                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+                  </svg>
+                  Photo 2
+                </div>
+                <button
+                  type="button"
+                  class="mp-slot-remove"
+                  onclick="mpRemoveImageSlot(1, event)"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <div
+                class="mp-img-slot mp-img-slot-sub"
+                id="mp-slot-2"
+                onclick="mpTriggerSlotUpload(2)"
+              >
+                <img src="" alt="Product angle 3" class="mp-slot-preview" />
+                <div class="mp-slot-placeholder">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="24"
+                    height="24"
+                    fill="currentColor"
+                  >
+                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+                  </svg>
+                  Photo 3
+                </div>
+                <button
+                  type="button"
+                  class="mp-slot-remove"
+                  onclick="mpRemoveImageSlot(2, event)"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <div
+                class="mp-img-slot mp-img-slot-sub"
+                id="mp-slot-3"
+                onclick="mpTriggerSlotUpload(3)"
+              >
+                <img src="" alt="Product angle 4" class="mp-slot-preview" />
+                <div class="mp-slot-placeholder">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="24"
+                    height="24"
+                    fill="currentColor"
+                  >
+                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+                  </svg>
+                  Photo 4
+                </div>
+                <button
+                  type="button"
+                  class="mp-slot-remove"
+                  onclick="mpRemoveImageSlot(3, event)"
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="upm-form-group">
+            <label for="mp-input-title">Product Title</label>
+            <input
+              type="text"
+              id="mp-input-title"
+              maxlength="80"
+              placeholder="e.g., Handmade Floral Maternity Wrap Dress"
+            />
+          </div>
+
+          <div class="upm-form-group">
+            <label for="mp-input-desc">Description</label>
+            <textarea
+              id="mp-input-desc"
+              rows="4"
+              maxlength="1000"
+              placeholder="Share size, condition, pickup city, or shipping notes..."
+            ></textarea>
+          </div>
+
+          <div class="upm-form-group">
+            <label for="mp-input-price">Price (USD)</label>
+            <div class="mp-price-wrap">
+              <span class="mp-price-prefix">$</span>
+              <input
+                type="number"
+                id="mp-input-price"
+                min="0"
+                step="0.01"
+                placeholder="0.00"
+              />
+            </div>
+          </div>
+
+          <div class="upm-form-group">
+            <label>Delivery / Pickup Option</label>
+            <div class="mp-fulfill-grid" id="mp-fulfillment-options">
+              <button
+                type="button"
+                class="mp-fulfill-opt active"
+                data-value="shipping_available"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  width="22"
+                  height="22"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"
+                  />
+                </svg>
+                Shipping Available
+              </button>
+
+              <button
+                type="button"
+                class="mp-fulfill-opt"
+                data-value="local_only"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  width="22"
+                  height="22"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"
+                  />
+                </svg>
+                Local Pickup Only
+              </button>
+
+              <button type="button" class="mp-fulfill-opt" data-value="both">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="22"
+                  height="22"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+                  />
+                </svg>
+                Both Options
+              </button>
+            </div>
+          </div>
+
+          <div class="mp-policy-box">
+            <strong>Marketplace Rules:</strong> Mommychat is a community
+            bulletin board only and is not responsible for items sold. Medical
+            equipment, used car seats, recalled items, and homemade supplements
+            are strictly prohibited and subject to removal.
+          </div>
+
+          <div class="mp-creator-actions">
+            <button
+              type="button"
+              class="mp-btn-secondary"
+              id="mp-cancel-edit-btn"
+              style="display: none"
+            >
+              Cancel Edit
+            </button>
+            <button type="button" class="btn-modal-action" id="mp-save-btn">
+              Save &amp; Publish Product
+            </button>
+          </div>
+
+          <!-- My Products Grid View -->
+          <div class="mp-my-header">
+            <h3>My Products</h3>
+            <span class="mp-count-pill" id="mp-my-count-badge">0 items</span>
+          </div>
+          <div class="mp-my-grid" id="mp-my-products-grid"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product Detail Overlay -->
+    <div class="mp-sub-backdrop" id="mp-detail-backdrop"></div>
+    <div class="mp-detail-modal" id="mp-detail-modal">
+      <div class="mp-detail-header">
+        <h3 class="upm-title" style="font-size: 1.15rem">Product Details</h3>
+        <button type="button" class="btn-close-modal" id="mp-detail-close-btn">
+          ✕
+        </button>
+      </div>
+
+      <div class="mp-detail-scroll">
+        <div class="mp-gallery-main">
+          <img src="" alt="Product" id="mp-detail-main-img" />
+        </div>
+        <div class="mp-gallery-thumbs" id="mp-detail-thumbs"></div>
+
+        <div class="mp-detail-card">
+          <div class="mp-detail-top-row">
+            <div class="mp-detail-price" id="mp-detail-price">$0</div>
+            <div class="mp-detail-pill" id="mp-detail-fulfillment">
+              Shipping Available
+            </div>
+          </div>
+          <div class="mp-detail-title" id="mp-detail-title"></div>
+          <div class="mp-detail-time" id="mp-detail-time"></div>
+          <div class="mp-detail-desc" id="mp-detail-desc"></div>
+        </div>
+
+        <div class="mp-seller-row" id="mp-detail-seller-row">
+          <div class="mp-seller-avatar-lg" id="mp-detail-seller-avatar">M</div>
+          <div style="flex: 1">
+            <div
+              style="font-weight: 800; color: var(--text-dark)"
+              id="mp-detail-seller-name"
+            >
+              Mama
+            </div>
+            <div style="font-size: 0.8rem; color: var(--text-muted)">
+              Tap to view seller profile
+            </div>
+          </div>
+        </div>
+
+        <div class="mp-policy-box" style="margin-bottom: 0">
+          Purchase at your own risk. Mommychat does not process payments or
+          guarantee listings. Meet in well-lit public places for local pickup or
+          use buyer-protected payment methods when shipping.
+        </div>
+      </div>
+
+      <div class="mp-detail-footer" id="mp-detail-actions"></div>
+    </div>
+
+    <!-- Report Listing Modal -->
+    <div class="mp-sub-backdrop" id="mp-report-backdrop"></div>
+    <div class="mp-report-modal" id="mp-report-modal">
+      <div
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        "
+      >
+        <h3 class="upm-title" style="font-size: 1.15rem">Report Listing</h3>
+        <button type="button" class="btn-close-modal" id="mp-report-close-btn">
+          ✕
+        </button>
+      </div>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px">
+        Listings receiving multiple unique reports are automatically paused for
+        review.
+      </p>
+
+      <div class="mp-report-reasons" id="mp-report-reasons">
+        <button
+          type="button"
+          class="mp-reason-btn active"
+          data-reason="Prohibited / Medical Equipment"
+        >
+          Prohibited Item / Medical Equipment
+        </button>
+        <button
+          type="button"
+          class="mp-reason-btn"
+          data-reason="Scam or Fraudulent Seller"
+        >
+          Scam or Fraudulent Seller
+        </button>
+        <button
+          type="button"
+          class="mp-reason-btn"
+          data-reason="Misleading Description or Photos"
+        >
+          Misleading Description or Photos
+        </button>
+        <button
+          type="button"
+          class="mp-reason-btn"
+          data-reason="Inappropriate or Spam Listing"
+        >
+          Inappropriate or Spam Listing
+        </button>
+      </div>
+
+      <textarea
+        id="mp-report-notes"
+        class="mp-report-notes"
+        rows="2"
+        placeholder="Optional details..."
+      ></textarea>
+
+      <button
+        type="button"
+        class="btn-modal-action"
+        id="mp-report-submit-btn"
+        style="background: #e63946; box-shadow: none"
+      >
+        Submit Report
+      </button>
     </div>
 
     <!-- Custom Alert Modal -->
@@ -3598,6 +5350,8 @@
         listenToStories(); // Added initialization for the dynamic stories feed
         listenToAllClips(); // Initialize the dynamic clips engine
         listenToInviteCodes();
+
+        listenToMarketplace();
       });
 
       function listenToUserProfile(uid) {
@@ -3633,6 +5387,13 @@
             } else {
               profileToggle.innerText = initial;
               userAvatarPreview.innerText = initial;
+            }
+
+            if (typeof syncMarketplaceUserAvatar === "function") {
+              syncMarketplaceUserAvatar();
+            }
+            if (typeof renderMarketplaceGrid === "function") {
+              renderMarketplaceGrid();
             }
 
             // Form Field Sync (Only if not currently editing)
@@ -3820,6 +5581,25 @@
                 });
                 await batch.commit();
               }
+            }
+
+            const mpSnapshot = await db
+              .collection("marketplace_listings")
+              .where("sellerUid", "==", currentUser.uid)
+              .get();
+            if (!mpSnapshot.empty) {
+              const mpBatch = db.batch();
+              const sellerLetter = updatedName
+                ? updatedName.charAt(0).toUpperCase()
+                : "M";
+              mpSnapshot.forEach((doc) => {
+                mpBatch.update(doc.ref, {
+                  sellerName: updatedName || "Mama",
+                  sellerAvatarUrl: downloadUrl,
+                  sellerAvatarLetter: sellerLetter,
+                });
+              });
+              await mpBatch.commit();
             }
 
             closeUserProfile();
@@ -5447,6 +7227,12 @@
                   .get();
                 commentsSnap.forEach((doc) => batch.update(doc.ref, scrubData));
 
+                const mpDelSnap = await db
+                  .collection("marketplace_listings")
+                  .where("sellerUid", "==", currentUser.uid)
+                  .get();
+                mpDelSnap.forEach((doc) => batch.delete(doc.ref));
+
                 await batch.commit();
 
                 await db.collection("users").doc(currentUser.uid).delete();
@@ -6242,6 +8028,1096 @@
         }
         lastFeedScrollY = currentScrollY;
       });
+
+      // --- Mommychat Marketplace Engine ---
+      let mpAllListings = [];
+      let mpAllListingsMap = {};
+      let mpListenerUnsub = null;
+      let mpImageSlots = [null, null, null, null];
+      let mpActiveUploadSlot = 0;
+      let mpEditingListingId = null;
+      let mpRemovedExistingUrls = [];
+      let mpSelectedFulfillment = "shipping_available";
+      let mpFilterFulfillment = "all";
+      let mpSelectedReportReason = "Prohibited / Medical Equipment";
+      let mpReportingListingId = null;
+      let mpCardRevealObserver = null;
+      let mpParallaxRaf = null;
+
+      const MP_REPORT_PAUSE_THRESHOLD = 3;
+
+      function mpEscape(str) {
+        return escapeHTML(String(str || ""));
+      }
+
+      function mpFormatPrice(value) {
+        const num = Number(value);
+        if (isNaN(num) || num <= 0) return "Free";
+        return (
+          "$" +
+          num.toLocaleString("en-US", {
+            minimumFractionDigits: num % 1 === 0 ? 0 : 2,
+            maximumFractionDigits: 2,
+          })
+        );
+      }
+
+      function mpFormatTime(timestamp) {
+        if (!timestamp || typeof timestamp.toDate !== "function") {
+          return "Just now";
+        }
+        const diffSec = Math.floor(
+          (Date.now() - timestamp.toDate().getTime()) / 1000
+        );
+        if (diffSec < 60) return "Just now";
+        const diffMin = Math.floor(diffSec / 60);
+        if (diffMin < 60) return `${diffMin}m ago`;
+        const diffHr = Math.floor(diffMin / 60);
+        if (diffHr < 24) return `${diffHr}h ago`;
+        const diffDay = Math.floor(diffHr / 24);
+        return `${diffDay}d ago`;
+      }
+
+      function mpFulfillmentLabel(code, shortVersion) {
+        if (code === "local_only")
+          return shortVersion ? "Local" : "Local Pickup Only";
+        if (code === "both")
+          return shortVersion ? "Ships / Local" : "Shipping & Local Pickup";
+        return shortVersion ? "Ships" : "Shipping Available";
+      }
+
+      function mpCompressImage(file, maxWidth = 1200, quality = 0.82) {
+        return new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = (ev) => {
+            const img = new Image();
+            img.onload = () => {
+              let width = img.width;
+              let height = img.height;
+              if (width > maxWidth) {
+                height = Math.round((height * maxWidth) / width);
+                width = maxWidth;
+              }
+              const canvas = document.createElement("canvas");
+              canvas.width = width;
+              canvas.height = height;
+              const ctx = canvas.getContext("2d");
+              ctx.drawImage(img, 0, 0, width, height);
+              canvas.toBlob(
+                (blob) => resolve(blob || file),
+                "image/jpeg",
+                quality
+              );
+            };
+            img.onerror = () => resolve(file);
+            img.src = ev.target.result;
+          };
+          reader.onerror = () => resolve(file);
+          reader.readAsDataURL(file);
+        });
+      }
+
+      window.syncMarketplaceUserAvatar = function () {
+        const btn = document.getElementById("mp-user-avatar-btn");
+        if (!btn || !currentUserDoc) return;
+        const initial = currentUserDoc.displayName
+          ? currentUserDoc.displayName.charAt(0).toUpperCase()
+          : "M";
+        if (currentUserDoc.avatarUrl) {
+          btn.innerHTML = `<img src="${currentUserDoc.avatarUrl}" alt="Profile">`;
+        } else {
+          btn.textContent = initial;
+        }
+      };
+
+      function listenToMarketplace() {
+        if (mpListenerUnsub) mpListenerUnsub();
+
+        mpListenerUnsub = db
+          .collection("marketplace_listings")
+          .orderBy("createdAt", "desc")
+          .limit(120)
+          .onSnapshot(
+            (snapshot) => {
+              mpAllListings = [];
+              mpAllListingsMap = {};
+              snapshot.forEach((doc) => {
+                const item = { id: doc.id, ...doc.data() };
+                mpAllListings.push(item);
+                mpAllListingsMap[doc.id] = item;
+              });
+              renderMarketplaceGrid();
+              renderMyProductsGrid();
+            },
+            (err) => {
+              console.error("Marketplace listener error:", err);
+            }
+          );
+      }
+
+      function mpUpdateFilterDot() {
+        const searchVal = document
+          .getElementById("mp-search-input")
+          .value.trim();
+        const sortVal = document.getElementById("mp-sort-select").value;
+        const hasActive =
+          searchVal !== "" ||
+          mpFilterFulfillment !== "all" ||
+          sortVal !== "newest";
+        document
+          .getElementById("mp-filter-dot")
+          .classList.toggle("visible", hasActive);
+        document
+          .getElementById("mp-search-clear-btn")
+          .classList.toggle("visible", searchVal !== "");
+      }
+
+      window.renderMarketplaceGrid = function () {
+        const container = document.getElementById("mp-grid-container");
+        if (!container) return;
+
+        const searchVal = document
+          .getElementById("mp-search-input")
+          .value.trim()
+          .toLowerCase();
+        const sortVal = document.getElementById("mp-sort-select").value;
+        const blocked =
+          currentUserDoc && Array.isArray(currentUserDoc.blockedUsers)
+            ? currentUserDoc.blockedUsers
+            : [];
+
+        mpUpdateFilterDot();
+
+        let filtered = mpAllListings.filter((item) => {
+          if (item.status !== "active") return false;
+          if (blocked.includes(item.sellerUid)) return false;
+
+          if (mpFilterFulfillment !== "all") {
+            if (mpFilterFulfillment === "shipping_available") {
+              if (
+                item.fulfillment !== "shipping_available" &&
+                item.fulfillment !== "both"
+              ) {
+                return false;
+              }
+            } else if (mpFilterFulfillment === "local_only") {
+              if (
+                item.fulfillment !== "local_only" &&
+                item.fulfillment !== "both"
+              ) {
+                return false;
+              }
+            } else if (item.fulfillment !== mpFilterFulfillment) {
+              return false;
+            }
+          }
+
+          if (searchVal) {
+            const haystack = `${item.title || ""} ${item.description || ""} ${
+              item.sellerName || ""
+            }`.toLowerCase();
+            if (!haystack.includes(searchVal)) return false;
+          }
+
+          return true;
+        });
+
+        if (sortVal === "price_asc") {
+          filtered.sort(
+            (a, b) => (Number(a.price) || 0) - (Number(b.price) || 0)
+          );
+        } else if (sortVal === "price_desc") {
+          filtered.sort(
+            (a, b) => (Number(b.price) || 0) - (Number(a.price) || 0)
+          );
+        } else {
+          filtered.sort((a, b) => {
+            const tA =
+              a.createdAt && a.createdAt.toMillis ? a.createdAt.toMillis() : 0;
+            const tB =
+              b.createdAt && b.createdAt.toMillis ? b.createdAt.toMillis() : 0;
+            return tB - tA;
+          });
+        }
+
+        const countEl = document.getElementById("mp-results-count");
+        if (countEl) {
+          countEl.textContent = `${filtered.length} ${
+            filtered.length === 1 ? "listing" : "listings"
+          }`;
+        }
+
+        if (filtered.length === 0) {
+          container.innerHTML = `
+            <div class="mp-empty-state">
+              <h3>No listings match right now</h3>
+              <p>Try clearing your filters or tap your profile icon in the top right to post the first product.</p>
+            </div>
+          `;
+          return;
+        }
+
+        let html = "";
+        filtered.forEach((item, index) => {
+          const mainImg =
+            Array.isArray(item.images) && item.images.length > 0
+              ? item.images[0]
+              : "";
+          const sellerLetter = item.sellerAvatarLetter
+            ? mpEscape(item.sellerAvatarLetter)
+            : mpEscape((item.sellerName || "M").charAt(0).toUpperCase());
+          const sellerAvatarHTML = item.sellerAvatarUrl
+            ? `<img src="${item.sellerAvatarUrl}" alt="${mpEscape(
+                item.sellerName
+              )}">`
+            : sellerLetter;
+
+          const delay = Math.min(index % 8, 7) * 45;
+
+          html += `
+            <article
+              class="mp-card"
+              style="transition-delay: ${delay}ms;"
+              onclick="mpOpenDetail('${item.id}')"
+            >
+              <div class="mp-card-media">
+                ${
+                  mainImg
+                    ? `<img src="${mainImg}" alt="${mpEscape(
+                        item.title
+                      )}" class="mp-card-img" loading="lazy">`
+                    : ""
+                }
+                <div class="mp-card-scrim"></div>
+                <div class="mp-fulfill-badge">${mpFulfillmentLabel(
+                  item.fulfillment,
+                  true
+                )}</div>
+                <div class="mp-price-tag">${mpFormatPrice(item.price)}</div>
+                <div
+                  class="mp-card-seller-avatar"
+                  title="${mpEscape(item.sellerName || "Mama")}"
+                  onclick="event.stopPropagation(); openFriendModal('${
+                    item.sellerUid
+                  }')"
+                >
+                  ${sellerAvatarHTML}
+                </div>
+              </div>
+              <div class="mp-card-info">
+                <div class="mp-card-title">${mpEscape(item.title)}</div>
+                <div class="mp-card-meta">
+                  <span>${mpEscape(item.sellerName || "Mama")}</span>
+                  <span>${mpFormatTime(item.createdAt)}</span>
+                </div>
+              </div>
+            </article>
+          `;
+        });
+
+        container.innerHTML = html;
+        mpInitCardRevealAndParallax();
+      };
+
+      function mpInitCardRevealAndParallax() {
+        const scrollEl = document.getElementById("mp-scroll-container");
+        if (!scrollEl) return;
+
+        if (mpCardRevealObserver) mpCardRevealObserver.disconnect();
+        mpCardRevealObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("mp-card-visible");
+                mpCardRevealObserver.unobserve(entry.target);
+              }
+            });
+          },
+          { root: scrollEl, threshold: 0.08 }
+        );
+
+        scrollEl.querySelectorAll(".mp-card").forEach((card) => {
+          mpCardRevealObserver.observe(card);
+        });
+
+        mpUpdateParallax();
+      }
+
+      function mpUpdateParallax() {
+        const scrollEl = document.getElementById("mp-scroll-container");
+        if (!scrollEl) return;
+
+        const scrollTop = scrollEl.scrollTop;
+        const orb1 = document.getElementById("mp-bg-orb-1");
+        const orb2 = document.getElementById("mp-bg-orb-2");
+        if (orb1)
+          orb1.style.transform = `translate3d(0, ${scrollTop * 0.16}px, 0)`;
+        if (orb2)
+          orb2.style.transform = `translate3d(0, ${-scrollTop * 0.12}px, 0)`;
+
+        const viewportH = scrollEl.clientHeight || window.innerHeight;
+        const viewportCenter = viewportH / 2;
+
+        scrollEl.querySelectorAll(".mp-card-media").forEach((media) => {
+          const rect = media.getBoundingClientRect();
+          if (rect.bottom < -60 || rect.top > viewportH + 60) return;
+          const img = media.querySelector(".mp-card-img");
+          if (!img) return;
+          const cardCenter = rect.top + rect.height / 2;
+          const normalized = (cardCenter - viewportCenter) / viewportH;
+          const shiftY = Math.max(-18, Math.min(18, normalized * 28));
+          img.style.transform = `translate3d(0, ${shiftY.toFixed(1)}px, 0)`;
+        });
+      }
+
+      document
+        .getElementById("mp-scroll-container")
+        .addEventListener("scroll", () => {
+          if (mpParallaxRaf) cancelAnimationFrame(mpParallaxRaf);
+          mpParallaxRaf = requestAnimationFrame(mpUpdateParallax);
+        });
+
+      function renderMyProductsGrid() {
+        const container = document.getElementById("mp-my-products-grid");
+        const badge = document.getElementById("mp-my-count-badge");
+        if (!container || !currentUser) return;
+
+        const myItems = mpAllListings.filter(
+          (item) => item.sellerUid === currentUser.uid
+        );
+        if (badge) {
+          badge.textContent = `${myItems.length} ${
+            myItems.length === 1 ? "item" : "items"
+          }`;
+        }
+
+        if (myItems.length === 0) {
+          container.innerHTML = `
+            <div class="mp-empty-state" style="padding: 2rem 1rem;">
+              <p>You have not posted any products yet.</p>
+            </div>
+          `;
+          return;
+        }
+
+        let html = "";
+        myItems.forEach((item) => {
+          const mainImg =
+            Array.isArray(item.images) && item.images.length > 0
+              ? item.images[0]
+              : "";
+          let statusLabel = "Active";
+          let statusClass = "";
+          if (item.status === "hidden") {
+            statusLabel = "Hidden";
+            statusClass = "hidden-status";
+          } else if (item.status === "under_review") {
+            statusLabel = "Under Review";
+            statusClass = "review-status";
+          }
+
+          const toggleLabel = item.status === "hidden" ? "Show" : "Hide";
+          const disableToggle = item.status === "under_review";
+
+          html += `
+            <div class="mp-my-card">
+              <div class="mp-my-card-media">
+                ${
+                  mainImg
+                    ? `<img src="${mainImg}" alt="${mpEscape(item.title)}">`
+                    : ""
+                }
+                <span class="mp-status-overlay ${statusClass}">${statusLabel}</span>
+              </div>
+              <div class="mp-my-card-body">
+                <div class="mp-my-card-title">${mpEscape(item.title)}</div>
+                <div class="mp-my-card-price">${mpFormatPrice(item.price)}</div>
+              </div>
+              <div class="mp-my-card-actions">
+                <button
+                  type="button"
+                  class="mp-my-btn"
+                  onclick="mpStartEditListing('${item.id}')"
+                >
+                  Edit
+                </button>
+                <button
+                  type="button"
+                  class="mp-my-btn"
+                  ${disableToggle ? "disabled" : ""}
+                  onclick="mpToggleHideListing('${item.id}')"
+                >
+                  ${toggleLabel}
+                </button>
+                <button
+                  type="button"
+                  class="mp-my-btn danger"
+                  onclick="mpDeleteListing('${item.id}')"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          `;
+        });
+
+        container.innerHTML = html;
+      }
+
+      // --- Marketplace Navigation & Drawer Controls ---
+      document
+        .getElementById("marketplace-open-btn")
+        .addEventListener("click", (e) => {
+          e.stopPropagation();
+          syncMarketplaceUserAvatar();
+          document
+            .getElementById("marketplace-main-modal")
+            .classList.add("active");
+          requestAnimationFrame(mpUpdateParallax);
+        });
+
+      document.getElementById("mp-close-btn").addEventListener("click", () => {
+        document.getElementById("mp-filter-drawer").classList.remove("active");
+        document
+          .getElementById("mp-filter-toggle-btn")
+          .classList.remove("active");
+        mpCloseCreatorModal();
+        mpCloseDetailModal();
+        mpCloseReportModal();
+        document
+          .getElementById("marketplace-main-modal")
+          .classList.remove("active");
+      });
+
+      document
+        .getElementById("mp-filter-toggle-btn")
+        .addEventListener("click", (e) => {
+          e.stopPropagation();
+          const drawer = document.getElementById("mp-filter-drawer");
+          const btn = document.getElementById("mp-filter-toggle-btn");
+          const isOpen = drawer.classList.toggle("active");
+          btn.classList.toggle("active", isOpen);
+        });
+
+      document
+        .getElementById("mp-search-input")
+        .addEventListener("input", renderMarketplaceGrid);
+
+      document
+        .getElementById("mp-search-clear-btn")
+        .addEventListener("click", () => {
+          document.getElementById("mp-search-input").value = "";
+          renderMarketplaceGrid();
+        });
+
+      document
+        .getElementById("mp-sort-select")
+        .addEventListener("change", renderMarketplaceGrid);
+
+      document.querySelectorAll("#mp-filter-pills .mp-pill").forEach((pill) => {
+        pill.addEventListener("click", () => {
+          document
+            .querySelectorAll("#mp-filter-pills .mp-pill")
+            .forEach((p) => p.classList.remove("active"));
+          pill.classList.add("active");
+          mpFilterFulfillment = pill.getAttribute("data-fulfillment");
+          renderMarketplaceGrid();
+        });
+      });
+
+      document
+        .getElementById("mp-reset-filters-btn")
+        .addEventListener("click", () => {
+          document.getElementById("mp-search-input").value = "";
+          document.getElementById("mp-sort-select").value = "newest";
+          mpFilterFulfillment = "all";
+          document
+            .querySelectorAll("#mp-filter-pills .mp-pill")
+            .forEach((p) => {
+              p.classList.toggle(
+                "active",
+                p.getAttribute("data-fulfillment") === "all"
+              );
+            });
+          renderMarketplaceGrid();
+        });
+
+      // --- Seller Studio (Creator & My Products) ---
+      window.mpOpenCreatorModal = function () {
+        document.getElementById("mp-filter-drawer").classList.remove("active");
+        document
+          .getElementById("mp-filter-toggle-btn")
+          .classList.remove("active");
+        document.getElementById("mp-creator-backdrop").classList.add("active");
+        document.getElementById("mp-creator-modal").classList.add("active");
+        renderMyProductsGrid();
+      };
+
+      window.mpCloseCreatorModal = function () {
+        document
+          .getElementById("mp-creator-backdrop")
+          .classList.remove("active");
+        document.getElementById("mp-creator-modal").classList.remove("active");
+      };
+
+      document
+        .getElementById("mp-user-avatar-btn")
+        .addEventListener("click", mpOpenCreatorModal);
+      document
+        .getElementById("mp-creator-close-btn")
+        .addEventListener("click", mpCloseCreatorModal);
+      document
+        .getElementById("mp-creator-backdrop")
+        .addEventListener("click", mpCloseCreatorModal);
+
+      function mpRenderImageSlots() {
+        for (let i = 0; i < 4; i++) {
+          const slotEl = document.getElementById(`mp-slot-${i}`);
+          if (!slotEl) continue;
+          const previewImg = slotEl.querySelector(".mp-slot-preview");
+          const slotData = mpImageSlots[i];
+          if (slotData && slotData.previewUrl) {
+            previewImg.src = slotData.previewUrl;
+            slotEl.classList.add("has-image");
+          } else {
+            previewImg.src = "";
+            slotEl.classList.remove("has-image");
+          }
+        }
+      }
+
+      window.mpTriggerSlotUpload = function (slotIndex) {
+        mpActiveUploadSlot = slotIndex;
+        const input = document.getElementById("mp-image-file-input");
+        input.value = "";
+        input.click();
+      };
+
+      window.mpRemoveImageSlot = function (slotIndex, event) {
+        event.stopPropagation();
+        const existing = mpImageSlots[slotIndex];
+        if (existing && existing.existingUrl) {
+          mpRemovedExistingUrls.push(existing.existingUrl);
+        }
+        mpImageSlots[slotIndex] = null;
+        mpRenderImageSlots();
+      };
+
+      document
+        .getElementById("mp-image-file-input")
+        .addEventListener("change", async (e) => {
+          if (!e.target.files || !e.target.files[0]) return;
+          const rawFile = e.target.files[0];
+          const previous = mpImageSlots[mpActiveUploadSlot];
+          if (previous && previous.existingUrl) {
+            mpRemovedExistingUrls.push(previous.existingUrl);
+          }
+          const compressed = await mpCompressImage(rawFile);
+          const previewUrl = URL.createObjectURL(compressed);
+          mpImageSlots[mpActiveUploadSlot] = {
+            file: compressed,
+            previewUrl: previewUrl,
+            existingUrl: null,
+          };
+          mpRenderImageSlots();
+        });
+
+      document
+        .querySelectorAll("#mp-fulfillment-options .mp-fulfill-opt")
+        .forEach((opt) => {
+          opt.addEventListener("click", () => {
+            document
+              .querySelectorAll("#mp-fulfillment-options .mp-fulfill-opt")
+              .forEach((o) => o.classList.remove("active"));
+            opt.classList.add("active");
+            mpSelectedFulfillment = opt.getAttribute("data-value");
+          });
+        });
+
+      function mpResetCreatorForm() {
+        mpEditingListingId = null;
+        mpImageSlots = [null, null, null, null];
+        mpRemovedExistingUrls = [];
+        mpSelectedFulfillment = "shipping_available";
+        document.getElementById("mp-input-title").value = "";
+        document.getElementById("mp-input-desc").value = "";
+        document.getElementById("mp-input-price").value = "";
+        document.getElementById("mp-creator-title").textContent =
+          "Create Product Listing";
+        document.getElementById("mp-save-btn").textContent =
+          "Save & Publish Product";
+        document.getElementById("mp-cancel-edit-btn").style.display = "none";
+        document
+          .querySelectorAll("#mp-fulfillment-options .mp-fulfill-opt")
+          .forEach((o) => {
+            o.classList.toggle(
+              "active",
+              o.getAttribute("data-value") === "shipping_available"
+            );
+          });
+        mpRenderImageSlots();
+      }
+
+      document
+        .getElementById("mp-cancel-edit-btn")
+        .addEventListener("click", mpResetCreatorForm);
+
+      document
+        .getElementById("mp-save-btn")
+        .addEventListener("click", async () => {
+          if (!currentUser) return;
+
+          const title = document.getElementById("mp-input-title").value.trim();
+          const description = document
+            .getElementById("mp-input-desc")
+            .value.trim();
+          const priceRaw = document.getElementById("mp-input-price").value;
+          const price = parseFloat(priceRaw);
+
+          const activeSlots = mpImageSlots.filter((s) => s !== null);
+          if (activeSlots.length === 0) {
+            showCustomAlert("Please add at least one product photo.");
+            return;
+          }
+          if (!title) {
+            showCustomAlert("Please enter a product title.");
+            return;
+          }
+          if (priceRaw === "" || isNaN(price) || price < 0) {
+            showCustomAlert("Please enter a valid price.");
+            return;
+          }
+
+          const btn = document.getElementById("mp-save-btn");
+          const prevLabel = btn.textContent;
+          btn.textContent = "Saving...";
+          btn.disabled = true;
+
+          try {
+            const docRef = mpEditingListingId
+              ? db.collection("marketplace_listings").doc(mpEditingListingId)
+              : db.collection("marketplace_listings").doc();
+
+            const uploadedUrls = [];
+            for (let i = 0; i < mpImageSlots.length; i++) {
+              const slot = mpImageSlots[i];
+              if (!slot) continue;
+              if (slot.existingUrl) {
+                uploadedUrls.push(slot.existingUrl);
+              } else if (slot.file) {
+                const storageRef = storage.ref(
+                  `marketplace/${currentUser.uid}/${
+                    docRef.id
+                  }/slot_${i}_${Date.now()}.jpg`
+                );
+                const snap = await storageRef.put(slot.file);
+                const url = await snap.ref.getDownloadURL();
+                uploadedUrls.push(url);
+              }
+            }
+
+            const sellerName =
+              currentUserDoc?.displayName || currentUser.displayName || "Mama";
+            const sellerAvatarUrl = currentUserDoc?.avatarUrl || "";
+            const sellerAvatarLetter = sellerName.charAt(0).toUpperCase();
+
+            if (mpEditingListingId) {
+              await docRef.update({
+                title: title,
+                description: description,
+                price: Number(price.toFixed(2)),
+                images: uploadedUrls,
+                fulfillment: mpSelectedFulfillment,
+                sellerName: sellerName,
+                sellerAvatarUrl: sellerAvatarUrl,
+                sellerAvatarLetter: sellerAvatarLetter,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+              });
+
+              mpRemovedExistingUrls.forEach((oldUrl) => {
+                storage
+                  .refFromURL(oldUrl)
+                  .delete()
+                  .catch(() => {});
+              });
+
+              showCustomAlert("Listing updated successfully!");
+            } else {
+              await docRef.set({
+                sellerUid: currentUser.uid,
+                sellerName: sellerName,
+                sellerAvatarUrl: sellerAvatarUrl,
+                sellerAvatarLetter: sellerAvatarLetter,
+                title: title,
+                description: description,
+                price: Number(price.toFixed(2)),
+                images: uploadedUrls,
+                fulfillment: mpSelectedFulfillment,
+                status: "active",
+                reportedBy: [],
+                reportCount: 0,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+              });
+
+              showCustomAlert("Product posted to the Marketplace!");
+            }
+
+            mpResetCreatorForm();
+          } catch (err) {
+            console.error("Error saving marketplace product:", err);
+            showCustomAlert("Failed to save product. Please try again.");
+          } finally {
+            btn.disabled = false;
+            if (!mpEditingListingId) {
+              btn.textContent = "Save & Publish Product";
+            } else {
+              btn.textContent = prevLabel;
+            }
+          }
+        });
+
+      window.mpStartEditListing = function (listingId) {
+        const item = mpAllListingsMap[listingId];
+        if (!item || !currentUser || item.sellerUid !== currentUser.uid) return;
+
+        mpCloseDetailModal();
+        mpEditingListingId = listingId;
+        mpRemovedExistingUrls = [];
+        mpImageSlots = [null, null, null, null];
+
+        if (Array.isArray(item.images)) {
+          item.images.slice(0, 4).forEach((url, idx) => {
+            mpImageSlots[idx] = {
+              file: null,
+              previewUrl: url,
+              existingUrl: url,
+            };
+          });
+        }
+
+        document.getElementById("mp-input-title").value = item.title || "";
+        document.getElementById("mp-input-desc").value = item.description || "";
+        document.getElementById("mp-input-price").value =
+          item.price !== undefined ? item.price : "";
+
+        mpSelectedFulfillment = item.fulfillment || "shipping_available";
+        document
+          .querySelectorAll("#mp-fulfillment-options .mp-fulfill-opt")
+          .forEach((o) => {
+            o.classList.toggle(
+              "active",
+              o.getAttribute("data-value") === mpSelectedFulfillment
+            );
+          });
+
+        document.getElementById("mp-creator-title").textContent =
+          "Edit Product Listing";
+        document.getElementById("mp-save-btn").textContent = "Update Listing";
+        document.getElementById("mp-cancel-edit-btn").style.display =
+          "inline-block";
+
+        mpRenderImageSlots();
+        mpOpenCreatorModal();
+
+        const body = document.getElementById("mp-creator-body");
+        if (body) body.scrollTo({ top: 0, behavior: "smooth" });
+      };
+
+      window.mpToggleHideListing = async function (listingId) {
+        const item = mpAllListingsMap[listingId];
+        if (!item || !currentUser || item.sellerUid !== currentUser.uid) return;
+        if (item.status === "under_review") return;
+
+        const nextStatus = item.status === "hidden" ? "active" : "hidden";
+        try {
+          await db.collection("marketplace_listings").doc(listingId).update({
+            status: nextStatus,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          });
+          showCustomAlert(
+            nextStatus === "hidden"
+              ? "Product hidden from Marketplace."
+              : "Product is now live in Marketplace."
+          );
+        } catch (err) {
+          console.error("Error toggling listing visibility:", err);
+          showCustomAlert("Could not update listing visibility.");
+        }
+      };
+
+      window.mpDeleteListing = function (listingId) {
+        const item = mpAllListingsMap[listingId];
+        if (!item || !currentUser || item.sellerUid !== currentUser.uid) return;
+
+        showCustomConfirm(
+          "Permanently delete this product listing and its photos?",
+          async () => {
+            try {
+              await db
+                .collection("marketplace_listings")
+                .doc(listingId)
+                .delete();
+
+              if (Array.isArray(item.images)) {
+                item.images.forEach((url) => {
+                  storage
+                    .refFromURL(url)
+                    .delete()
+                    .catch(() => {});
+                });
+              }
+
+              if (mpEditingListingId === listingId) {
+                mpResetCreatorForm();
+              }
+              showCustomAlert("Product deleted.");
+            } catch (err) {
+              console.error("Error deleting product:", err);
+              showCustomAlert("Failed to delete product.");
+            }
+          }
+        );
+      };
+
+      // --- Product Detail Overlay ---
+      window.mpOpenDetail = function (listingId) {
+        const item = mpAllListingsMap[listingId];
+        if (!item) return;
+
+        const images =
+          Array.isArray(item.images) && item.images.length > 0
+            ? item.images
+            : [];
+        const mainImgEl = document.getElementById("mp-detail-main-img");
+        mainImgEl.src = images[0] || "";
+
+        const thumbsEl = document.getElementById("mp-detail-thumbs");
+        if (images.length > 1) {
+          thumbsEl.style.display = "flex";
+          thumbsEl.innerHTML = images
+            .map(
+              (url, idx) => `
+              <div class="mp-gallery-thumb ${
+                idx === 0 ? "active" : ""
+              }" onclick="mpSelectDetailThumb(this, '${url}')">
+                <img src="${url}" alt="Photo ${idx + 1}">
+              </div>
+            `
+            )
+            .join("");
+        } else {
+          thumbsEl.style.display = "none";
+          thumbsEl.innerHTML = "";
+        }
+
+        document.getElementById("mp-detail-price").textContent = mpFormatPrice(
+          item.price
+        );
+        document.getElementById("mp-detail-fulfillment").textContent =
+          mpFulfillmentLabel(item.fulfillment, false);
+        document.getElementById("mp-detail-title").textContent =
+          item.title || "";
+        document.getElementById(
+          "mp-detail-time"
+        ).textContent = `Listed ${mpFormatTime(item.createdAt)}`;
+        document.getElementById("mp-detail-desc").textContent =
+          item.description || "No additional description provided.";
+
+        const sellerName = item.sellerName || "Mama";
+        const sellerLetter =
+          item.sellerAvatarLetter || sellerName.charAt(0).toUpperCase();
+        document.getElementById("mp-detail-seller-name").textContent =
+          sellerName;
+        document.getElementById("mp-detail-seller-avatar").innerHTML =
+          item.sellerAvatarUrl
+            ? `<img src="${item.sellerAvatarUrl}" alt="${mpEscape(
+                sellerName
+              )}">`
+            : mpEscape(sellerLetter);
+
+        document.getElementById("mp-detail-seller-row").onclick = () => {
+          openFriendModal(item.sellerUid);
+        };
+
+        const actionsEl = document.getElementById("mp-detail-actions");
+        const isOwner = currentUser && item.sellerUid === currentUser.uid;
+        if (isOwner) {
+          actionsEl.innerHTML = `
+            <button
+              type="button"
+              class="btn-modal-action"
+              onclick="mpStartEditListing('${item.id}')"
+            >
+              Edit in Seller Studio
+            </button>
+          `;
+        } else {
+          actionsEl.innerHTML = `
+            <button
+              type="button"
+              class="btn-danger-outline"
+              style="flex-shrink: 0;"
+              onclick="mpOpenReportModal('${item.id}')"
+            >
+              Report
+            </button>
+            <button
+              type="button"
+              class="btn-modal-action"
+              onclick="mpMessageSeller('${item.id}')"
+            >
+              Message Seller
+            </button>
+          `;
+        }
+
+        document.getElementById("mp-detail-backdrop").classList.add("active");
+        document.getElementById("mp-detail-modal").classList.add("active");
+      };
+
+      window.mpSelectDetailThumb = function (thumbEl, url) {
+        document.getElementById("mp-detail-main-img").src = url;
+        document
+          .querySelectorAll("#mp-detail-thumbs .mp-gallery-thumb")
+          .forEach((t) => t.classList.remove("active"));
+        thumbEl.classList.add("active");
+      };
+
+      window.mpCloseDetailModal = function () {
+        document
+          .getElementById("mp-detail-backdrop")
+          .classList.remove("active");
+        document.getElementById("mp-detail-modal").classList.remove("active");
+      };
+
+      document
+        .getElementById("mp-detail-close-btn")
+        .addEventListener("click", mpCloseDetailModal);
+      document
+        .getElementById("mp-detail-backdrop")
+        .addEventListener("click", mpCloseDetailModal);
+
+      window.mpMessageSeller = async function (listingId) {
+        const item = mpAllListingsMap[listingId];
+        if (!item || !currentUser) return;
+        await startDirectMessage(item.sellerUid, false);
+        const chatInput = document.getElementById("chat-input");
+        if (chatInput && chatInput.value.trim() === "") {
+          chatInput.value = `Hi! Is "${item.title}" still available?`;
+          chatInput.focus();
+        }
+      };
+
+      // --- Threshold-Based Reporting System ---
+      window.mpOpenReportModal = function (listingId) {
+        mpReportingListingId = listingId;
+        document.getElementById("mp-report-notes").value = "";
+        mpSelectedReportReason = "Prohibited / Medical Equipment";
+        document
+          .querySelectorAll("#mp-report-reasons .mp-reason-btn")
+          .forEach((b, idx) => b.classList.toggle("active", idx === 0));
+        document.getElementById("mp-report-backdrop").classList.add("active");
+        document.getElementById("mp-report-modal").classList.add("active");
+      };
+
+      window.mpCloseReportModal = function () {
+        document
+          .getElementById("mp-report-backdrop")
+          .classList.remove("active");
+        document.getElementById("mp-report-modal").classList.remove("active");
+        mpReportingListingId = null;
+      };
+
+      document
+        .getElementById("mp-report-close-btn")
+        .addEventListener("click", mpCloseReportModal);
+      document
+        .getElementById("mp-report-backdrop")
+        .addEventListener("click", mpCloseReportModal);
+
+      document
+        .querySelectorAll("#mp-report-reasons .mp-reason-btn")
+        .forEach((btn) => {
+          btn.addEventListener("click", () => {
+            document
+              .querySelectorAll("#mp-report-reasons .mp-reason-btn")
+              .forEach((b) => b.classList.remove("active"));
+            btn.classList.add("active");
+            mpSelectedReportReason = btn.getAttribute("data-reason");
+          });
+        });
+
+      document
+        .getElementById("mp-report-submit-btn")
+        .addEventListener("click", async () => {
+          if (!currentUser || !mpReportingListingId) return;
+
+          const listingId = mpReportingListingId;
+          const notes = document.getElementById("mp-report-notes").value.trim();
+          const btn = document.getElementById("mp-report-submit-btn");
+          btn.textContent = "Submitting...";
+          btn.disabled = true;
+
+          try {
+            const listingRef = db
+              .collection("marketplace_listings")
+              .doc(listingId);
+
+            const result = await db.runTransaction(async (transaction) => {
+              const doc = await transaction.get(listingRef);
+              if (!doc.exists) return "missing";
+              const data = doc.data();
+              const reportedBy = Array.isArray(data.reportedBy)
+                ? data.reportedBy
+                : [];
+              if (reportedBy.includes(currentUser.uid)) {
+                return "already_reported";
+              }
+
+              const newCount = reportedBy.length + 1;
+              const updates = {
+                reportedBy: firebase.firestore.FieldValue.arrayUnion(
+                  currentUser.uid
+                ),
+                reportCount: newCount,
+              };
+              if (newCount >= MP_REPORT_PAUSE_THRESHOLD) {
+                updates.status = "under_review";
+              }
+              transaction.update(listingRef, updates);
+              return newCount >= MP_REPORT_PAUSE_THRESHOLD
+                ? "paused"
+                : "recorded";
+            });
+
+            if (result === "already_reported") {
+              showCustomAlert("You have already reported this listing.");
+            } else if (result === "missing") {
+              showCustomAlert("This listing is no longer available.");
+            } else {
+              await listingRef.collection("reports").add({
+                reporterUid: currentUser.uid,
+                reason: mpSelectedReportReason,
+                notes: notes,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+              });
+              mpCloseReportModal();
+              mpCloseDetailModal();
+              showCustomAlert(
+                result === "paused"
+                  ? "Thank you. This listing has been automatically paused for review."
+                  : "Report submitted. Thank you for helping keep the community safe."
+              );
+            }
+          } catch (err) {
+            console.error("Error submitting report:", err);
+            showCustomAlert("Failed to submit report. Please try again.");
+          } finally {
+            btn.textContent = "Submit Report";
+            btn.disabled = false;
+          }
+        });
 
       // Register Service Worker for PWA Offline Caching
       if ("serviceWorker" in navigator) {
