@@ -17,14 +17,14 @@
         if (screenWidth > 0 && screenWidth < idealWidth) {
           var scaleRatio = (screenWidth / idealWidth).toFixed(2);
           var metaTag = document.getElementById("app-viewport");
-          if (metaTag) {
+          if (metaTag) { 
             metaTag.setAttribute(
               "content",
-              "width=device-width, initial-scale=" +
+              "width=device-width, initial-scale=" + 
                 scaleRatio +
                 ", maximum-scale=" +
                 scaleRatio +
-                ", user-scalable=no" 
+                ", user-scalable=no"
             );
           }
         }
@@ -3364,6 +3364,361 @@
         margin-bottom: 1rem;
         resize: vertical;
       }
+
+      /* --- Community Directory Modal --- */
+      .community-view-all-btn {
+        color: var(--text-muted);
+        cursor: pointer;
+        font-size: 0.9rem;
+        font-weight: 600;
+        transition: color 0.2s ease;
+      }
+
+      .community-view-all-btn:hover {
+        color: var(--dark-pink);
+      }
+
+      .cm-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(89, 13, 34, 0.35);
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        z-index: 1997;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+      }
+
+      .cm-backdrop.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .cm-modal {
+        position: fixed;
+        top: 5%;
+        left: 5%;
+        width: 90%;
+        height: 90%;
+        background: var(--white);
+        border-radius: 20px;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 20px 50px rgba(89, 13, 34, 0.22);
+        z-index: 1998;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        opacity: 0;
+        visibility: hidden;
+        transform: scale(0.95);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .cm-modal.active {
+        opacity: 1;
+        visibility: visible;
+        transform: scale(1);
+      }
+
+      .cm-header {
+        padding: 1.2rem 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: var(--white);
+        flex-shrink: 0;
+      }
+
+      .cm-header-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .cm-count-pill {
+        background: var(--bg-color);
+        color: var(--dark-pink);
+        border: 1px solid var(--border-color);
+        border-radius: 50px;
+        padding: 3px 10px;
+        font-size: 0.78rem;
+        font-weight: 800;
+      }
+
+      .cm-controls {
+        padding: 0.9rem 1.5rem;
+        background: rgba(255, 255, 255, 0.95);
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        flex-shrink: 0;
+      }
+
+      .cm-search-wrap {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+
+      .cm-search-icon {
+        position: absolute;
+        left: 14px;
+        color: var(--text-muted);
+        display: flex;
+        pointer-events: none;
+      }
+
+      .cm-search-input {
+        width: 100%;
+        padding: 0.65rem 2.5rem 0.65rem 2.6rem;
+        border: 2px solid var(--border-color);
+        border-radius: 50px;
+        background: var(--bg-color);
+        color: var(--text-dark);
+        font-size: 0.95rem;
+        font-weight: 600;
+        outline: none;
+        transition: border-color 0.2s ease, background 0.2s ease;
+      }
+
+      .cm-search-input:focus {
+        border-color: var(--primary-pink);
+        background: var(--white);
+      }
+
+      .cm-search-clear {
+        position: absolute;
+        right: 10px;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        border: none;
+        background: var(--light-pink);
+        color: var(--white);
+        font-size: 0.75rem;
+        font-weight: 800;
+        cursor: pointer;
+        display: none;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .cm-search-clear.visible {
+        display: flex;
+      }
+
+      .cm-filter-pills {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .cm-pill {
+        padding: 0.38rem 0.95rem;
+        border-radius: 50px;
+        border: 1.5px solid var(--border-color);
+        background: var(--white);
+        color: var(--text-dark);
+        font-size: 0.82rem;
+        font-weight: 800;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .cm-pill:hover {
+        border-color: var(--primary-pink);
+        color: var(--dark-pink);
+      }
+
+      .cm-pill.active {
+        background: var(--dark-pink);
+        border-color: var(--dark-pink);
+        color: var(--white);
+        box-shadow: 0 3px 10px rgba(201, 24, 74, 0.2);
+      }
+
+      .cm-body {
+        flex: 1;
+        overflow-y: auto;
+        padding: 1.25rem 1.5rem 2rem;
+        background: var(--bg-color);
+      }
+
+      .cm-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+
+      @media (min-width: 720px) {
+        .cm-grid {
+          grid-template-columns: repeat(3, 1fr);
+          gap: 16px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .cm-modal {
+          width: 95%;
+          height: 95%;
+          top: 2.5%;
+          left: 2.5%;
+        }
+
+        .cm-header,
+        .cm-controls,
+        .cm-body {
+          padding-left: 1rem;
+          padding-right: 1rem;
+        }
+      }
+
+      .cm-card {
+        background: var(--white);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        cursor: pointer;
+        box-shadow: 0 4px 14px rgba(89, 13, 34, 0.06);
+        transition: transform 0.2s ease, box-shadow 0.2s ease,
+          border-color 0.2s ease;
+      }
+
+      .cm-card:hover {
+        transform: translateY(-3px);
+        border-color: var(--primary-pink);
+        box-shadow: 0 10px 24px rgba(201, 24, 74, 0.12);
+      }
+
+      .cm-card-banner {
+        width: 100%;
+        height: 46px;
+        background: linear-gradient(
+          135deg,
+          var(--light-pink),
+          var(--primary-pink)
+        );
+        position: relative;
+      }
+
+      .cm-card-badge {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        background: rgba(255, 255, 255, 0.92);
+        color: var(--dark-pink);
+        font-size: 0.68rem;
+        font-weight: 800;
+        padding: 2px 8px;
+        border-radius: 50px;
+      }
+
+      .cm-card-avatar {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        margin-top: -36px;
+        border: 3px solid var(--white);
+        background: linear-gradient(
+          135deg,
+          var(--light-pink),
+          var(--primary-pink)
+        );
+        color: var(--white);
+        font-weight: 800;
+        font-size: 1.6rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        position: relative;
+        z-index: 2;
+        box-shadow: 0 4px 10px rgba(255, 143, 163, 0.25);
+      }
+
+      .cm-card-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .cm-card-body {
+        width: 100%;
+        padding: 0.6rem 0.75rem 0.85rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex: 1;
+      }
+
+      .cm-card-name {
+        font-weight: 800;
+        font-size: 0.96rem;
+        color: var(--text-dark);
+        margin-bottom: 4px;
+        word-break: break-word;
+      }
+
+      .cm-card-context {
+        font-size: 0.78rem;
+        color: var(--text-muted);
+        line-height: 1.35;
+        margin-bottom: 0.75rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        min-height: 2.1em;
+      }
+
+      .cm-card-btn {
+        width: 100%;
+        margin-top: auto;
+        padding: 0.45rem 0.6rem;
+        border: none;
+        border-radius: 8px;
+        background: var(--bg-color);
+        color: var(--dark-pink);
+        font-weight: 800;
+        font-size: 0.82rem;
+        cursor: pointer;
+        transition: background 0.2s ease, color 0.2s ease;
+      }
+
+      .cm-card:hover .cm-card-btn {
+        background: var(--primary-pink);
+        color: var(--white);
+      }
+
+      .cm-empty-state {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 2.5rem 1.25rem;
+        background: var(--white);
+        border: 1px dashed var(--border-color);
+        border-radius: 16px;
+        color: var(--text-muted);
+        font-weight: 600;
+      }
+
+      .cm-footer-loader {
+        display: flex;
+        justify-content: center;
+        margin-top: 1.25rem;
+      }
+
+      .cm-load-more-btn {
+        width: auto;
+        padding: 0.65rem 2rem;
+        font-size: 0.95rem;
+      }
     </style>
 
     <!-- Firebase SDKs -->
@@ -4034,6 +4389,76 @@
       </div>
       <div class="upm-body" style="padding: 10px">
         <div class="my-loops-grid" id="global-loops-container"></div>
+      </div>
+    </div>
+
+    <!-- Community Members Directory Modal -->
+    <div class="cm-backdrop" id="community-modal-backdrop"></div>
+    <div class="cm-modal" id="community-members-modal">
+      <div class="cm-header">
+        <div class="cm-header-left">
+          <h2 class="upm-title">Community</h2>
+          <span class="cm-count-pill" id="cm-count-pill">0</span>
+        </div>
+        <button
+          type="button"
+          class="btn-close-modal"
+          id="cm-close-btn"
+          aria-label="Close Community Directory"
+        >
+          ✕
+        </button>
+      </div>
+
+      <div class="cm-controls">
+        <div class="cm-search-wrap">
+          <span class="cm-search-icon">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+              <path
+                d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+              />
+            </svg>
+          </span>
+          <input
+            type="text"
+            id="cm-search-input"
+            class="cm-search-input"
+            placeholder="Search members by name or context..."
+          />
+          <button
+            type="button"
+            class="cm-search-clear"
+            id="cm-search-clear-btn"
+            aria-label="Clear Member Search"
+          >
+            ✕
+          </button>
+        </div>
+
+        <div class="cm-filter-pills" id="cm-filter-pills">
+          <button type="button" class="cm-pill active" data-filter="all">
+            All Members
+          </button>
+          <button type="button" class="cm-pill" data-filter="helpers">
+            Helpers
+          </button>
+          <button type="button" class="cm-pill" data-filter="friends">
+            Friends
+          </button>
+        </div>
+      </div>
+
+      <div class="cm-body" id="cm-scroll-body">
+        <div class="cm-grid" id="cm-members-grid"></div>
+        <div class="cm-footer-loader" id="cm-footer-loader">
+          <button
+            type="button"
+            class="btn-modal-action cm-load-more-btn"
+            id="cm-load-more-btn"
+          >
+            Load More Members
+          </button>
+        </div>
       </div>
     </div>
 
@@ -5806,8 +6231,14 @@
                   <div class="community-section">
                     <div class="community-header">
                       <span>Community</span>
-                      <span style="color: var(--text-muted); cursor: pointer">View all</span>
+                      
+                      
+                      <span class="community-view-all-btn" onclick="openCommunityModal()">View all</span>                      
+                      
+                      
                     </div>
+                    
+                    
                     <div class="helper-carousel" id="dynamic-helper-carousel">
                       ${window.helperHTML || ""}
                     </div>
@@ -9166,6 +9597,413 @@
           } finally {
             btn.textContent = "Submit Report";
             btn.disabled = false;
+          }
+        });
+
+      // --- Community Members Directory Engine ---
+      const CM_PAGE_SIZE = 24;
+      let cmMembers = [];
+      let cmMembersMap = {};
+      let cmLastDoc = null;
+      let cmHasMore = true;
+      let cmIsLoading = false;
+      let cmActiveFilter = "all";
+      let cmSearchQuery = "";
+      let cmSearchResults = null;
+      let cmSearchDebounce = null;
+      let cmHelpersSynced = false;
+
+      function cmEscape(str) {
+        return escapeHTML(String(str || ""));
+      }
+
+      function cmIsMemberVisible(member) {
+        if (!member || !member.id) return false;
+        if (currentUser && member.id === currentUser.uid) return false;
+
+        const blocked =
+          currentUserDoc && Array.isArray(currentUserDoc.blockedUsers)
+            ? currentUserDoc.blockedUsers
+            : [];
+        if (blocked.includes(member.id)) return false;
+
+        const friends =
+          currentUserDoc && Array.isArray(currentUserDoc.friends)
+            ? currentUserDoc.friends
+            : [];
+        if (member.hideFromDiscovery === true && !friends.includes(member.id)) {
+          return false;
+        }
+
+        return true;
+      }
+
+      function cmUpsertMember(doc) {
+        const entry = { id: doc.id, ...doc.data() };
+        if (!cmMembersMap[doc.id]) {
+          cmMembers.push(entry);
+        } else {
+          const idx = cmMembers.findIndex((m) => m.id === doc.id);
+          if (idx !== -1) cmMembers[idx] = entry;
+        }
+        cmMembersMap[doc.id] = entry;
+        return entry;
+      }
+
+      async function cmLoadNextPage(reset = false) {
+        if (cmIsLoading || !currentUser) return;
+        if (!reset && !cmHasMore) return;
+
+        if (reset) {
+          cmMembers = [];
+          cmMembersMap = {};
+          cmLastDoc = null;
+          cmHasMore = true;
+          cmHelpersSynced = false;
+        }
+
+        cmIsLoading = true;
+        const loadMoreBtn = document.getElementById("cm-load-more-btn");
+        const gridEl = document.getElementById("cm-members-grid");
+
+        if (reset && gridEl) {
+          gridEl.innerHTML =
+            '<div class="cm-empty-state">Loading community members...</div>';
+        }
+        if (loadMoreBtn) {
+          loadMoreBtn.textContent = "Loading...";
+          loadMoreBtn.disabled = true;
+        }
+
+        try {
+          let visibleAdded = 0;
+          let attempts = 0;
+
+          while (cmHasMore && visibleAdded < 12 && attempts < 3) {
+            attempts++;
+            let query = db
+              .collection("users")
+              .orderBy(firebase.firestore.FieldPath.documentId())
+              .limit(CM_PAGE_SIZE);
+
+            if (cmLastDoc) {
+              query = query.startAfter(cmLastDoc);
+            }
+
+            const snap = await query.get();
+            if (snap.empty) {
+              cmHasMore = false;
+              break;
+            }
+
+            cmLastDoc = snap.docs[snap.docs.length - 1];
+            if (snap.docs.length < CM_PAGE_SIZE) {
+              cmHasMore = false;
+            }
+
+            snap.forEach((doc) => {
+              const member = cmUpsertMember(doc);
+              if (cmIsMemberVisible(member)) {
+                visibleAdded++;
+              }
+            });
+          }
+        } catch (err) {
+          console.error("Error loading community members:", err);
+          if (gridEl && cmMembers.length === 0) {
+            gridEl.innerHTML =
+              '<div class="cm-empty-state">Unable to load members right now. Please try again.</div>';
+          }
+        } finally {
+          cmIsLoading = false;
+          cmRenderMembers();
+        }
+      }
+
+      async function cmSyncFilterSubset(filterType) {
+        if (!currentUser) return;
+
+        try {
+          if (filterType === "helpers" && !cmHelpersSynced) {
+            const snap = await db
+              .collection("users")
+              .where("isHelper", "==", true)
+              .limit(40)
+              .get();
+            snap.forEach((doc) => cmUpsertMember(doc));
+            cmHelpersSynced = true;
+            cmRenderMembers();
+          } else if (
+            filterType === "friends" &&
+            currentUserDoc &&
+            Array.isArray(currentUserDoc.friends)
+          ) {
+            const missingUids = currentUserDoc.friends.filter(
+              (uid) => !cmMembersMap[uid]
+            );
+            for (let i = 0; i < missingUids.length; i += 10) {
+              const chunk = missingUids.slice(i, i + 10);
+              const snap = await db
+                .collection("users")
+                .where(firebase.firestore.FieldPath.documentId(), "in", chunk)
+                .get();
+              snap.forEach((doc) => cmUpsertMember(doc));
+            }
+            if (missingUids.length > 0) {
+              cmRenderMembers();
+            }
+          }
+        } catch (err) {
+          console.error("Error syncing filtered members:", err);
+        }
+      }
+
+      async function cmRunRemoteSearch(term) {
+        if (!currentUser || !term) {
+          cmSearchResults = null;
+          cmRenderMembers();
+          return;
+        }
+
+        const capitalized =
+          term.charAt(0).toUpperCase() + term.slice(1).toLowerCase();
+        const termsToQuery =
+          capitalized === term ? [term] : [term, capitalized];
+
+        try {
+          const queries = termsToQuery.map((q) =>
+            db
+              .collection("users")
+              .where("displayName", ">=", q)
+              .where("displayName", "<=", q + "\uf8ff")
+              .limit(25)
+              .get()
+          );
+
+          const snapshots = await Promise.all(queries);
+          if (term !== cmSearchQuery) return;
+
+          const matchedMap = {};
+          const lowerTerm = term.toLowerCase();
+
+          cmMembers.forEach((member) => {
+            const haystack = `${member.displayName || ""} ${
+              member.childrenContext || ""
+            } ${member.helperSpecialties || ""}`.toLowerCase();
+            if (haystack.includes(lowerTerm)) {
+              matchedMap[member.id] = member;
+            }
+          });
+
+          snapshots.forEach((snap) => {
+            snap.forEach((doc) => {
+              const member = cmUpsertMember(doc);
+              matchedMap[doc.id] = member;
+            });
+          });
+
+          cmSearchResults = Object.values(matchedMap);
+          cmRenderMembers();
+        } catch (err) {
+          console.error("Error searching community members:", err);
+          cmSearchResults = null;
+          cmRenderMembers();
+        }
+      }
+
+      function cmRenderMembers() {
+        const gridEl = document.getElementById("cm-members-grid");
+        const countEl = document.getElementById("cm-count-pill");
+        const footerEl = document.getElementById("cm-footer-loader");
+        const loadMoreBtn = document.getElementById("cm-load-more-btn");
+        if (!gridEl) return;
+
+        const friends =
+          currentUserDoc && Array.isArray(currentUserDoc.friends)
+            ? currentUserDoc.friends
+            : [];
+        const lowerSearch = cmSearchQuery.toLowerCase();
+        const sourceList =
+          cmSearchQuery && Array.isArray(cmSearchResults)
+            ? cmSearchResults
+            : cmMembers;
+
+        const filtered = sourceList.filter((member) => {
+          if (!cmIsMemberVisible(member)) return false;
+
+          if (cmActiveFilter === "helpers" && !member.isHelper) return false;
+          if (cmActiveFilter === "friends" && !friends.includes(member.id)) {
+            return false;
+          }
+
+          if (lowerSearch && !Array.isArray(cmSearchResults)) {
+            const haystack = `${member.displayName || ""} ${
+              member.childrenContext || ""
+            } ${member.helperSpecialties || ""}`.toLowerCase();
+            if (!haystack.includes(lowerSearch)) return false;
+          }
+
+          return true;
+        });
+
+        filtered.sort((a, b) =>
+          String(a.displayName || "Mama").localeCompare(
+            String(b.displayName || "Mama")
+          )
+        );
+
+        if (countEl) {
+          countEl.textContent =
+            cmHasMore && !cmSearchQuery && cmActiveFilter === "all"
+              ? `${filtered.length}+`
+              : `${filtered.length}`;
+        }
+
+        if (filtered.length === 0) {
+          gridEl.innerHTML = `<div class="cm-empty-state">${
+            cmSearchQuery
+              ? "No community members match your search."
+              : cmActiveFilter === "friends"
+              ? "You have not added any friends yet."
+              : cmActiveFilter === "helpers"
+              ? "No Helpers found right now."
+              : "No community members found."
+          }</div>`;
+        } else {
+          let html = "";
+          filtered.forEach((member) => {
+            const name = member.displayName || "Mama";
+            const initial = cmEscape(name.charAt(0).toUpperCase());
+            const avatarMarkup = member.avatarUrl
+              ? `<img src="${member.avatarUrl}" alt="${cmEscape(
+                  name
+                )}" loading="lazy">`
+              : initial;
+
+            let badgeHTML = "";
+            if (member.isHelper) {
+              badgeHTML = '<span class="cm-card-badge">Helper</span>';
+            } else if (friends.includes(member.id)) {
+              badgeHTML = '<span class="cm-card-badge">Friend</span>';
+            }
+
+            const contextText =
+              member.childrenContext ||
+              member.helperSpecialties ||
+              "Community Member";
+
+            html += `
+              <div class="cm-card" onclick="openFriendModal('${member.id}')">
+                <div class="cm-card-banner">${badgeHTML}</div>
+                <div class="cm-card-avatar">${avatarMarkup}</div>
+                <div class="cm-card-body">
+                  <div class="cm-card-name">${cmEscape(name)}</div>
+                  <div class="cm-card-context">${cmEscape(contextText)}</div>
+                  <button type="button" class="cm-card-btn">View Profile</button>
+                </div>
+              </div>
+            `;
+          });
+          gridEl.innerHTML = html;
+        }
+
+        if (footerEl && loadMoreBtn) {
+          const showLoadMore =
+            cmHasMore && !cmSearchQuery && cmActiveFilter === "all";
+          footerEl.style.display = showLoadMore ? "flex" : "none";
+          loadMoreBtn.textContent = cmIsLoading
+            ? "Loading..."
+            : "Load More Members";
+          loadMoreBtn.disabled = cmIsLoading;
+        }
+      }
+
+      window.openCommunityModal = function () {
+        if (!currentUser) return;
+        document
+          .getElementById("community-modal-backdrop")
+          .classList.add("active");
+        document
+          .getElementById("community-members-modal")
+          .classList.add("active");
+
+        if (cmMembers.length === 0) {
+          cmLoadNextPage(true);
+        } else {
+          cmRenderMembers();
+        }
+      };
+
+      window.closeCommunityModal = function () {
+        document
+          .getElementById("community-modal-backdrop")
+          .classList.remove("active");
+        document
+          .getElementById("community-members-modal")
+          .classList.remove("active");
+      };
+
+      document
+        .getElementById("cm-close-btn")
+        .addEventListener("click", closeCommunityModal);
+      document
+        .getElementById("community-modal-backdrop")
+        .addEventListener("click", closeCommunityModal);
+      document
+        .getElementById("community-members-modal")
+        .addEventListener("click", (e) => e.stopPropagation());
+
+      document
+        .getElementById("cm-load-more-btn")
+        .addEventListener("click", () => cmLoadNextPage(false));
+
+      const cmSearchInput = document.getElementById("cm-search-input");
+      const cmSearchClearBtn = document.getElementById("cm-search-clear-btn");
+
+      cmSearchInput.addEventListener("input", (e) => {
+        cmSearchQuery = e.target.value.trim();
+        cmSearchClearBtn.classList.toggle("visible", cmSearchQuery !== "");
+        cmSearchResults = null;
+        cmRenderMembers();
+
+        if (cmSearchDebounce) clearTimeout(cmSearchDebounce);
+        if (cmSearchQuery.length >= 2) {
+          cmSearchDebounce = setTimeout(() => {
+            cmRunRemoteSearch(cmSearchQuery);
+          }, 350);
+        }
+      });
+
+      cmSearchClearBtn.addEventListener("click", () => {
+        cmSearchInput.value = "";
+        cmSearchQuery = "";
+        cmSearchResults = null;
+        cmSearchClearBtn.classList.remove("visible");
+        cmRenderMembers();
+        cmSearchInput.focus();
+      });
+
+      document.querySelectorAll("#cm-filter-pills .cm-pill").forEach((pill) => {
+        pill.addEventListener("click", () => {
+          document
+            .querySelectorAll("#cm-filter-pills .cm-pill")
+            .forEach((p) => p.classList.remove("active"));
+          pill.classList.add("active");
+          cmActiveFilter = pill.getAttribute("data-filter");
+          cmRenderMembers();
+          cmSyncFilterSubset(cmActiveFilter);
+        });
+      });
+
+      document
+        .getElementById("close-friend-modal-btn")
+        .addEventListener("click", () => {
+          if (
+            document
+              .getElementById("community-members-modal")
+              .classList.contains("active")
+          ) {
+            setTimeout(cmRenderMembers, 150);
           }
         });
 
