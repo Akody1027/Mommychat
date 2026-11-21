@@ -17,10 +17,10 @@
         if (screenWidth > 0 && screenWidth < idealWidth) {
           var scaleRatio = (screenWidth / idealWidth).toFixed(2);
           var metaTag = document.getElementById("app-viewport");
-          if (metaTag) { 
+          if (metaTag) {
             metaTag.setAttribute(
               "content",
-              "width=device-width, initial-scale=" + 
+              "width=device-width, initial-scale=" +
                 scaleRatio +
                 ", maximum-scale=" +
                 scaleRatio +
@@ -2142,6 +2142,582 @@
         border-color: var(--primary-pink);
       }
 
+      /* --- Closed-Loop Wallet, Tipping, Helper Studio & Live Call Dashboard --- */
+      .wallet-closed-loop-note {
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.85rem;
+        line-height: 1.4;
+        margin-bottom: 1.25rem;
+      }
+
+      .mc-feed-tip-btn {
+        color: var(--dark-pink);
+        background: var(--bg-color);
+        padding: 0.35rem 0.75rem;
+        border-radius: 10px;
+      }
+
+      .mc-feed-tip-btn:hover {
+        background: var(--light-pink);
+        color: var(--white);
+      }
+
+      .fm-btn-add-friend {
+        background: var(--primary-pink);
+        color: var(--white);
+      }
+
+      .fm-btn-tip {
+        background: var(--bg-color);
+        color: var(--dark-pink);
+        border: 2px solid var(--primary-pink);
+        box-shadow: none;
+      }
+
+      .fm-btn-tip:hover {
+        background: var(--primary-pink);
+        color: var(--white);
+      }
+
+      .fm-btn-call {
+        background: var(--dark-pink);
+        color: var(--white);
+      }
+
+      .fm-btn-block {
+        background: transparent;
+        color: #e63946;
+        border: 2px solid #e63946;
+        margin-top: 6px;
+        width: 100%;
+        box-shadow: none;
+      }
+
+      .fm-btn-block:hover {
+        background: #e63946;
+        color: var(--white);
+      }
+
+      .fm-p2p-row {
+        width: 100%;
+        display: none;
+        flex-direction: column;
+        gap: 8px;
+        padding-top: 8px;
+        border-top: 1px solid var(--border-color);
+      }
+
+      .fm-p2p-row.visible {
+        display: flex;
+      }
+
+      .fm-p2p-label {
+        font-size: 0.78rem;
+        font-weight: 800;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+      }
+
+      .fm-p2p-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .fm-p2p-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 0.42rem 0.9rem;
+        border-radius: 50px;
+        border: 1.5px solid var(--border-color);
+        background: var(--bg-color);
+        color: var(--dark-pink);
+        font-size: 0.84rem;
+        font-weight: 800;
+        text-decoration: none;
+        transition: all 0.2s ease;
+      }
+
+      .fm-p2p-chip:hover {
+        background: var(--primary-pink);
+        border-color: var(--primary-pink);
+        color: var(--white);
+      }
+
+      .mc-studio-card {
+        background: var(--white);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 1.25rem;
+        margin-bottom: 1.25rem;
+      }
+
+      .mc-studio-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 0.9rem;
+        flex-wrap: wrap;
+      }
+
+      .mc-studio-title {
+        font-size: 1.1rem;
+        font-weight: 800;
+        color: var(--dark-pink);
+      }
+
+      .mc-studio-sub {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        line-height: 1.45;
+        margin-bottom: 1rem;
+      }
+
+      .mc-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 4px 10px;
+        border-radius: 50px;
+        font-size: 0.74rem;
+        font-weight: 800;
+        background: var(--bg-color);
+        color: var(--dark-pink);
+        border: 1px solid var(--border-color);
+      }
+
+      .mc-badge-verified {
+        background: #e6f7f4;
+        color: #1f7a6e;
+        border-color: #9ed9cf;
+      }
+
+      .mc-badge-live {
+        background: #ffe5e8;
+        color: #b5172a;
+        border-color: #f4a4ae;
+      }
+
+      .mc-badge-overtime {
+        background: #e6f7f4;
+        color: #1f7a6e;
+        border-color: #9ed9cf;
+      }
+
+      .mc-field-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+
+      @media (max-width: 600px) {
+        .mc-field-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .mc-input-group {
+        margin-bottom: 0.9rem;
+      }
+
+      .mc-input-group label {
+        display: block;
+        font-size: 0.84rem;
+        font-weight: 800;
+        color: var(--text-dark);
+        margin-bottom: 0.35rem;
+      }
+
+      .mc-input-group input,
+      .mc-input-group select,
+      .mc-input-group textarea {
+        width: 100%;
+        padding: 0.68rem 0.9rem;
+        border: 1.5px solid var(--border-color);
+        border-radius: 10px;
+        font-family: inherit;
+        font-size: 0.94rem;
+        color: var(--text-dark);
+        background: var(--white);
+        outline: none;
+        transition: border-color 0.2s ease;
+      }
+
+      .mc-input-group input:focus,
+      .mc-input-group select:focus,
+      .mc-input-group textarea:focus {
+        border-color: var(--primary-pink);
+      }
+
+      .mc-helper-tip-box {
+        background: var(--bg-color);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 0.8rem 0.95rem;
+        font-size: 0.82rem;
+        color: var(--text-light);
+        line-height: 1.45;
+        margin-bottom: 1rem;
+      }
+
+      .mc-direct-pay-box {
+        background: linear-gradient(135deg, #fff5f7, #ffeef3);
+        border: 1.5px solid var(--primary-pink);
+        border-radius: 14px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .mc-call-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .mc-call-empty {
+        text-align: center;
+        padding: 1.4rem 1rem;
+        border: 1px dashed var(--border-color);
+        border-radius: 12px;
+        color: var(--text-muted);
+        font-size: 0.88rem;
+      }
+
+      .mc-call-card {
+        border: 1.5px solid var(--border-color);
+        border-radius: 14px;
+        padding: 1rem;
+        background: var(--bg-color);
+      }
+
+      .mc-call-card.in-progress {
+        border-color: var(--dark-pink);
+        background: var(--white);
+        box-shadow: 0 6px 20px rgba(201, 24, 74, 0.12);
+      }
+
+      .mc-call-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 10px;
+        margin-bottom: 0.6rem;
+      }
+
+      .mc-call-person {
+        font-weight: 800;
+        font-size: 1rem;
+        color: var(--text-dark);
+      }
+
+      .mc-call-meta {
+        font-size: 0.82rem;
+        color: var(--text-muted);
+        margin-top: 2px;
+      }
+
+      .mc-call-note {
+        background: var(--white);
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        padding: 0.65rem 0.8rem;
+        font-size: 0.85rem;
+        color: var(--text-dark);
+        line-height: 1.45;
+        margin-bottom: 0.75rem;
+      }
+
+      .mc-call-timer {
+        border-radius: 12px;
+        padding: 0.85rem 1rem;
+        text-align: center;
+        margin-bottom: 0.85rem;
+        background: #fff0f4;
+        border: 1.5px solid var(--primary-pink);
+      }
+
+      .mc-call-timer.warning {
+        background: #fff7e6;
+        border-color: #f4a261;
+      }
+
+      .mc-call-timer.overtime {
+        background: #e6f7f4;
+        border-color: #2a9d8f;
+      }
+
+      .mc-timer-clock {
+        font-size: 1.6rem;
+        font-weight: 800;
+        color: var(--dark-pink);
+        font-variant-numeric: tabular-nums;
+      }
+
+      .mc-call-timer.warning .mc-timer-clock {
+        color: #c86a17;
+      }
+
+      .mc-call-timer.overtime .mc-timer-clock {
+        color: #1f7a6e;
+      }
+
+      .mc-timer-status {
+        font-size: 0.8rem;
+        font-weight: 800;
+        color: var(--text-muted);
+        margin-top: 2px;
+      }
+
+      .mc-timer-stale-note {
+        font-size: 0.78rem;
+        font-weight: 800;
+        color: #b5172a;
+        margin-top: 6px;
+      }
+
+      .mc-call-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .mc-btn-sm {
+        flex: 1;
+        min-width: 110px;
+        padding: 0.6rem 0.9rem;
+        border-radius: 50px;
+        border: none;
+        font-weight: 800;
+        font-size: 0.86rem;
+        cursor: pointer;
+        transition: transform 0.15s ease, opacity 0.2s ease;
+      }
+
+      .mc-btn-sm:hover {
+        transform: translateY(-1px);
+      }
+
+      .mc-btn-primary {
+        background: var(--dark-pink);
+        color: var(--white);
+      }
+
+      .mc-btn-secondary {
+        background: var(--white);
+        color: var(--text-dark);
+        border: 1.5px solid var(--border-color);
+      }
+
+      .mc-btn-success {
+        background: #2a9d8f;
+        color: var(--white);
+      }
+
+      .mc-btn-danger {
+        background: #e63946;
+        color: var(--white);
+      }
+
+      /* Tip & Book Live Call Overlays */
+      .mc-overlay-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(89, 13, 34, 0.45);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        z-index: 2010;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.28s ease, visibility 0.28s ease;
+      }
+
+      .mc-overlay-backdrop.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .mc-overlay-modal {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        width: 92%;
+        max-width: 460px;
+        max-height: 90%;
+        background: var(--white);
+        border-radius: 22px;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 24px 60px rgba(89, 13, 34, 0.28);
+        z-index: 2011;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        opacity: 0;
+        visibility: hidden;
+        transform: translate(-50%, -46%) scale(0.95);
+        transition: all 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      .mc-overlay-modal.active {
+        opacity: 1;
+        visibility: visible;
+        transform: translate(-50%, -50%) scale(1);
+      }
+
+      .mc-overlay-header {
+        padding: 1rem 1.25rem;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .mc-overlay-body {
+        padding: 1.2rem 1.25rem;
+        overflow-y: auto;
+        background: var(--bg-color);
+      }
+
+      .mc-tip-presets {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin: 0.9rem 0;
+      }
+
+      .mc-tip-preset {
+        padding: 0.75rem 0.5rem;
+        border-radius: 14px;
+        border: 2px solid var(--border-color);
+        background: var(--white);
+        color: var(--dark-pink);
+        font-weight: 800;
+        font-size: 0.98rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        transition: all 0.2s ease;
+      }
+
+      .mc-tip-preset.active {
+        background: var(--dark-pink);
+        border-color: var(--dark-pink);
+        color: var(--white);
+      }
+
+      .mc-rail-options {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 1rem;
+      }
+
+      .mc-rail-opt {
+        text-align: left;
+        padding: 0.75rem 0.95rem;
+        border-radius: 12px;
+        border: 1.5px solid var(--border-color);
+        background: var(--white);
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .mc-rail-opt.active {
+        border-color: var(--dark-pink);
+        background: #fff0f4;
+      }
+
+      .mc-rail-opt-title {
+        font-weight: 800;
+        font-size: 0.92rem;
+        color: var(--text-dark);
+      }
+
+      .mc-rail-opt-desc {
+        font-size: 0.78rem;
+        color: var(--text-muted);
+        margin-top: 2px;
+      }
+
+      /* Marketplace Fee Banner & Featured Boost Styles */
+      .mp-fee-banner {
+        background: var(--white);
+        border: 1.5px solid var(--primary-pink);
+        border-radius: 14px;
+        padding: 0.8rem 1rem;
+        margin-bottom: 1rem;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--text-dark);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .mp-featured-badge {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        background: linear-gradient(
+          135deg,
+          var(--dark-pink),
+          var(--primary-pink)
+        );
+        color: var(--white);
+        font-size: 0.68rem;
+        font-weight: 800;
+        letter-spacing: 0.3px;
+        padding: 4px 9px;
+        border-radius: 50px;
+        box-shadow: 0 3px 10px rgba(201, 24, 74, 0.35);
+        z-index: 3;
+      }
+
+      .mp-my-boost-row {
+        padding: 0.45rem 0.65rem;
+        border-top: 1px solid var(--bg-color);
+        background: #fff9fb;
+      }
+
+      .mp-boost-btn {
+        width: 100%;
+        padding: 0.42rem 0.5rem;
+        border-radius: 8px;
+        border: 1.5px solid var(--primary-pink);
+        background: var(--white);
+        color: var(--dark-pink);
+        font-weight: 800;
+        font-size: 0.75rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        transition: all 0.2s ease;
+      }
+
+      .mp-boost-btn:hover {
+        background: var(--primary-pink);
+        color: var(--white);
+      }
+
+      .mp-boost-active-pill {
+        width: 100%;
+        text-align: center;
+        padding: 0.35rem 0.5rem;
+        border-radius: 8px;
+        background: #e6f7f4;
+        color: #1f7a6e;
+        font-weight: 800;
+        font-size: 0.74rem;
+      }
+
       /* --- Mommychat Marketplace Ecosystem --- */
       .mp-modal {
         position: fixed;
@@ -3840,16 +4416,12 @@
           <img src="Mtoken.PNG" alt="Token" style="width: 32px; height: 32px" />
           0
         </div>
-        <p
-          style="
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            margin-bottom: 1.5rem;
-          "
-        >
-          Recent: -10 (Direct Message)
+
+        <p class="wallet-closed-loop-note">
+          Closed-loop credits for Community Tips, extra Marketplace listings
+          &amp; 72-hour Featured Boosts.
         </p>
+
         <button class="btn-modal-action" id="btn-get-tokens">
           Get More Tokens
         </button>
@@ -4179,22 +4751,35 @@
 
         <!-- TAB 3: Helper Ecosystem -->
         <div id="tab-helper" class="upm-tab-content">
+          <!-- Mother's Booked Calls Tracker -->
+          <div class="mc-studio-card" id="mc-booked-calls-section">
+            <div class="mc-studio-header">
+              <div class="mc-studio-title">My Booked Calls</div>
+              <span class="mc-badge" id="mc-my-calls-count">0</span>
+            </div>
+            <div class="mc-call-list" id="mc-my-booked-calls-list">
+              <div class="mc-call-empty">No live calls booked yet.</div>
+            </div>
+          </div>
+
           <!-- Explainer View (For Non-Helpers) -->
           <div id="helper-explainer-view">
             <div class="helper-pitch">
-              <h3>Turn your experience into support.</h3>
-              <p style="color: var(--text-dark); margin-bottom: 1rem">
-                Earn tokens by taking Live Calls and Direct Messages from moms
-                who need a listening ear. Keep 80% of the tokens you receive to
-                cash out for real money.
+              <h3>Turn your experience into real side-gig income.</h3>
+              <p class="mc-studio-sub">
+                Support other moms through scheduled Live Calls and keep 100% of
+                your direct Venmo, Cash App, or PayPal earnings—or enable
+                Mommychat Direct Pay for private, automated card checkout.
               </p>
             </div>
             <div class="upm-form-group">
-              <label>What are your specialties?</label>
+              <label for="helper-signup-specialties"
+                >What are your specialties?</label
+              >
               <textarea
                 id="helper-signup-specialties"
                 rows="2"
-                placeholder="e.g., Sleep Training, Postpartum Anxiety, Autism Support..."
+                placeholder="e.g., Sleep Training, Postpartum Support, Autism Advocacy..."
               ></textarea>
             </div>
             <button class="btn-modal-action" id="btn-apply-helper">
@@ -4202,49 +4787,129 @@
             </button>
           </div>
 
-          <!-- Dashboard View (For Approved Helpers) -->
+          <!-- Helper Studio & Live Call Dashboard (For Approved Helpers) -->
           <div id="helper-dashboard-view" style="display: none">
-            <div class="dashboard-stat-card">
-              <div class="stat-value">
-                <img
-                  src="Mtoken.PNG"
-                  class="token-icon"
-                  alt="Token"
-                  style="width: 40px; height: 40px"
-                />
-                <span id="earned-tokens-disp">0</span>
+            <!-- Incoming Live Call Dashboard -->
+            <div class="mc-studio-card">
+              <div class="mc-studio-header">
+                <div class="mc-studio-title">Live Call Dashboard</div>
+                <span class="mc-badge" id="mc-helper-calls-badge"
+                  >0 Completed</span
+                >
               </div>
-              <div class="stat-label">Total Earned Tokens</div>
-              <div
-                style="
-                  font-size: 1.2rem;
-                  margin-top: 10px;
-                  font-weight: 800;
-                  color: var(--white);
-                "
-              >
-                ≈ $<span id="cash-value-disp">0.00</span> USD
+              <p class="mc-studio-sub">
+                Tap Start Call to open your phone dialer and begin the session
+                timer. Calls never cut off—when booked time ends, the timer
+                switches to bonus overtime until you tap Call Ended.
+              </p>
+              <div class="mc-call-list" id="mc-helper-calls-list">
+                <div class="mc-call-empty">No incoming call requests yet.</div>
               </div>
             </div>
 
-            <p
-              style="
-                text-align: center;
-                color: var(--text-muted);
-                margin-bottom: 1.5rem;
-                font-size: 0.9rem;
-              "
-            >
-              Payouts are processed to your connected bank account within 3-5
-              business days. Minimum 500 tokens required.
-            </p>
-            <button
-              class="btn-modal-action"
-              id="btn-request-payout"
-              style="background: var(--text-dark)"
-            >
-              Request Cash Out
-            </button>
+            <!-- Dual-Rail Payment & Rates Studio -->
+            <div class="mc-studio-card">
+              <div class="mc-studio-header">
+                <div class="mc-studio-title">Helper Payments &amp; Rates</div>
+                <span class="mc-badge" id="mc-direct-pay-badge"
+                  >Direct Pay: Not Connected</span
+                >
+              </div>
+
+              <div class="mc-direct-pay-box">
+                <div class="mc-studio-title">Mommychat Direct Pay</div>
+                <p class="mc-studio-sub">
+                  Accept private card, Apple Pay, and Google Pay bookings via
+                  Stripe Connect Express without sharing your personal payment
+                  handles.
+                </p>
+                <button
+                  type="button"
+                  class="btn-modal-action"
+                  id="btn-connect-direct-pay"
+                >
+                  Connect Direct Pay
+                </button>
+              </div>
+
+              <div class="mc-helper-tip-box">
+                <strong>Personal Payment Links (0% Fee):</strong> Add your
+                handles below so moms can pay you directly. For outbound calls,
+                we recommend dialing from a free Google Voice number to keep
+                your personal cell number private.
+              </div>
+
+              <div class="mc-field-grid">
+                <div class="mc-input-group">
+                  <label for="mc-helper-venmo">Venmo Username</label>
+                  <input
+                    type="text"
+                    id="mc-helper-venmo"
+                    placeholder="e.g., Sarah-Mom"
+                  />
+                </div>
+                <div class="mc-input-group">
+                  <label for="mc-helper-cashapp">Cash App $Cashtag</label>
+                  <input
+                    type="text"
+                    id="mc-helper-cashapp"
+                    placeholder="e.g., $SarahMom"
+                  />
+                </div>
+              </div>
+
+              <div class="mc-input-group">
+                <label for="mc-helper-paypal">PayPal.me Username</label>
+                <input
+                  type="text"
+                  id="mc-helper-paypal"
+                  placeholder="e.g., SarahMom"
+                />
+              </div>
+
+              <div class="mc-field-grid">
+                <div class="mc-input-group">
+                  <label for="mc-helper-call-rate">Live Call Rate (USD)</label>
+                  <input
+                    type="number"
+                    id="mc-helper-call-rate"
+                    min="0"
+                    step="1"
+                    placeholder="15"
+                  />
+                </div>
+                <div class="mc-input-group">
+                  <label for="mc-helper-call-duration"
+                    >Session Length (Minutes)</label
+                  >
+                  <select id="mc-helper-call-duration">
+                    <option value="15">15 Minutes</option>
+                    <option value="30" selected>30 Minutes</option>
+                    <option value="45">45 Minutes</option>
+                    <option value="60">60 Minutes</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="mc-input-group">
+                <label for="mc-helper-phone-note"
+                  >Helper Dialer Note (Private Reference Only)</label
+                >
+                <input
+                  type="text"
+                  id="mc-helper-phone-note"
+                  placeholder="e.g., Calling from Google Voice line"
+                />
+              </div>
+
+              <button
+                type="button"
+                class="btn-modal-action"
+                id="btn-save-helper-settings"
+              >
+                Save Payment &amp; Call Settings
+              </button>
+            </div>
           </div>
         </div>
 
@@ -4342,35 +5007,26 @@
 
       <!-- Fixed Footer Actions -->
       <div class="friend-modal-footer">
+        <button class="btn-modal-action fm-btn-add-friend" id="btn-add-friend">
+          Add Friend
+        </button>
+        <button class="btn-modal-action" id="btn-dm-friend">Message</button>
+        <button class="btn-modal-action fm-btn-tip" id="btn-tip-friend">
+          Tip <img src="Mtoken.PNG" class="token-icon" alt="Token" />
+        </button>
+        <button class="btn-modal-action fm-btn-call" id="btn-call-friend">
+          Book Live Call
+        </button>
+        <div class="fm-p2p-row" id="fm-helper-p2p-row">
+          <div class="fm-p2p-label">Direct Support Links (Peer-to-Peer)</div>
+          <div class="fm-p2p-links" id="fm-helper-p2p-links"></div>
+        </div>
         <button
-          class="btn-modal-action"
-          id="btn-add-friend"
-          style="background: var(--primary-pink); color: var(--white)"
-        >
-          ➕ Add Friend
-        </button>
-        <button class="btn-modal-action" id="btn-dm-friend">
-          Message (10
-          <img src="Mtoken.PNG" class="token-icon" alt="Token" />)
-        </button>
-        <button class="btn-modal-action" id="btn-call-friend">
-          Live Call (60
-          <img src="Mtoken.PNG" class="token-icon" alt="Token" />)
-        </button>
-
-        <button
-          class="btn-modal-action"
+          class="btn-modal-action fm-btn-block"
           id="btn-block-user"
           onclick="blockCurrentUser()"
-          style="
-            background: transparent;
-            color: #e63946;
-            border: 2px solid #e63946;
-            margin-top: 10px;
-            width: 100%;
-          "
         >
-          🚫 Block User
+          Block User
         </button>
       </div>
     </div>
@@ -4834,6 +5490,10 @@
             are strictly prohibited and subject to removal.
           </div>
 
+          <div class="mp-fee-banner" id="mp-listing-fee-banner">
+            <span>Checking your active listing allowance...</span>
+          </div>
+
           <div class="mp-creator-actions">
             <button
               type="button"
@@ -4977,6 +5637,140 @@
       >
         Submit Report
       </button>
+    </div>
+
+    <!-- Closed-Loop Token Tip Modal -->
+    <div class="mc-overlay-backdrop" id="mc-tip-backdrop"></div>
+    <div class="mc-overlay-modal" id="mc-tip-modal">
+      <div class="mc-overlay-header">
+        <h3 class="upm-title">Send Token Tip</h3>
+        <button
+          type="button"
+          class="btn-close-modal"
+          id="mc-tip-close-btn"
+          aria-label="Close Tip Modal"
+        >
+          ✕
+        </button>
+      </div>
+      <div class="mc-overlay-body">
+        <p class="mc-studio-sub">
+          Sending closed-loop tokens to
+          <strong id="mc-tip-recipient-name">Mama</strong>. Your balance:
+          <strong id="mc-tip-balance-disp">0</strong> tokens.
+        </p>
+
+        <div class="mc-tip-presets" id="mc-tip-presets">
+          <button type="button" class="mc-tip-preset active" data-amount="1">
+            <img src="Mtoken.PNG" class="token-icon" alt="Token" /> 1
+          </button>
+          <button type="button" class="mc-tip-preset" data-amount="5">
+            <img src="Mtoken.PNG" class="token-icon" alt="Token" /> 5
+          </button>
+          <button type="button" class="mc-tip-preset" data-amount="10">
+            <img src="Mtoken.PNG" class="token-icon" alt="Token" /> 10
+          </button>
+        </div>
+
+        <div class="mc-input-group">
+          <label for="mc-tip-custom-input">Custom Token Amount</label>
+          <input
+            type="number"
+            id="mc-tip-custom-input"
+            min="1"
+            max="500"
+            step="1"
+            value="1"
+          />
+        </div>
+
+        <div class="mc-input-group">
+          <label for="mc-tip-note-input">Optional Thank-You Note</label>
+          <input
+            type="text"
+            id="mc-tip-note-input"
+            maxlength="140"
+            placeholder="Thank you for the support!"
+          />
+        </div>
+
+        <button type="button" class="btn-modal-action" id="mc-tip-submit-btn">
+          Send Tip
+        </button>
+      </div>
+    </div>
+
+    <!-- Book Live Call Modal -->
+    <div class="mc-overlay-backdrop" id="mc-book-call-backdrop"></div>
+    <div class="mc-overlay-modal" id="mc-book-call-modal">
+      <div class="mc-overlay-header">
+        <h3 class="upm-title">Book Live Call</h3>
+        <button
+          type="button"
+          class="btn-close-modal"
+          id="mc-book-call-close-btn"
+          aria-label="Close Book Call Modal"
+        >
+          ✕
+        </button>
+      </div>
+      <div class="mc-overlay-body">
+        <div class="mc-helper-tip-box" id="mc-book-call-summary">
+          Session details loading...
+        </div>
+
+        <div class="mc-input-group">
+          <label for="mc-book-phone">Your Callback Phone Number</label>
+          <input
+            type="tel"
+            id="mc-book-phone"
+            placeholder="e.g., (555) 123-4567"
+            autocomplete="tel"
+          />
+        </div>
+
+        <div class="mc-helper-tip-box">
+          Your Helper will call you at this number. It is only visible to this
+          Helper during your active session and is automatically deleted once
+          the call ends. Please expect a call from an unfamiliar number at your
+          scheduled time.
+        </div>
+
+        <div class="mc-input-group">
+          <label for="mc-book-window">Preferred Time Window</label>
+          <select id="mc-book-window">
+            <option value="As soon as available">As soon as available</option>
+            <option value="Within the next hour">Within the next hour</option>
+            <option value="Later today">Later today</option>
+            <option value="Tomorrow (coordinate in chat)">
+              Tomorrow (coordinate in chat)
+            </option>
+          </select>
+        </div>
+
+        <div class="mc-input-group">
+          <label for="mc-book-topic">What would you like to talk about?</label>
+          <textarea
+            id="mc-book-topic"
+            rows="2"
+            maxlength="300"
+            placeholder="Brief context so your Helper is prepared..."
+          ></textarea>
+        </div>
+
+        <div class="mc-input-group">
+          <label>Select Payment Method</label>
+          <div class="mc-rail-options" id="mc-book-rail-options"></div>
+        </div>
+
+        <button
+          type="button"
+          class="btn-modal-action"
+          id="mc-book-call-submit-btn"
+        >
+          Confirm Call Request
+        </button>
+      </div>
     </div>
 
     <!-- Custom Alert Modal -->
@@ -5535,34 +6329,8 @@
           btnAddFriend.style.display =
             isFriend || targetUid === currentUser.uid ? "none" : "block";
 
-          const btnDm = document.getElementById("btn-dm-friend");
-          const btnCall = document.getElementById("btn-call-friend");
-          const btnBlock = document.getElementById("btn-block-user");
-
-          // Hide action buttons if viewing your own profile
-          if (targetUid === currentUser.uid) {
-            btnDm.style.display = "none";
-            btnCall.style.display = "none";
-            btnBlock.style.display = "none";
-          } else {
-            btnDm.style.display = "block";
-            btnBlock.style.display = "block";
-            if (targetData.isHelper) {
-              btnDm.innerHTML =
-                'Message (10 <img src="Mtoken.PNG" class="token-icon" alt="Token">)';
-              btnDm.setAttribute(
-                "onclick",
-                `startDirectMessage('${targetUid}', true)`
-              );
-              btnCall.style.display = "block";
-            } else {
-              btnDm.innerHTML = "Message";
-              btnDm.setAttribute(
-                "onclick",
-                `startDirectMessage('${targetUid}', false)`
-              );
-              btnCall.style.display = "none";
-            }
+          if (typeof mcRenderHelperProfileActions === "function") {
+            mcRenderHelperProfileActions(targetUid, targetData);
           }
 
           // Fetch the user's public loop history AND active loop
@@ -5825,6 +6593,10 @@
         listenToInviteCodes();
 
         listenToMarketplace();
+
+        if (typeof mcInitMonetizationAndCalls === "function") {
+          mcInitMonetizationAndCalls(user.uid);
+        }
       });
 
       function listenToUserProfile(uid) {
@@ -5954,16 +6726,16 @@
             if (currentUserDoc.isHelper) {
               explainerView.style.display = "none";
               dashboardView.style.display = "block";
-
-              const earned = currentUserDoc.earnedTokens || 0;
-              document.getElementById("earned-tokens-disp").innerText = earned;
-              // Example conversion: 10 Tokens = $1.00
-              document.getElementById("cash-value-disp").innerText = (
-                earned * 0.1
-              ).toFixed(2);
+              if (typeof mcSyncHelperStudioUI === "function") {
+                mcSyncHelperStudioUI(currentUserDoc);
+              }
             } else {
               explainerView.style.display = "block";
               dashboardView.style.display = "none";
+            }
+
+            if (typeof mcUpdateListingFeeBanner === "function") {
+              mcUpdateListingFeeBanner();
             }
 
             // Refresh the friends sidebar when user profile data updates
@@ -6187,6 +6959,27 @@
                                     <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
                                     <span>${post.commentsCount || 0}</span>
                                 </button>
+                                
+                                
+                                
+                                
+                                ${
+                                  !isOwner
+                                    ? `<button class="action-btn mc-feed-tip-btn" onclick="mcOpenTipModal('${post.authorUid}')">
+                                    <img src="Mtoken.PNG" class="token-icon" alt="Token" />
+                                    <span>Tip</span>
+                                </button>`
+                                    : ""
+                                }
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
+                                
 
 
                                 <button class="action-btn premium-action" onclick="openFriendModal('${
@@ -7602,12 +8395,6 @@
         }
       };
 
-      document
-        .getElementById("btn-call-friend")
-        .addEventListener("click", () =>
-          initiatePremiumAction(60, "Live Call")
-        );
-
       // Profile Tab Switching Logic
       const upmTabs = document.querySelectorAll(".upm-tab");
       const upmContents = document.querySelectorAll(".upm-tab-content");
@@ -7651,15 +8438,6 @@
             btn.innerText = "Become a Helper Today";
             btn.disabled = false;
           }
-        });
-
-      // Payout Request Stub
-      document
-        .getElementById("btn-request-payout")
-        .addEventListener("click", () => {
-          showCustomAlert(
-            "Payout request submitted! (Stripe Connect integration pending)"
-          );
         });
 
       // Account Security Logic
@@ -8703,23 +9481,29 @@
           return true;
         });
 
-        if (sortVal === "price_asc") {
-          filtered.sort(
-            (a, b) => (Number(a.price) || 0) - (Number(b.price) || 0)
-          );
-        } else if (sortVal === "price_desc") {
-          filtered.sort(
-            (a, b) => (Number(b.price) || 0) - (Number(a.price) || 0)
-          );
-        } else {
-          filtered.sort((a, b) => {
-            const tA =
-              a.createdAt && a.createdAt.toMillis ? a.createdAt.toMillis() : 0;
-            const tB =
-              b.createdAt && b.createdAt.toMillis ? b.createdAt.toMillis() : 0;
-            return tB - tA;
-          });
-        }
+        filtered.sort((a, b) => {
+          const featA =
+            typeof mcIsListingFeatured === "function" && mcIsListingFeatured(a)
+              ? 1
+              : 0;
+          const featB =
+            typeof mcIsListingFeatured === "function" && mcIsListingFeatured(b)
+              ? 1
+              : 0;
+          if (featA !== featB) return featB - featA;
+
+          if (sortVal === "price_asc") {
+            return (Number(a.price) || 0) - (Number(b.price) || 0);
+          }
+          if (sortVal === "price_desc") {
+            return (Number(b.price) || 0) - (Number(a.price) || 0);
+          }
+          const tA =
+            a.createdAt && a.createdAt.toMillis ? a.createdAt.toMillis() : 0;
+          const tB =
+            b.createdAt && b.createdAt.toMillis ? b.createdAt.toMillis() : 0;
+          return tB - tA;
+        });
 
         const countEl = document.getElementById("mp-results-count");
         if (countEl) {
@@ -8775,6 +9559,19 @@
                   true
                 )}</div>
                 <div class="mp-price-tag">${mpFormatPrice(item.price)}</div>
+                
+                
+                ${
+                  typeof mcIsListingFeatured === "function" &&
+                  mcIsListingFeatured(item)
+                    ? '<div class="mp-featured-badge">Featured</div>'
+                    : ""
+                }
+                
+                
+                
+                
+                
                 <div
                   class="mp-card-seller-avatar"
                   title="${mpEscape(item.sellerName || "Mama")}"
@@ -8863,6 +9660,10 @@
         const badge = document.getElementById("mp-my-count-badge");
         if (!container || !currentUser) return;
 
+        if (typeof mcUpdateListingFeeBanner === "function") {
+          mcUpdateListingFeeBanner();
+        }
+
         const myItems = mpAllListings.filter(
           (item) => item.sellerUid === currentUser.uid
         );
@@ -8899,6 +9700,26 @@
 
           const toggleLabel = item.status === "hidden" ? "Show" : "Hide";
           const disableToggle = item.status === "under_review";
+          const isBoosted =
+            typeof mcIsListingFeatured === "function" &&
+            mcIsListingFeatured(item);
+          const hoursLeft = isBoosted
+            ? Math.max(
+                1,
+                Math.ceil(
+                  (item.featuredUntil.toMillis() - Date.now()) / 3600000
+                )
+              )
+            : 0;
+
+          const boostRowHTML =
+            item.status === "active"
+              ? `<div class="mp-my-boost-row">${
+                  isBoosted
+                    ? `<div class="mp-boost-active-pill">Featured (${hoursLeft}h left)</div>`
+                    : `<button type="button" class="mp-boost-btn" onclick="mcBoostMarketplaceListing('${item.id}')">Boost 72h (10 <img src="Mtoken.PNG" class="token-icon" alt="Token" />)</button>`
+                }</div>`
+              : "";
 
           html += `
             <div class="mp-my-card">
@@ -8914,6 +9735,7 @@
                 <div class="mp-my-card-title">${mpEscape(item.title)}</div>
                 <div class="mp-my-card-price">${mpFormatPrice(item.price)}</div>
               </div>
+              ${boostRowHTML}
               <div class="mp-my-card-actions">
                 <button
                   type="button"
@@ -9143,15 +9965,144 @@
         .getElementById("mp-cancel-edit-btn")
         .addEventListener("click", mpResetCreatorForm);
 
+      async function mpExecuteSaveListing(requireTokenFee) {
+        const title = document.getElementById("mp-input-title").value.trim();
+        const description = document
+          .getElementById("mp-input-desc")
+          .value.trim();
+        const price = parseFloat(
+          document.getElementById("mp-input-price").value
+        );
+
+        const btn = document.getElementById("mp-save-btn");
+        const prevLabel = btn.textContent;
+        btn.textContent = "Saving...";
+        btn.disabled = true;
+
+        try {
+          const docRef = mpEditingListingId
+            ? db.collection("marketplace_listings").doc(mpEditingListingId)
+            : db.collection("marketplace_listings").doc();
+
+          const uploadedUrls = [];
+          for (let i = 0; i < mpImageSlots.length; i++) {
+            const slot = mpImageSlots[i];
+            if (!slot) continue;
+            if (slot.existingUrl) {
+              uploadedUrls.push(slot.existingUrl);
+            } else if (slot.file) {
+              const storageRef = storage.ref(
+                `marketplace/${currentUser.uid}/${
+                  docRef.id
+                }/slot_${i}_${Date.now()}.jpg`
+              );
+              const snap = await storageRef.put(slot.file);
+              const url = await snap.ref.getDownloadURL();
+              uploadedUrls.push(url);
+            }
+          }
+
+          const sellerName =
+            currentUserDoc?.displayName || currentUser.displayName || "Mama";
+          const sellerAvatarUrl = currentUserDoc?.avatarUrl || "";
+          const sellerAvatarLetter = sellerName.charAt(0).toUpperCase();
+
+          if (mpEditingListingId) {
+            await docRef.update({
+              title: title,
+              description: description,
+              price: Number(price.toFixed(2)),
+              images: uploadedUrls,
+              fulfillment: mpSelectedFulfillment,
+              sellerName: sellerName,
+              sellerAvatarUrl: sellerAvatarUrl,
+              sellerAvatarLetter: sellerAvatarLetter,
+              updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            });
+
+            mpRemovedExistingUrls.forEach((oldUrl) => {
+              storage
+                .refFromURL(oldUrl)
+                .delete()
+                .catch(() => {});
+            });
+
+            showCustomAlert("Listing updated successfully!");
+          } else {
+            const listingPayload = {
+              sellerUid: currentUser.uid,
+              sellerName: sellerName,
+              sellerAvatarUrl: sellerAvatarUrl,
+              sellerAvatarLetter: sellerAvatarLetter,
+              title: title,
+              description: description,
+              price: Number(price.toFixed(2)),
+              images: uploadedUrls,
+              fulfillment: mpSelectedFulfillment,
+              status: "active",
+              reportedBy: [],
+              reportCount: 0,
+              createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+              updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            };
+
+            if (requireTokenFee) {
+              const userRef = db.collection("users").doc(currentUser.uid);
+              const ledgerRef = db.collection("token_ledger").doc();
+
+              await db.runTransaction(async (transaction) => {
+                const uDoc = await transaction.get(userRef);
+                const bal = uDoc.exists ? uDoc.data().tokens || 0 : 0;
+                if (bal < MC_EXTRA_LISTING_COST) {
+                  throw new Error("INSUFFICIENT_TOKENS");
+                }
+                transaction.update(userRef, {
+                  tokens: bal - MC_EXTRA_LISTING_COST,
+                });
+                transaction.set(docRef, listingPayload);
+                transaction.set(ledgerRef, {
+                  userUid: currentUser.uid,
+                  type: "marketplace_listing_fee",
+                  amount: -MC_EXTRA_LISTING_COST,
+                  listingId: docRef.id,
+                  note: title,
+                  createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                });
+              });
+
+              showCustomAlert(
+                `Product posted! (${MC_EXTRA_LISTING_COST} tokens deducted)`
+              );
+            } else {
+              await docRef.set(listingPayload);
+              showCustomAlert("Free starter listing posted to MommyMarket!");
+            }
+          }
+
+          mpResetCreatorForm();
+        } catch (err) {
+          console.error("Error saving marketplace product:", err);
+          if (err && err.message === "INSUFFICIENT_TOKENS") {
+            showCustomAlert(
+              `You need ${MC_EXTRA_LISTING_COST} tokens for an additional active listing. Visit your Wallet to add tokens.`
+            );
+          } else {
+            showCustomAlert("Failed to save product. Please try again.");
+          }
+        } finally {
+          btn.disabled = false;
+          btn.textContent = mpEditingListingId
+            ? prevLabel
+            : "Save & Publish Product";
+        }
+      }
+
       document
         .getElementById("mp-save-btn")
         .addEventListener("click", async () => {
           if (!currentUser) return;
 
           const title = document.getElementById("mp-input-title").value.trim();
-          const description = document
-            .getElementById("mp-input-desc")
-            .value.trim();
           const priceRaw = document.getElementById("mp-input-price").value;
           const price = parseFloat(priceRaw);
 
@@ -9169,92 +10120,30 @@
             return;
           }
 
-          const btn = document.getElementById("mp-save-btn");
-          const prevLabel = btn.textContent;
-          btn.textContent = "Saving...";
-          btn.disabled = true;
+          if (mpEditingListingId) {
+            await mpExecuteSaveListing(false);
+            return;
+          }
 
-          try {
-            const docRef = mpEditingListingId
-              ? db.collection("marketplace_listings").doc(mpEditingListingId)
-              : db.collection("marketplace_listings").doc();
+          const myActiveCount = mpAllListings.filter(
+            (item) =>
+              item.sellerUid === currentUser.uid && item.status === "active"
+          ).length;
 
-            const uploadedUrls = [];
-            for (let i = 0; i < mpImageSlots.length; i++) {
-              const slot = mpImageSlots[i];
-              if (!slot) continue;
-              if (slot.existingUrl) {
-                uploadedUrls.push(slot.existingUrl);
-              } else if (slot.file) {
-                const storageRef = storage.ref(
-                  `marketplace/${currentUser.uid}/${
-                    docRef.id
-                  }/slot_${i}_${Date.now()}.jpg`
-                );
-                const snap = await storageRef.put(slot.file);
-                const url = await snap.ref.getDownloadURL();
-                uploadedUrls.push(url);
-              }
+          if (myActiveCount >= MC_FREE_ACTIVE_LISTINGS) {
+            const currentTokens = currentUserDoc?.tokens || 0;
+            if (currentTokens < MC_EXTRA_LISTING_COST) {
+              showCustomAlert(
+                `Your first active listing is free. Publishing an additional listing costs ${MC_EXTRA_LISTING_COST} tokens—please add tokens in your Wallet.`
+              );
+              return;
             }
-
-            const sellerName =
-              currentUserDoc?.displayName || currentUser.displayName || "Mama";
-            const sellerAvatarUrl = currentUserDoc?.avatarUrl || "";
-            const sellerAvatarLetter = sellerName.charAt(0).toUpperCase();
-
-            if (mpEditingListingId) {
-              await docRef.update({
-                title: title,
-                description: description,
-                price: Number(price.toFixed(2)),
-                images: uploadedUrls,
-                fulfillment: mpSelectedFulfillment,
-                sellerName: sellerName,
-                sellerAvatarUrl: sellerAvatarUrl,
-                sellerAvatarLetter: sellerAvatarLetter,
-                updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-              });
-
-              mpRemovedExistingUrls.forEach((oldUrl) => {
-                storage
-                  .refFromURL(oldUrl)
-                  .delete()
-                  .catch(() => {});
-              });
-
-              showCustomAlert("Listing updated successfully!");
-            } else {
-              await docRef.set({
-                sellerUid: currentUser.uid,
-                sellerName: sellerName,
-                sellerAvatarUrl: sellerAvatarUrl,
-                sellerAvatarLetter: sellerAvatarLetter,
-                title: title,
-                description: description,
-                price: Number(price.toFixed(2)),
-                images: uploadedUrls,
-                fulfillment: mpSelectedFulfillment,
-                status: "active",
-                reportedBy: [],
-                reportCount: 0,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-              });
-
-              showCustomAlert("Product posted to the Marketplace!");
-            }
-
-            mpResetCreatorForm();
-          } catch (err) {
-            console.error("Error saving marketplace product:", err);
-            showCustomAlert("Failed to save product. Please try again.");
-          } finally {
-            btn.disabled = false;
-            if (!mpEditingListingId) {
-              btn.textContent = "Save & Publish Product";
-            } else {
-              btn.textContent = prevLabel;
-            }
+            showCustomConfirm(
+              `You already have ${myActiveCount} active listing(s). Publishing an additional listing costs ${MC_EXTRA_LISTING_COST} tokens. Continue?`,
+              () => mpExecuteSaveListing(true)
+            );
+          } else {
+            await mpExecuteSaveListing(false);
           }
         });
 
@@ -9311,6 +10200,70 @@
         if (item.status === "under_review") return;
 
         const nextStatus = item.status === "hidden" ? "active" : "hidden";
+
+        if (nextStatus === "active") {
+          const otherActiveCount = mpAllListings.filter(
+            (l) =>
+              l.sellerUid === currentUser.uid &&
+              l.status === "active" &&
+              l.id !== listingId
+          ).length;
+
+          if (otherActiveCount >= MC_FREE_ACTIVE_LISTINGS) {
+            const currentTokens = currentUserDoc?.tokens || 0;
+            if (currentTokens < MC_EXTRA_LISTING_COST) {
+              showCustomAlert(
+                `You already have an active listing. Reactivating an additional listing costs ${MC_EXTRA_LISTING_COST} tokens.`
+              );
+              return;
+            }
+            showCustomConfirm(
+              `You already have an active listing. Reactivating this listing costs ${MC_EXTRA_LISTING_COST} tokens. Continue?`,
+              async () => {
+                try {
+                  const userRef = db.collection("users").doc(currentUser.uid);
+                  const listRef = db
+                    .collection("marketplace_listings")
+                    .doc(listingId);
+                  const ledgerRef = db.collection("token_ledger").doc();
+
+                  await db.runTransaction(async (transaction) => {
+                    const uDoc = await transaction.get(userRef);
+                    const bal = uDoc.exists ? uDoc.data().tokens || 0 : 0;
+                    if (bal < MC_EXTRA_LISTING_COST) {
+                      throw new Error("INSUFFICIENT_TOKENS");
+                    }
+                    transaction.update(userRef, {
+                      tokens: bal - MC_EXTRA_LISTING_COST,
+                    });
+                    transaction.update(listRef, {
+                      status: "active",
+                      updatedAt:
+                        firebase.firestore.FieldValue.serverTimestamp(),
+                    });
+                    transaction.set(ledgerRef, {
+                      userUid: currentUser.uid,
+                      type: "marketplace_reactivate_fee",
+                      amount: -MC_EXTRA_LISTING_COST,
+                      listingId: listingId,
+                      note: item.title || "",
+                      createdAt:
+                        firebase.firestore.FieldValue.serverTimestamp(),
+                    });
+                  });
+                  showCustomAlert(
+                    `Product is now live! (${MC_EXTRA_LISTING_COST} tokens deducted)`
+                  );
+                } catch (err) {
+                  console.error("Error reactivating listing:", err);
+                  showCustomAlert("Could not reactivate listing.");
+                }
+              }
+            );
+            return;
+          }
+        }
+
         try {
           await db.collection("marketplace_listings").doc(listingId).update({
             status: nextStatus,
@@ -10006,6 +10959,1291 @@
             setTimeout(cmRenderMembers, 150);
           }
         });
+
+      // --- Closed-Loop Economy, Dual-Rail Helper Studio & Live Call Dashboard ---
+      const MC_WELCOME_TOKENS = 5;
+      const MC_FREE_ACTIVE_LISTINGS = 1;
+      const MC_EXTRA_LISTING_COST = 2;
+      const MC_BOOST_COST = 10;
+      const MC_BOOST_HOURS = 72;
+
+      // Configure these HTTPS URLs when deploying Phase 3 Stripe Connect Cloud Functions
+      window.MC_STRIPE_ENDPOINTS = {
+        connectOnboard: "",
+        directCallCheckout: "",
+      };
+
+      let mcTipTargetUid = null;
+      let mcBookTargetUid = null;
+      let mcBookTargetData = null;
+      let mcSelectedBookRail = "";
+      let mcHelperCallsUnsub = null;
+      let mcMyCallsUnsub = null;
+      let mcHelperCallsMap = {};
+      let mcLocalCallStarts = {};
+      let mcCallTimerInterval = null;
+      let mcWelcomeChecked = false;
+
+      function mcEsc(val) {
+        return escapeHTML(String(val || ""));
+      }
+
+      function mcSanitizeHandle(raw, platform) {
+        let cleaned = String(raw || "").trim();
+        if (!cleaned) return "";
+        cleaned = cleaned
+          .replace(/^https?:\/\/(www\.)?venmo\.com\/u\//i, "")
+          .replace(/^https?:\/\/(www\.)?venmo\.com\//i, "")
+          .replace(/^https?:\/\/(www\.)?cash\.app\//i, "")
+          .replace(/^https?:\/\/(www\.)?paypal\.me\//i, "")
+          .replace(/^[@$]+/, "");
+        if (platform === "paypal") {
+          return cleaned.replace(/[^A-Za-z0-9._-]/g, "");
+        }
+        return cleaned.replace(/[^A-Za-z0-9_-]/g, "");
+      }
+
+      function mcBuildP2PUrl(platform, handle) {
+        const clean = mcSanitizeHandle(handle, platform);
+        if (!clean) return "";
+        if (platform === "venmo") return `https://venmo.com/u/${clean}`;
+        if (platform === "cashapp") return `https://cash.app/$${clean}`;
+        if (platform === "paypal") return `https://paypal.me/${clean}`;
+        return "";
+      }
+
+      function mcSanitizeDialNumber(raw) {
+        const str = String(raw || "").trim();
+        const hasPlus = str.startsWith("+");
+        const digits = str.replace(/\D/g, "");
+        return hasPlus ? "+" + digits : digits;
+      }
+
+      window.mcIsListingFeatured = function (item) {
+        if (!item || !item.featuredUntil) return false;
+        const ms =
+          typeof item.featuredUntil.toMillis === "function"
+            ? item.featuredUntil.toMillis()
+            : Number(item.featuredUntil) || 0;
+        return ms > Date.now();
+      };
+
+      window.mcUpdateListingFeeBanner = function () {
+        const banner = document.getElementById("mp-listing-fee-banner");
+        if (!banner || !currentUser) return;
+
+        if (mpEditingListingId) {
+          banner.innerHTML =
+            "<span>Editing an existing listing is always free.</span>";
+          return;
+        }
+
+        const activeCount = mpAllListings.filter(
+          (item) =>
+            item.sellerUid === currentUser.uid && item.status === "active"
+        ).length;
+
+        if (activeCount < MC_FREE_ACTIVE_LISTINGS) {
+          banner.innerHTML =
+            "<span>Free Starter Slot Available</span><span>0 Tokens</span>";
+        } else {
+          banner.innerHTML = `<span>Additional Active Listing</span><span>${MC_EXTRA_LISTING_COST} <img src="Mtoken.PNG" class="token-icon" alt="Token" /></span>`;
+        }
+      };
+
+      window.mcBoostMarketplaceListing = function (listingId) {
+        const item = mpAllListingsMap[listingId];
+        if (!item || !currentUser || item.sellerUid !== currentUser.uid) return;
+        if (item.status !== "active") {
+          showCustomAlert("Only active listings can be boosted.");
+          return;
+        }
+
+        const currentTokens = currentUserDoc?.tokens || 0;
+        if (currentTokens < MC_BOOST_COST) {
+          showCustomAlert(
+            `Boosting a listing for ${MC_BOOST_HOURS} hours costs ${MC_BOOST_COST} tokens. Please add tokens in your Wallet.`
+          );
+          return;
+        }
+
+        showCustomConfirm(
+          `Pin "${item.title}" to the top of MommyMarket for ${MC_BOOST_HOURS} hours for ${MC_BOOST_COST} tokens?`,
+          async () => {
+            try {
+              const userRef = db.collection("users").doc(currentUser.uid);
+              const listRef = db
+                .collection("marketplace_listings")
+                .doc(listingId);
+              const ledgerRef = db.collection("token_ledger").doc();
+              const expiresTs = firebase.firestore.Timestamp.fromMillis(
+                Date.now() + MC_BOOST_HOURS * 60 * 60 * 1000
+              );
+
+              await db.runTransaction(async (transaction) => {
+                const uDoc = await transaction.get(userRef);
+                const bal = uDoc.exists ? uDoc.data().tokens || 0 : 0;
+                if (bal < MC_BOOST_COST) {
+                  throw new Error("INSUFFICIENT_TOKENS");
+                }
+                transaction.update(userRef, { tokens: bal - MC_BOOST_COST });
+                transaction.update(listRef, {
+                  featuredUntil: expiresTs,
+                  updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                });
+                transaction.set(ledgerRef, {
+                  userUid: currentUser.uid,
+                  type: "marketplace_boost",
+                  amount: -MC_BOOST_COST,
+                  listingId: listingId,
+                  note: item.title || "",
+                  createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                });
+              });
+
+              showCustomAlert(
+                `Boost active! Your listing is featured for ${MC_BOOST_HOURS} hours.`
+              );
+            } catch (err) {
+              console.error("Error boosting listing:", err);
+              showCustomAlert("Could not boost listing. Please try again.");
+            }
+          }
+        );
+      };
+
+      async function mcEnsureWelcomeTokens(uid) {
+        if (!uid || mcWelcomeChecked) return;
+        mcWelcomeChecked = true;
+        const userRef = db.collection("users").doc(uid);
+
+        try {
+          await db.runTransaction(async (transaction) => {
+            const doc = await transaction.get(userRef);
+            if (!doc.exists) return;
+            const data = doc.data();
+            if (data.welcomeTokensGranted === true) return;
+
+            const currentBal = Number(data.tokens) || 0;
+            const ledgerRef = db.collection("token_ledger").doc();
+
+            transaction.update(userRef, {
+              tokens: currentBal + MC_WELCOME_TOKENS,
+              welcomeTokensGranted: true,
+            });
+            transaction.set(ledgerRef, {
+              userUid: uid,
+              type: "welcome_grant",
+              amount: MC_WELCOME_TOKENS,
+              note: "Welcome to Mommychat",
+              createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            });
+          });
+        } catch (err) {
+          console.error("Welcome grant check failed:", err);
+        }
+      }
+
+      window.mcInitMonetizationAndCalls = function (uid) {
+        if (!uid) return;
+        mcEnsureWelcomeTokens(uid);
+        mcListenToCallSessions(uid);
+      };
+
+      // --- Closed-Loop Peer-to-Peer Tipping ---
+      window.mcOpenTipModal = async function (targetUid) {
+        if (!currentUser || !targetUid) return;
+        if (targetUid === currentUser.uid) {
+          showCustomAlert("You cannot tip your own account.");
+          return;
+        }
+
+        mcTipTargetUid = targetUid;
+        document.getElementById("mc-tip-balance-disp").textContent =
+          currentUserDoc?.tokens || 0;
+        document.getElementById("mc-tip-recipient-name").textContent =
+          "Loading...";
+        document.getElementById("mc-tip-custom-input").value = "1";
+        document.getElementById("mc-tip-note-input").value = "";
+        document
+          .querySelectorAll("#mc-tip-presets .mc-tip-preset")
+          .forEach((b) =>
+            b.classList.toggle("active", b.getAttribute("data-amount") === "1")
+          );
+
+        document.getElementById("mc-tip-backdrop").classList.add("active");
+        document.getElementById("mc-tip-modal").classList.add("active");
+
+        try {
+          const doc = await db.collection("users").doc(targetUid).get();
+          document.getElementById("mc-tip-recipient-name").textContent =
+            doc.exists && doc.data().displayName
+              ? doc.data().displayName
+              : "Mama";
+        } catch (err) {
+          document.getElementById("mc-tip-recipient-name").textContent = "Mama";
+        }
+      };
+
+      window.mcCloseTipModal = function () {
+        document.getElementById("mc-tip-backdrop").classList.remove("active");
+        document.getElementById("mc-tip-modal").classList.remove("active");
+        mcTipTargetUid = null;
+      };
+
+      document
+        .getElementById("mc-tip-close-btn")
+        .addEventListener("click", mcCloseTipModal);
+      document
+        .getElementById("mc-tip-backdrop")
+        .addEventListener("click", mcCloseTipModal);
+      document
+        .getElementById("mc-tip-modal")
+        .addEventListener("click", (e) => e.stopPropagation());
+
+      document
+        .querySelectorAll("#mc-tip-presets .mc-tip-preset")
+        .forEach((btn) => {
+          btn.addEventListener("click", () => {
+            document
+              .querySelectorAll("#mc-tip-presets .mc-tip-preset")
+              .forEach((b) => b.classList.remove("active"));
+            btn.classList.add("active");
+            document.getElementById("mc-tip-custom-input").value =
+              btn.getAttribute("data-amount");
+          });
+        });
+
+      document
+        .getElementById("mc-tip-custom-input")
+        .addEventListener("input", (e) => {
+          const val = String(e.target.value || "").trim();
+          document
+            .querySelectorAll("#mc-tip-presets .mc-tip-preset")
+            .forEach((b) =>
+              b.classList.toggle(
+                "active",
+                b.getAttribute("data-amount") === val
+              )
+            );
+        });
+
+      document
+        .getElementById("mc-tip-submit-btn")
+        .addEventListener("click", async () => {
+          if (!currentUser || !mcTipTargetUid) return;
+          if (mcTipTargetUid === currentUser.uid) {
+            showCustomAlert("You cannot tip your own account.");
+            return;
+          }
+
+          const amount = parseInt(
+            document.getElementById("mc-tip-custom-input").value,
+            10
+          );
+          const note = document
+            .getElementById("mc-tip-note-input")
+            .value.trim();
+
+          if (!Number.isInteger(amount) || amount < 1 || amount > 500) {
+            showCustomAlert(
+              "Please enter a valid tip between 1 and 500 tokens."
+            );
+            return;
+          }
+
+          const btn = document.getElementById("mc-tip-submit-btn");
+          btn.textContent = "Sending...";
+          btn.disabled = true;
+
+          try {
+            const senderRef = db.collection("users").doc(currentUser.uid);
+            const recipientRef = db.collection("users").doc(mcTipTargetUid);
+            const ledgerRef = db.collection("token_ledger").doc();
+
+            await db.runTransaction(async (transaction) => {
+              const sDoc = await transaction.get(senderRef);
+              const rDoc = await transaction.get(recipientRef);
+              if (!sDoc.exists || !rDoc.exists) {
+                throw new Error("USER_NOT_FOUND");
+              }
+
+              const senderBal = Number(sDoc.data().tokens) || 0;
+              if (senderBal < amount) {
+                throw new Error("INSUFFICIENT_TOKENS");
+              }
+
+              const recipientBal = Number(rDoc.data().tokens) || 0;
+              transaction.update(senderRef, { tokens: senderBal - amount });
+              transaction.update(recipientRef, {
+                tokens: recipientBal + amount,
+              });
+              transaction.set(ledgerRef, {
+                fromUid: currentUser.uid,
+                toUid: mcTipTargetUid,
+                type: "community_tip",
+                amount: amount,
+                note: note,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+              });
+            });
+
+            mcCloseTipModal();
+            showCustomAlert(`Sent ${amount} token${amount === 1 ? "" : "s"}!`);
+          } catch (err) {
+            console.error("Tip transaction failed:", err);
+            if (err && err.message === "INSUFFICIENT_TOKENS") {
+              showCustomAlert(
+                "Insufficient tokens! Please add tokens in your Wallet."
+              );
+            } else {
+              showCustomAlert("Failed to send tip. Please try again.");
+            }
+          } finally {
+            btn.textContent = "Send Tip";
+            btn.disabled = false;
+          }
+        });
+
+      // --- Member Profile Modal Actions (Free DM, Tip, Call Booking, P2P Links) ---
+      window.mcRenderHelperProfileActions = function (targetUid, targetData) {
+        const btnDm = document.getElementById("btn-dm-friend");
+        const btnTip = document.getElementById("btn-tip-friend");
+        const btnCall = document.getElementById("btn-call-friend");
+        const btnBlock = document.getElementById("btn-block-user");
+        const p2pRow = document.getElementById("fm-helper-p2p-row");
+        const p2pLinks = document.getElementById("fm-helper-p2p-links");
+
+        if (!btnDm || !btnTip || !btnCall || !btnBlock) return;
+
+        const isSelf = currentUser && targetUid === currentUser.uid;
+        if (isSelf) {
+          btnDm.style.display = "none";
+          btnTip.style.display = "none";
+          btnCall.style.display = "none";
+          btnBlock.style.display = "none";
+          if (p2pRow) p2pRow.classList.remove("visible");
+          return;
+        }
+
+        btnDm.style.display = "block";
+        btnDm.textContent = "Message";
+        btnDm.onclick = () => startDirectMessage(targetUid, false);
+
+        btnTip.style.display = "block";
+        btnTip.onclick = () => mcOpenTipModal(targetUid);
+
+        btnBlock.style.display = "block";
+
+        if (targetData && targetData.isHelper) {
+          const rate =
+            targetData.helperCallRateUsd !== undefined
+              ? Number(targetData.helperCallRateUsd)
+              : 15;
+          const mins = Number(targetData.helperCallDurationMinutes) || 30;
+          const rateLabel = rate > 0 ? `$${rate}` : "Free";
+
+          btnCall.style.display = "block";
+          btnCall.textContent = `Book Live Call (${rateLabel} / ${mins}m)`;
+          btnCall.onclick = () => mcOpenBookCallModal(targetUid, targetData);
+
+          if (p2pRow && p2pLinks) {
+            const links = [];
+            const venmoUrl = mcBuildP2PUrl("venmo", targetData.helperVenmo);
+            const cashUrl = mcBuildP2PUrl("cashapp", targetData.helperCashApp);
+            const paypalUrl = mcBuildP2PUrl("paypal", targetData.helperPayPal);
+
+            if (venmoUrl) {
+              links.push(
+                `<a class="fm-p2p-chip" href="${venmoUrl}" target="_blank" rel="noopener noreferrer">Venmo</a>`
+              );
+            }
+            if (cashUrl) {
+              links.push(
+                `<a class="fm-p2p-chip" href="${cashUrl}" target="_blank" rel="noopener noreferrer">Cash App</a>`
+              );
+            }
+            if (paypalUrl) {
+              links.push(
+                `<a class="fm-p2p-chip" href="${paypalUrl}" target="_blank" rel="noopener noreferrer">PayPal</a>`
+              );
+            }
+
+            if (links.length > 0) {
+              p2pLinks.innerHTML = links.join("");
+              p2pRow.classList.add("visible");
+            } else {
+              p2pLinks.innerHTML = "";
+              p2pRow.classList.remove("visible");
+            }
+          }
+        } else {
+          btnCall.style.display = "none";
+          if (p2pRow) p2pRow.classList.remove("visible");
+        }
+      };
+
+      // --- Helper Studio UI Sync & Settings Save ---
+      window.mcSyncHelperStudioUI = function (userDoc) {
+        if (!userDoc) return;
+
+        const venmoInput = document.getElementById("mc-helper-venmo");
+        const cashInput = document.getElementById("mc-helper-cashapp");
+        const paypalInput = document.getElementById("mc-helper-paypal");
+        const rateInput = document.getElementById("mc-helper-call-rate");
+        const durSelect = document.getElementById("mc-helper-call-duration");
+        const phoneNoteInput = document.getElementById("mc-helper-phone-note");
+
+        if (venmoInput && document.activeElement !== venmoInput) {
+          venmoInput.value = userDoc.helperVenmo || "";
+        }
+        if (cashInput && document.activeElement !== cashInput) {
+          cashInput.value = userDoc.helperCashApp || "";
+        }
+        if (paypalInput && document.activeElement !== paypalInput) {
+          paypalInput.value = userDoc.helperPayPal || "";
+        }
+        if (rateInput && document.activeElement !== rateInput) {
+          rateInput.value =
+            userDoc.helperCallRateUsd !== undefined
+              ? userDoc.helperCallRateUsd
+              : 15;
+        }
+        if (durSelect && document.activeElement !== durSelect) {
+          durSelect.value = String(userDoc.helperCallDurationMinutes || 30);
+        }
+        if (phoneNoteInput && document.activeElement !== phoneNoteInput) {
+          phoneNoteInput.value = userDoc.helperDialerNote || "";
+        }
+
+        const badge = document.getElementById("mc-direct-pay-badge");
+        const connectBtn = document.getElementById("btn-connect-direct-pay");
+        const isConnected = userDoc.stripeConnectStatus === "active";
+
+        if (badge) {
+          badge.textContent = isConnected
+            ? "Direct Pay: Verified"
+            : "Direct Pay: Not Connected";
+          badge.classList.toggle("mc-badge-verified", isConnected);
+        }
+        if (connectBtn) {
+          connectBtn.textContent = isConnected
+            ? "Manage Direct Pay Account"
+            : "Connect Direct Pay";
+        }
+
+        const callsBadge = document.getElementById("mc-helper-calls-badge");
+        if (callsBadge) {
+          const completed = Number(userDoc.completedCallsCount) || 0;
+          callsBadge.textContent = `${completed} Completed`;
+        }
+      };
+
+      document
+        .getElementById("btn-save-helper-settings")
+        .addEventListener("click", async () => {
+          if (!currentUser) return;
+
+          const btn = document.getElementById("btn-save-helper-settings");
+          const orig = btn.textContent;
+          btn.textContent = "Saving...";
+          btn.disabled = true;
+
+          const venmo = mcSanitizeHandle(
+            document.getElementById("mc-helper-venmo").value,
+            "venmo"
+          );
+          const cashApp = mcSanitizeHandle(
+            document.getElementById("mc-helper-cashapp").value,
+            "cashapp"
+          );
+          const paypal = mcSanitizeHandle(
+            document.getElementById("mc-helper-paypal").value,
+            "paypal"
+          );
+          const rateRaw = parseFloat(
+            document.getElementById("mc-helper-call-rate").value
+          );
+          const callRateUsd =
+            isNaN(rateRaw) || rateRaw < 0 ? 0 : Math.round(rateRaw);
+          const callDuration =
+            parseInt(
+              document.getElementById("mc-helper-call-duration").value,
+              10
+            ) || 30;
+          const dialerNote = document
+            .getElementById("mc-helper-phone-note")
+            .value.trim();
+
+          try {
+            await db.collection("users").doc(currentUser.uid).update({
+              helperVenmo: venmo,
+              helperCashApp: cashApp,
+              helperPayPal: paypal,
+              helperCallRateUsd: callRateUsd,
+              helperCallDurationMinutes: callDuration,
+              helperDialerNote: dialerNote,
+            });
+            showCustomAlert("Helper payment & call settings saved!");
+          } catch (err) {
+            console.error("Error saving helper settings:", err);
+            showCustomAlert("Failed to save settings. Please try again.");
+          } finally {
+            btn.textContent = orig;
+            btn.disabled = false;
+          }
+        });
+
+      document
+        .getElementById("btn-connect-direct-pay")
+        .addEventListener("click", async () => {
+          if (!currentUser) return;
+          const endpoint = window.MC_STRIPE_ENDPOINTS.connectOnboard;
+          if (!endpoint) {
+            showCustomAlert(
+              "Mommychat Direct Pay connects to your Stripe Connect Cloud Function (Phase 3). Meanwhile, your personal Venmo, Cash App, and PayPal links work immediately."
+            );
+            return;
+          }
+
+          const btn = document.getElementById("btn-connect-direct-pay");
+          const orig = btn.textContent;
+          btn.textContent = "Connecting...";
+          btn.disabled = true;
+
+          try {
+            const idToken = await currentUser.getIdToken();
+            const res = await fetch(endpoint, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${idToken}`,
+              },
+              body: JSON.stringify({ returnUrl: window.location.href }),
+            });
+            const data = await res.json();
+            if (res.ok && data.url) {
+              window.location.href = data.url;
+            } else {
+              showCustomAlert(
+                data.error || "Could not start Stripe Connect onboarding."
+              );
+            }
+          } catch (err) {
+            console.error("Direct Pay onboarding error:", err);
+            showCustomAlert("Connection failed. Please try again.");
+          } finally {
+            btn.textContent = orig;
+            btn.disabled = false;
+          }
+        });
+
+      // --- Book Live Call Modal (Mother -> Helper) ---
+      window.mcOpenBookCallModal = async function (targetUid, preloadedData) {
+        if (!currentUser || !targetUid) return;
+        mcBookTargetUid = targetUid;
+
+        let targetData = preloadedData;
+        if (!targetData) {
+          try {
+            const doc = await db.collection("users").doc(targetUid).get();
+            targetData = doc.exists ? doc.data() : {};
+          } catch (err) {
+            targetData = {};
+          }
+        }
+        mcBookTargetData = targetData;
+
+        const helperName = targetData.displayName || "Helper";
+        const rate =
+          targetData.helperCallRateUsd !== undefined
+            ? Number(targetData.helperCallRateUsd)
+            : 15;
+        const mins = Number(targetData.helperCallDurationMinutes) || 30;
+        const rateStr = rate > 0 ? `$${rate} USD` : "Free";
+
+        document.getElementById(
+          "mc-book-call-summary"
+        ).innerHTML = `<strong>${mcEsc(helperName)}</strong> &bull; ${mcEsc(
+          rateStr
+        )} for ${mins} minutes`;
+
+        document.getElementById("mc-book-phone").value = "";
+        document.getElementById("mc-book-topic").value = "";
+        document.getElementById("mc-book-window").value =
+          "As soon as available";
+
+        const rails = [];
+        if (targetData.stripeConnectStatus === "active") {
+          rails.push({
+            id: "direct_pay",
+            title: "Mommychat Direct Pay (Card / Apple Pay)",
+            desc: "Private checkout verified automatically via Stripe.",
+          });
+        }
+        if (mcBuildP2PUrl("venmo", targetData.helperVenmo)) {
+          rails.push({
+            id: "venmo",
+            title: "Venmo (Direct to Helper)",
+            desc: "Peer-to-peer payment directly to your Helper's Venmo.",
+          });
+        }
+        if (mcBuildP2PUrl("cashapp", targetData.helperCashApp)) {
+          rails.push({
+            id: "cashapp",
+            title: "Cash App (Direct to Helper)",
+            desc: "Peer-to-peer payment directly to your Helper's $Cashtag.",
+          });
+        }
+        if (mcBuildP2PUrl("paypal", targetData.helperPayPal)) {
+          rails.push({
+            id: "paypal",
+            title: "PayPal (Direct to Helper)",
+            desc: "Peer-to-peer payment directly to your Helper's PayPal.me.",
+          });
+        }
+        if (rails.length === 0) {
+          rails.push({
+            id: "arrange_in_chat",
+            title: "Arrange Directly with Helper",
+            desc: "Coordinate payment or support details with your Helper in chat.",
+          });
+        }
+
+        mcSelectedBookRail = rails[0].id;
+        const railContainer = document.getElementById("mc-book-rail-options");
+        railContainer.innerHTML = rails
+          .map(
+            (r, idx) => `
+            <button
+              type="button"
+              class="mc-rail-opt ${idx === 0 ? "active" : ""}"
+              data-rail="${r.id}"
+            >
+              <div class="mc-rail-opt-title">${mcEsc(r.title)}</div>
+              <div class="mc-rail-opt-desc">${mcEsc(r.desc)}</div>
+            </button>
+          `
+          )
+          .join("");
+
+        railContainer.querySelectorAll(".mc-rail-opt").forEach((opt) => {
+          opt.addEventListener("click", () => {
+            railContainer
+              .querySelectorAll(".mc-rail-opt")
+              .forEach((o) => o.classList.remove("active"));
+            opt.classList.add("active");
+            mcSelectedBookRail = opt.getAttribute("data-rail");
+          });
+        });
+
+        document
+          .getElementById("mc-book-call-backdrop")
+          .classList.add("active");
+        document.getElementById("mc-book-call-modal").classList.add("active");
+      };
+
+      window.mcCloseBookCallModal = function () {
+        document
+          .getElementById("mc-book-call-backdrop")
+          .classList.remove("active");
+        document
+          .getElementById("mc-book-call-modal")
+          .classList.remove("active");
+        mcBookTargetUid = null;
+        mcBookTargetData = null;
+      };
+
+      document
+        .getElementById("mc-book-call-close-btn")
+        .addEventListener("click", mcCloseBookCallModal);
+      document
+        .getElementById("mc-book-call-backdrop")
+        .addEventListener("click", mcCloseBookCallModal);
+      document
+        .getElementById("mc-book-call-modal")
+        .addEventListener("click", (e) => e.stopPropagation());
+
+      document
+        .getElementById("mc-book-call-submit-btn")
+        .addEventListener("click", async () => {
+          if (!currentUser || !mcBookTargetUid || !mcBookTargetData) return;
+
+          const rawPhone = document
+            .getElementById("mc-book-phone")
+            .value.trim();
+          const cleanPhone = mcSanitizeDialNumber(rawPhone);
+          const digitsOnly = cleanPhone.replace(/\D/g, "");
+
+          if (digitsOnly.length < 10) {
+            showCustomAlert("Please enter a valid 10-digit callback number.");
+            return;
+          }
+
+          const preferredWindow =
+            document.getElementById("mc-book-window").value;
+          const topicNote = document
+            .getElementById("mc-book-topic")
+            .value.trim();
+          const rate =
+            mcBookTargetData.helperCallRateUsd !== undefined
+              ? Number(mcBookTargetData.helperCallRateUsd)
+              : 15;
+          const mins = Number(mcBookTargetData.helperCallDurationMinutes) || 30;
+
+          const btn = document.getElementById("mc-book-call-submit-btn");
+          const orig = btn.textContent;
+          btn.textContent = "Scheduling...";
+          btn.disabled = true;
+
+          try {
+            const sessionRef = db.collection("helper_call_sessions").doc();
+            await sessionRef.set({
+              helperUid: mcBookTargetUid,
+              helperName: mcBookTargetData.displayName || "Helper",
+              requesterUid: currentUser.uid,
+              requesterName:
+                currentUserDoc?.displayName ||
+                currentUser.displayName ||
+                "Mama",
+              callbackPhone: cleanPhone,
+              preferredWindow: preferredWindow,
+              topicNote: topicNote,
+              privateNotesSnapshot: currentUserDoc?.privateNotes || "",
+              bookedMinutes: mins,
+              rateUsd: rate,
+              paymentMethod: mcSelectedBookRail,
+              paymentStatus:
+                mcSelectedBookRail === "direct_pay"
+                  ? "pending_checkout"
+                  : "p2p_arranged",
+              status: "scheduled",
+              startedAt: null,
+              endedAt: null,
+              actualMinutes: 0,
+              overtimeMinutes: 0,
+              createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+              updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            });
+
+            const p2pUrl =
+              mcSelectedBookRail === "venmo"
+                ? mcBuildP2PUrl("venmo", mcBookTargetData.helperVenmo)
+                : mcSelectedBookRail === "cashapp"
+                ? mcBuildP2PUrl("cashapp", mcBookTargetData.helperCashApp)
+                : mcSelectedBookRail === "paypal"
+                ? mcBuildP2PUrl("paypal", mcBookTargetData.helperPayPal)
+                : "";
+
+            if (
+              mcSelectedBookRail === "direct_pay" &&
+              window.MC_STRIPE_ENDPOINTS.directCallCheckout
+            ) {
+              const idToken = await currentUser.getIdToken();
+              const res = await fetch(
+                window.MC_STRIPE_ENDPOINTS.directCallCheckout,
+                {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${idToken}`,
+                  },
+                  body: JSON.stringify({
+                    sessionId: sessionRef.id,
+                    returnUrl: window.location.href,
+                  }),
+                }
+              );
+              const data = await res.json();
+              if (res.ok && data.url) {
+                window.location.href = data.url;
+                return;
+              }
+            }
+
+            mcCloseBookCallModal();
+            closeFriendModal();
+
+            if (p2pUrl) {
+              showCustomConfirm(
+                "Call requested! Your Helper will call you soon. Open their payment link now to send your session payment?",
+                () => window.open(p2pUrl, "_blank", "noopener,noreferrer")
+              );
+            } else {
+              showCustomAlert(
+                "Call requested! Track it anytime inside Profile Settings under Helper Payouts."
+              );
+            }
+          } catch (err) {
+            console.error("Error booking call:", err);
+            showCustomAlert("Could not schedule call. Please try again.");
+          } finally {
+            btn.textContent = orig;
+            btn.disabled = false;
+          }
+        });
+
+      // --- Helper Live Call Dashboard & Soft Overtime Timer ---
+      function mcFormatClock(totalSec) {
+        const abs = Math.max(0, Math.floor(Math.abs(totalSec)));
+        const hrs = Math.floor(abs / 3600);
+        const mins = Math.floor((abs % 3600) / 60);
+        const secs = abs % 60;
+        const mm = String(mins).padStart(2, "0");
+        const ss = String(secs).padStart(2, "0");
+        return hrs > 0 ? `${hrs}:${mm}:${ss}` : `${mm}:${ss}`;
+      }
+
+      function mcUpdateCallTimers() {
+        const timerNodes = document.querySelectorAll("[data-call-timer-id]");
+        if (timerNodes.length === 0) {
+          if (mcCallTimerInterval) {
+            clearInterval(mcCallTimerInterval);
+            mcCallTimerInterval = null;
+          }
+          return;
+        }
+
+        timerNodes.forEach((node) => {
+          const sid = node.getAttribute("data-call-timer-id");
+          const bookedMins =
+            parseInt(node.getAttribute("data-booked-mins"), 10) || 30;
+          const startMs = parseInt(node.getAttribute("data-start-ms"), 10);
+          if (!startMs) return;
+
+          const elapsedSec = Math.max(
+            0,
+            Math.floor((Date.now() - startMs) / 1000)
+          );
+          const bookedSec = bookedMins * 60;
+          const remainingSec = bookedSec - elapsedSec;
+
+          const clockEl = node.querySelector(".mc-timer-clock");
+          const statusEl = node.querySelector(".mc-timer-status");
+          const staleEl = node.querySelector(".mc-timer-stale-note");
+
+          node.classList.remove("warning", "overtime");
+
+          if (remainingSec > 0) {
+            if (clockEl) clockEl.textContent = mcFormatClock(remainingSec);
+            if (remainingSec <= 300) {
+              node.classList.add("warning");
+              if (statusEl)
+                statusEl.textContent = `${bookedMins}m session • Wrap up soon`;
+            } else if (statusEl) {
+              statusEl.textContent = `${bookedMins}m session remaining`;
+            }
+          } else {
+            const overtimeSec = Math.abs(remainingSec);
+            node.classList.add("overtime");
+            if (clockEl) clockEl.textContent = `+${mcFormatClock(overtimeSec)}`;
+            if (statusEl)
+              statusEl.textContent = "Booked time complete • Bonus overtime";
+          }
+
+          if (staleEl) {
+            staleEl.textContent =
+              elapsedSec >= 7200
+                ? "Still on this call? Tap Call Ended whenever you finish."
+                : "";
+          }
+        });
+      }
+
+      function mcEnsureTimerTicker() {
+        mcUpdateCallTimers();
+        const hasActive =
+          document.querySelectorAll("[data-call-timer-id]").length > 0;
+        if (hasActive && !mcCallTimerInterval) {
+          mcCallTimerInterval = setInterval(mcUpdateCallTimers, 1000);
+        } else if (!hasActive && mcCallTimerInterval) {
+          clearInterval(mcCallTimerInterval);
+          mcCallTimerInterval = null;
+        }
+      }
+
+      document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible") {
+          mcUpdateCallTimers();
+        }
+      });
+
+      function mcPaymentMethodLabel(code) {
+        if (code === "direct_pay") return "Mommychat Direct Pay";
+        if (code === "venmo") return "Venmo (P2P)";
+        if (code === "cashapp") return "Cash App (P2P)";
+        if (code === "paypal") return "PayPal (P2P)";
+        return "Direct Arrangement";
+      }
+
+      function mcListenToCallSessions(uid) {
+        if (mcHelperCallsUnsub) mcHelperCallsUnsub();
+        if (mcMyCallsUnsub) mcMyCallsUnsub();
+
+        mcHelperCallsUnsub = db
+          .collection("helper_call_sessions")
+          .where("helperUid", "==", uid)
+          .onSnapshot((snap) => {
+            const container = document.getElementById("mc-helper-calls-list");
+            if (!container) return;
+
+            mcHelperCallsMap = {};
+            const list = [];
+            snap.forEach((doc) => {
+              const item = { id: doc.id, ...doc.data() };
+              mcHelperCallsMap[doc.id] = item;
+              list.push(item);
+            });
+
+            const rank = {
+              in_progress: 0,
+              scheduled: 1,
+              completed: 2,
+              cancelled: 3,
+            };
+            list.sort((a, b) => {
+              const rA = rank[a.status] ?? 4;
+              const rB = rank[b.status] ?? 4;
+              if (rA !== rB) return rA - rB;
+              const tA =
+                a.createdAt && a.createdAt.toMillis
+                  ? a.createdAt.toMillis()
+                  : 0;
+              const tB =
+                b.createdAt && b.createdAt.toMillis
+                  ? b.createdAt.toMillis()
+                  : 0;
+              return tB - tA;
+            });
+
+            const activeList = list.filter((c) => c.status !== "cancelled");
+            if (activeList.length === 0) {
+              container.innerHTML =
+                '<div class="mc-call-empty">No incoming call requests yet.</div>';
+              mcEnsureTimerTicker();
+              return;
+            }
+
+            let html = "";
+            activeList.slice(0, 20).forEach((call) => {
+              const isLive = call.status === "in_progress";
+              const isDone = call.status === "completed";
+              const startMs =
+                call.startedAt && typeof call.startedAt.toMillis === "function"
+                  ? call.startedAt.toMillis()
+                  : mcLocalCallStarts[call.id] || Date.now();
+
+              const badgeClass = isLive
+                ? "mc-badge mc-badge-live"
+                : isDone
+                ? "mc-badge mc-badge-verified"
+                : "mc-badge";
+              const badgeText = isLive
+                ? "Live Call"
+                : isDone
+                ? `Completed (${call.actualMinutes || call.bookedMinutes}m)`
+                : "Scheduled";
+
+              const topicHTML = call.topicNote
+                ? `<div class="mc-call-note"><strong>Topic:</strong> ${mcEsc(
+                    call.topicNote
+                  )}</div>`
+                : "";
+              const privateNotesHTML =
+                !isDone && call.privateNotesSnapshot
+                  ? `<div class="mc-call-note"><strong>Mom's Private Context:</strong> ${mcEsc(
+                      call.privateNotesSnapshot
+                    )}</div>`
+                  : "";
+
+              const timerHTML = isLive
+                ? `<div class="mc-call-timer" data-call-timer-id="${
+                    call.id
+                  }" data-booked-mins="${
+                    call.bookedMinutes || 30
+                  }" data-start-ms="${startMs}">
+                    <div class="mc-timer-clock">--:--</div>
+                    <div class="mc-timer-status">Calculating session clock...</div>
+                    <div class="mc-timer-stale-note"></div>
+                  </div>`
+                : "";
+
+              let actionsHTML = "";
+              if (call.status === "scheduled") {
+                actionsHTML = `
+                  <button type="button" class="mc-btn-sm mc-btn-primary" onclick="mcStartHelperCall('${call.id}')">Start Call</button>
+                  <button type="button" class="mc-btn-sm mc-btn-secondary" onclick="closeUserProfile(); startDirectMessage('${call.requesterUid}', false);">Message</button>
+                `;
+              } else if (isLive) {
+                actionsHTML = `
+                  <button type="button" class="mc-btn-sm mc-btn-success" onclick="mcEndHelperCall('${call.id}')">Call Ended</button>
+                  <button type="button" class="mc-btn-sm mc-btn-secondary" onclick="mcRedialHelperCall('${call.id}')">Redial</button>
+                  <button type="button" class="mc-btn-sm mc-btn-secondary" onclick="mcMarkNoAnswer('${call.id}')">No Answer</button>
+                `;
+              }
+
+              html += `
+                <div class="mc-call-card ${isLive ? "in-progress" : ""}">
+                  <div class="mc-call-top">
+                    <div>
+                      <div class="mc-call-person">${mcEsc(
+                        call.requesterName || "Mama"
+                      )}</div>
+                      <div class="mc-call-meta">
+                        ${call.bookedMinutes || 30}m &bull; $${
+                Number(call.rateUsd) || 0
+              } &bull; ${mcEsc(mcPaymentMethodLabel(call.paymentMethod))}
+                      </div>
+                      <div class="mc-call-meta">Window: ${mcEsc(
+                        call.preferredWindow || "As soon as available"
+                      )}</div>
+                    </div>
+                    <span class="${badgeClass}">${badgeText}</span>
+                  </div>
+                  ${topicHTML}
+                  ${privateNotesHTML}
+                  ${timerHTML}
+                  <div class="mc-call-actions">${actionsHTML}</div>
+                </div>
+              `;
+            });
+
+            container.innerHTML = html;
+            mcEnsureTimerTicker();
+          });
+
+        mcMyCallsUnsub = db
+          .collection("helper_call_sessions")
+          .where("requesterUid", "==", uid)
+          .onSnapshot((snap) => {
+            const listEl = document.getElementById("mc-my-booked-calls-list");
+            const countEl = document.getElementById("mc-my-calls-count");
+            if (!listEl) return;
+
+            const items = [];
+            snap.forEach((doc) => items.push({ id: doc.id, ...doc.data() }));
+            items.sort((a, b) => {
+              const tA =
+                a.createdAt && a.createdAt.toMillis
+                  ? a.createdAt.toMillis()
+                  : 0;
+              const tB =
+                b.createdAt && b.createdAt.toMillis
+                  ? b.createdAt.toMillis()
+                  : 0;
+              return tB - tA;
+            });
+
+            const visibleItems = items.filter((c) => c.status !== "cancelled");
+            if (countEl) countEl.textContent = String(visibleItems.length);
+
+            if (visibleItems.length === 0) {
+              listEl.innerHTML =
+                '<div class="mc-call-empty">No live calls booked yet.</div>';
+              return;
+            }
+
+            let html = "";
+            visibleItems.slice(0, 10).forEach((call) => {
+              const isDone = call.status === "completed";
+              const isLive = call.status === "in_progress";
+              const statusLabel = isLive
+                ? "In Progress"
+                : isDone
+                ? `Completed (${call.actualMinutes || call.bookedMinutes}m)`
+                : "Scheduled";
+
+              let actionBtn = "";
+              if (call.status === "scheduled") {
+                actionBtn = `<button type="button" class="mc-btn-sm mc-btn-secondary" onclick="mcCancelBookedCall('${call.id}')">Cancel Request</button>`;
+              } else if (isDone) {
+                actionBtn = `<button type="button" class="mc-btn-sm mc-btn-primary" onclick="mcOpenTipModal('${call.helperUid}')">Send Thank-You Tip</button>`;
+              }
+
+              html += `
+                <div class="mc-call-card ${isLive ? "in-progress" : ""}">
+                  <div class="mc-call-top">
+                    <div>
+                      <div class="mc-call-person">${mcEsc(
+                        call.helperName || "Helper"
+                      )}</div>
+                      <div class="mc-call-meta">
+                        ${call.bookedMinutes || 30}m &bull; ${mcEsc(
+                call.preferredWindow || ""
+              )}
+                      </div>
+                    </div>
+                    <span class="mc-badge ${
+                      isLive
+                        ? "mc-badge-live"
+                        : isDone
+                        ? "mc-badge-verified"
+                        : ""
+                    }">${statusLabel}</span>
+                  </div>
+                  <div class="mc-call-actions">
+                    ${actionBtn}
+                    <button type="button" class="mc-btn-sm mc-btn-secondary" onclick="closeUserProfile(); startDirectMessage('${
+                      call.helperUid
+                    }', false);">Message</button>
+                  </div>
+                </div>
+              `;
+            });
+
+            listEl.innerHTML = html;
+          });
+      }
+
+      window.mcStartHelperCall = function (sessionId) {
+        const call = mcHelperCallsMap[sessionId];
+        if (!call || !currentUser) return;
+
+        const dialDigits = mcSanitizeDialNumber(call.callbackPhone);
+        if (!dialDigits) {
+          showCustomAlert("No callback number is available for this session.");
+          return;
+        }
+
+        mcLocalCallStarts[sessionId] = Date.now();
+
+        db.collection("helper_call_sessions")
+          .doc(sessionId)
+          .update({
+            status: "in_progress",
+            startedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          })
+          .catch((err) => {
+            console.error("Failed to start call session:", err);
+            showCustomAlert("Could not update call status.");
+          });
+
+        window.location.href = `tel:${dialDigits}`;
+      };
+
+      window.mcRedialHelperCall = function (sessionId) {
+        const call = mcHelperCallsMap[sessionId];
+        if (!call) return;
+        const dialDigits = mcSanitizeDialNumber(call.callbackPhone);
+        if (!dialDigits) {
+          showCustomAlert("Callback number is no longer available.");
+          return;
+        }
+        window.location.href = `tel:${dialDigits}`;
+      };
+
+      window.mcMarkNoAnswer = function (sessionId) {
+        const call = mcHelperCallsMap[sessionId];
+        if (!call || !currentUser) return;
+
+        showCustomConfirm(
+          "Reset this call back to Scheduled and message the mother to coordinate a retry?",
+          async () => {
+            try {
+              delete mcLocalCallStarts[sessionId];
+              await db
+                .collection("helper_call_sessions")
+                .doc(sessionId)
+                .update({
+                  status: "scheduled",
+                  startedAt: null,
+                  updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                });
+
+              closeUserProfile();
+              await startDirectMessage(call.requesterUid, false);
+              const chatInput = document.getElementById("chat-input");
+              if (chatInput && chatInput.value.trim() === "") {
+                chatInput.value =
+                  "Hi! I just tried calling for our Mommychat session—message me whenever you are ready for me to call again.";
+                chatInput.focus();
+              }
+            } catch (err) {
+              console.error("No-answer reset failed:", err);
+              showCustomAlert("Could not reset session.");
+            }
+          }
+        );
+      };
+
+      window.mcEndHelperCall = function (sessionId) {
+        const call = mcHelperCallsMap[sessionId];
+        if (!call || !currentUser) return;
+
+        showCustomConfirm(
+          "Mark this call as completed? This logs the final session duration and clears the callback number for privacy.",
+          async () => {
+            try {
+              const startMs =
+                call.startedAt && typeof call.startedAt.toMillis === "function"
+                  ? call.startedAt.toMillis()
+                  : mcLocalCallStarts[sessionId] || Date.now();
+              const elapsedSec = Math.max(
+                60,
+                Math.floor((Date.now() - startMs) / 1000)
+              );
+              const bookedMins = Number(call.bookedMinutes) || 30;
+              const actualMinutes = Math.max(1, Math.round(elapsedSec / 60));
+              const overtimeMinutes = Math.max(
+                0,
+                Math.round((elapsedSec - bookedMins * 60) / 60)
+              );
+
+              delete mcLocalCallStarts[sessionId];
+
+              const batch = db.batch();
+              const sessionRef = db
+                .collection("helper_call_sessions")
+                .doc(sessionId);
+              const helperRef = db.collection("users").doc(currentUser.uid);
+
+              batch.update(sessionRef, {
+                status: "completed",
+                endedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                actualMinutes: actualMinutes,
+                overtimeMinutes: overtimeMinutes,
+                callbackPhone: firebase.firestore.FieldValue.delete(),
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+              });
+              batch.update(helperRef, {
+                completedCallsCount: firebase.firestore.FieldValue.increment(1),
+              });
+
+              await batch.commit();
+              showCustomAlert(
+                `Session logged (${actualMinutes} min). Callback number cleared for privacy.`
+              );
+            } catch (err) {
+              console.error("Error ending call:", err);
+              showCustomAlert("Could not finalize call session.");
+            }
+          }
+        );
+      };
+
+      window.mcCancelBookedCall = function (sessionId) {
+        if (!currentUser) return;
+        showCustomConfirm(
+          "Cancel this scheduled call request and delete your callback number?",
+          async () => {
+            try {
+              await db
+                .collection("helper_call_sessions")
+                .doc(sessionId)
+                .update({
+                  status: "cancelled",
+                  callbackPhone: firebase.firestore.FieldValue.delete(),
+                  updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                });
+              showCustomAlert("Call request cancelled.");
+            } catch (err) {
+              console.error("Error cancelling call:", err);
+              showCustomAlert("Could not cancel request.");
+            }
+          }
+        );
+      };
 
       // Register Service Worker for PWA Offline Caching
       if ("serviceWorker" in navigator) {
