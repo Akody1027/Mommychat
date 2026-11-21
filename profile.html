@@ -26,7 +26,7 @@
                 scaleRatio +
                 ", user-scalable=no"
             );
-          }
+          } 
         }
       })();
     </script>
@@ -169,6 +169,228 @@
       .toolbar-btn:hover {
         background: var(--bg-color);
         transform: scale(1.05);
+      }
+
+      .notif-bell-btn {
+        position: relative;
+      }
+
+      .notif-badge {
+        position: absolute;
+        top: 1px;
+        right: 1px;
+        min-width: 18px;
+        height: 18px;
+        padding: 0 5px;
+        border-radius: 50px;
+        background: #e63946;
+        color: var(--white);
+        font-size: 0.68rem;
+        font-weight: 800;
+        line-height: 18px;
+        text-align: center;
+        border: 2px solid var(--white);
+        box-shadow: 0 2px 6px rgba(230, 57, 70, 0.35);
+        display: none;
+        pointer-events: none;
+      }
+
+      .notif-badge.visible {
+        display: inline-block;
+      }
+
+      .notif-dropdown {
+        width: 350px;
+        max-width: calc(100vw - 1.5rem);
+        right: 1rem;
+        top: 110px;
+        padding: 0;
+        z-index: 997;
+        overflow: hidden;
+      }
+
+      .notif-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.9rem 1rem;
+        border-bottom: 1px solid var(--border-color);
+        background: var(--white);
+      }
+
+      .notif-header-title {
+        font-size: 1.05rem;
+        font-weight: 800;
+        color: var(--dark-pink);
+        margin: 0;
+      }
+
+      .notif-header-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .notif-text-btn {
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-size: 0.78rem;
+        font-weight: 800;
+        cursor: pointer;
+        padding: 2px 4px;
+        transition: color 0.2s ease;
+      }
+
+      .notif-text-btn:hover {
+        color: var(--dark-pink);
+      }
+
+      .notif-text-btn.danger:hover {
+        color: #e63946;
+      }
+
+      .notif-list {
+        max-height: 410px;
+        overflow-y: auto;
+        background: var(--white);
+      }
+
+      .notif-empty {
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        padding: 2rem 1rem;
+      }
+
+      .notif-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 11px;
+        padding: 0.85rem 1rem;
+        border-bottom: 1px solid var(--bg-color);
+        border-left: 3px solid transparent;
+        cursor: pointer;
+        transition: background 0.2s ease;
+      }
+
+      .notif-item:hover {
+        background: var(--bg-color);
+      }
+
+      .notif-item.unread {
+        background: #fff5f8;
+      }
+
+      .notif-item.high-priority {
+        border-left-color: var(--dark-pink);
+      }
+
+      .notif-item.unread.high-priority {
+        background: #ffedf2;
+      }
+
+      .notif-avatar-wrap {
+        position: relative;
+        width: 40px;
+        height: 40px;
+        flex-shrink: 0;
+      }
+
+      .notif-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(
+          135deg,
+          var(--light-pink),
+          var(--primary-pink)
+        );
+        color: var(--white);
+        font-weight: 800;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+
+      .notif-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .notif-type-pill {
+        position: absolute;
+        bottom: -2px;
+        right: -2px;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: var(--dark-pink);
+        color: var(--white);
+        border: 2px solid var(--white);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .notif-type-pill.urgent {
+        background: #e63946;
+      }
+
+      .notif-type-pill.tip {
+        background: var(--primary-pink);
+      }
+
+      .notif-content {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .notif-top-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 6px;
+        margin-bottom: 2px;
+      }
+
+      .notif-title {
+        font-size: 0.86rem;
+        font-weight: 800;
+        color: var(--text-dark);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .notif-time {
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: var(--text-muted);
+        flex-shrink: 0;
+      }
+
+      .notif-body {
+        font-size: 0.82rem;
+        color: var(--text-light);
+        line-height: 1.38;
+        word-break: break-word;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .notif-unread-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--dark-pink);
+        flex-shrink: 0;
+        margin-top: 6px;
       }
 
       .token-balance {
@@ -4365,6 +4587,19 @@
           </svg>
         </button>
 
+        <button
+          class="toolbar-btn notif-bell-btn"
+          id="notif-toggle"
+          aria-label="Notifications"
+        >
+          <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor">
+            <path
+              d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"
+            />
+          </svg>
+          <span class="notif-badge" id="notif-badge"></span>
+        </button>
+
         <div class="token-balance" id="wallet-toggle">
           <img src="Mtoken.PNG" class="token-icon" alt="Token" /> 0
         </div>
@@ -4505,6 +4740,28 @@
       </div>
     </div>
 
+    <!-- Notifications Dropdown Modal -->
+    <div class="dropdown-modal notif-dropdown" id="notif-modal">
+      <div class="notif-header">
+        <h3 class="notif-header-title">Notifications</h3>
+        <div class="notif-header-actions">
+          <button type="button" class="notif-text-btn" id="notif-mark-all-btn">
+            Mark all read
+          </button>
+          <button
+            type="button"
+            class="notif-text-btn danger"
+            id="notif-clear-all-btn"
+          >
+            Clear
+          </button>
+        </div>
+      </div>
+      <div class="notif-list" id="notif-list-container">
+        <div class="notif-empty">No notifications yet.</div>
+      </div>
+    </div>
+
     <!-- Active Chat Modal (90x90) -->
     <div class="user-profile-modal" id="chat-modal" style="z-index: 2001">
       <div
@@ -4635,7 +4892,7 @@
             Household Details
           </div>
           <div class="upm-tab" data-target="tab-account">Account</div>
-          <div class="upm-tab" data-target="tab-helper">Helper Payouts</div>
+          <div class="upm-tab" data-target="tab-helper">Helper Dashboard</div>
           <div class="upm-tab" data-target="tab-invites">Invitations</div>
         </div>
 
@@ -6480,6 +6737,22 @@
                 currentFriendModalUid
               ),
             });
+
+          if (typeof mcSendNotification === "function") {
+            mcSendNotification(currentFriendModalUid, {
+              type: "friend",
+              title: "New Friend",
+              body: `${
+                currentUserDoc?.displayName ||
+                currentUser.displayName ||
+                "A mama"
+              } added you as a friend.`,
+              targetId: currentUser.uid,
+              priority: "normal",
+              docId: `friend_${currentUser.uid}`,
+            });
+          }
+
           showCustomAlert("Friend added successfully!");
           btnAddFriend.style.display = "none";
         } catch (err) {
@@ -7597,6 +7870,32 @@
                 .update({
                   commentsCount: firebase.firestore.FieldValue.increment(1),
                 });
+
+              const postCardEl = document.querySelector(
+                `.post-card[data-id="${postId}"]`
+              );
+              const postAuthorUid = postCardEl
+                ? postCardEl.getAttribute("data-author-uid")
+                : null;
+              if (
+                postAuthorUid &&
+                postAuthorUid !== currentUser.uid &&
+                typeof mcSendNotification === "function"
+              ) {
+                const snippet =
+                  content.length > 80
+                    ? content.substring(0, 80) + "..."
+                    : content;
+                mcSendNotification(postAuthorUid, {
+                  type: "comment",
+                  title: "New Comment",
+                  body: `${
+                    currentUserDoc?.displayName || "Mama"
+                  } commented: "${snippet}"`,
+                  targetId: postId,
+                  priority: "normal",
+                });
+              }
             }
 
             inputEl.value = "";
@@ -8129,19 +8428,6 @@
         db.collection("chats")
           .where("participants", "array-contains", currentUser.uid)
           .onSnapshot(async (snapshot) => {
-            // Check for new incoming messages to trigger sound/vibration
-            snapshot.docChanges().forEach((change) => {
-              if (change.type === "modified") {
-                const data = change.doc.data();
-                if (
-                  data.lastSenderId &&
-                  data.lastSenderId !== currentUser.uid
-                ) {
-                  triggerNewMessageAlert();
-                }
-              }
-            });
-
             const container = document.getElementById(
               "inbox-threads-container"
             );
@@ -8225,6 +8511,8 @@
       window.openChatModal = async function (chatId, otherUid) {
         currentActiveChatId = chatId;
 
+        window.currentActiveChatOtherUid = otherUid;
+
         const doc = await db.collection("users").doc(otherUid).get();
         if (doc.exists) {
           const data = doc.data();
@@ -8296,6 +8584,8 @@
           activeChatListener = null;
         }
         currentActiveChatId = null;
+
+        window.currentActiveChatOtherUid = null;
       };
 
       // Delete Thread
@@ -8383,6 +8673,30 @@
 
               updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
             });
+
+          if (
+            window.currentActiveChatOtherUid &&
+            typeof mcSendNotification === "function"
+          ) {
+            const msgPreview =
+              text !== ""
+                ? text.length > 75
+                  ? text.substring(0, 75) + "..."
+                  : text
+                : "Sent a photo";
+            mcSendNotification(window.currentActiveChatOtherUid, {
+              type: "message",
+              title:
+                currentUserDoc?.displayName ||
+                currentUser.displayName ||
+                "New Message",
+              body: msgPreview,
+              targetId: currentActiveChatId,
+              extraUid: currentUser.uid,
+              priority: "normal",
+              docId: `msg_${currentActiveChatId}`,
+            });
+          }
 
           inputEl.value = "";
           clearChatImagePreview();
@@ -10536,6 +10850,30 @@
                 notes: notes,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp(),
               });
+
+              if (
+                result === "paused" &&
+                typeof mcSendNotification === "function"
+              ) {
+                const pausedItem = mpAllListingsMap[listingId];
+                if (
+                  pausedItem &&
+                  pausedItem.sellerUid &&
+                  pausedItem.sellerUid !== currentUser.uid
+                ) {
+                  mcSendNotification(pausedItem.sellerUid, {
+                    type: "marketplace_paused",
+                    title: "Listing Paused for Review",
+                    body: `Your listing "${
+                      pausedItem.title || "Item"
+                    }" was paused after receiving community reports.`,
+                    targetId: listingId,
+                    priority: "high",
+                    docId: `mp_paused_${listingId}`,
+                  });
+                }
+              }
+
               mpCloseReportModal();
               mpCloseDetailModal();
               showCustomAlert(
@@ -11148,6 +11486,10 @@
         if (!uid) return;
         mcEnsureWelcomeTokens(uid);
         mcListenToCallSessions(uid);
+
+        if (typeof mcListenToNotifications === "function") {
+          mcListenToNotifications(uid);
+        }
       };
 
       // --- Closed-Loop Peer-to-Peer Tipping ---
@@ -11287,6 +11629,27 @@
                 createdAt: firebase.firestore.FieldValue.serverTimestamp(),
               });
             });
+
+            if (typeof mcSendNotification === "function") {
+              const tipperName =
+                currentUserDoc?.displayName ||
+                currentUser.displayName ||
+                "A mama";
+              const tipBody = note
+                ? `${tipperName} sent you ${amount} token${
+                    amount === 1 ? "" : "s"
+                  }: "${note}"`
+                : `${tipperName} sent you ${amount} token${
+                    amount === 1 ? "" : "s"
+                  }!`;
+              mcSendNotification(mcTipTargetUid, {
+                type: "tip",
+                title: "Token Tip Received",
+                body: tipBody,
+                targetId: currentUser.uid,
+                priority: "normal",
+              });
+            }
 
             mcCloseTipModal();
             showCustomAlert(`Sent ${amount} token${amount === 1 ? "" : "s"}!`);
@@ -11726,6 +12089,21 @@
               updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
             });
 
+            if (typeof mcSendNotification === "function") {
+              mcSendNotification(mcBookTargetUid, {
+                type: "call_request",
+                title: "New Live Call Request",
+                body: `${
+                  currentUserDoc?.displayName ||
+                  currentUser.displayName ||
+                  "A mama"
+                } requested a ${mins}-minute live call (${preferredWindow}).`,
+                targetId: sessionRef.id,
+                priority: "high",
+                docId: `call_req_${sessionRef.id}`,
+              });
+            }
+
             const p2pUrl =
               mcSelectedBookRail === "venmo"
                 ? mcBuildP2PUrl("venmo", mcBookTargetData.helperVenmo)
@@ -12119,6 +12497,19 @@
             showCustomAlert("Could not update call status.");
           });
 
+        if (typeof mcSendNotification === "function") {
+          mcSendNotification(call.requesterUid, {
+            type: "call_update",
+            title: "Your Helper Is Calling",
+            body: `${
+              currentUserDoc?.displayName || "Your Helper"
+            } started your live call session. Keep an eye on your phone.`,
+            targetId: sessionId,
+            priority: "high",
+            docId: `call_upd_${sessionId}`,
+          });
+        }
+
         window.location.href = `tel:${dialDigits}`;
       };
 
@@ -12150,6 +12541,19 @@
                   startedAt: null,
                   updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
                 });
+
+              if (typeof mcSendNotification === "function") {
+                mcSendNotification(call.requesterUid, {
+                  type: "call_update",
+                  title: "Missed Live Call Attempt",
+                  body: `${
+                    currentUserDoc?.displayName || "Your Helper"
+                  } tried calling you. Tap to check your session or reply in chat.`,
+                  targetId: sessionId,
+                  priority: "high",
+                  docId: `call_upd_${sessionId}`,
+                });
+              }
 
               closeUserProfile();
               await startDirectMessage(call.requesterUid, false);
@@ -12211,6 +12615,21 @@
               });
 
               await batch.commit();
+
+              if (typeof mcSendNotification === "function") {
+                mcSendNotification(call.requesterUid, {
+                  type: "call_completed",
+                  title: "Live Call Completed",
+                  body: `Your ${actualMinutes}-minute session with ${
+                    currentUserDoc?.displayName || "your Helper"
+                  } is complete. Tap to view or send a thank-you tip.`,
+                  targetId: sessionId,
+                  extraUid: currentUser.uid,
+                  priority: "high",
+                  docId: `call_done_${sessionId}`,
+                });
+              }
+
               showCustomAlert(
                 `Session logged (${actualMinutes} min). Callback number cleared for privacy.`
               );
@@ -12244,6 +12663,481 @@
           }
         );
       };
+
+      // --- Unified Notifications Engine ---
+      let mcNotifUnsub = null;
+      let mcNotificationsList = [];
+      let mcNotificationsMap = {};
+      let mcNotifTimestamps = {};
+      let mcNotifInitialLoad = true;
+
+      function mcFormatNotifTime(timestamp) {
+        if (!timestamp || typeof timestamp.toDate !== "function") {
+          return "Just now";
+        }
+        const diffSec = Math.floor(
+          (Date.now() - timestamp.toDate().getTime()) / 1000
+        );
+        if (diffSec < 60) return "Just now";
+        const diffMin = Math.floor(diffSec / 60);
+        if (diffMin < 60) return `${diffMin}m`;
+        const diffHr = Math.floor(diffMin / 60);
+        if (diffHr < 24) return `${diffHr}h`;
+        const diffDay = Math.floor(diffHr / 24);
+        return `${diffDay}d`;
+      }
+
+      function mcNotifTypeBadgeHTML(type) {
+        if (type === "message") {
+          return `<span class="notif-type-pill"><svg viewBox="0 0 24 24" width="10" height="10" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg></span>`;
+        }
+        if (
+          type === "call_request" ||
+          type === "call_update" ||
+          type === "call_completed"
+        ) {
+          return `<span class="notif-type-pill urgent"><svg viewBox="0 0 24 24" width="10" height="10" fill="currentColor"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1V20a1 1 0 01-1 1C10.61 21 3 13.39 3 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.46.57 3.58a1 1 0 01-.25 1.01l-2.2 2.2z"/></svg></span>`;
+        }
+        if (type === "tip") {
+          return `<span class="notif-type-pill tip"><svg viewBox="0 0 24 24" width="10" height="10" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></span>`;
+        }
+        if (type === "friend") {
+          return `<span class="notif-type-pill"><svg viewBox="0 0 24 24" width="10" height="10" fill="currentColor"><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></span>`;
+        }
+        if (type === "marketplace_paused") {
+          return `<span class="notif-type-pill urgent"><svg viewBox="0 0 24 24" width="10" height="10" fill="currentColor"><path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z"/></svg></span>`;
+        }
+        return `<span class="notif-type-pill"><svg viewBox="0 0 24 24" width="10" height="10" fill="currentColor"><path d="M21 6h-2v9H6v2c0 1.1.9 2 2 2h11l4 4V8c0-1.1-.9-2-2-2z"/></svg></span>`;
+      }
+
+      window.mcSendNotification = async function (recipientUid, payload) {
+        if (!currentUser || !recipientUid || recipientUid === currentUser.uid) {
+          return;
+        }
+        if (!payload || !payload.type) return;
+
+        const senderName =
+          currentUserDoc?.displayName || currentUser.displayName || "Mama";
+        const senderAvatarUrl = currentUserDoc?.avatarUrl || "";
+
+        const notifDoc = {
+          type: payload.type,
+          title: payload.title || "Notification",
+          body: payload.body || "",
+          senderUid: currentUser.uid,
+          senderName: senderName,
+          senderAvatarUrl: senderAvatarUrl,
+          targetId: payload.targetId || "",
+          extraUid: payload.extraUid || "",
+          priority: payload.priority || "normal",
+          seen: false,
+          read: false,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        };
+
+        try {
+          const colRef = db
+            .collection("users")
+            .doc(recipientUid)
+            .collection("notifications");
+
+          if (payload.docId) {
+            await colRef.doc(payload.docId).set(notifDoc);
+          } else {
+            await colRef.add(notifDoc);
+          }
+        } catch (err) {
+          console.error("Failed to dispatch notification:", err);
+        }
+      };
+
+      function mcUpdateNotifBadge() {
+        const badgeEl = document.getElementById("notif-badge");
+        if (!badgeEl) return;
+
+        const blocked =
+          currentUserDoc && Array.isArray(currentUserDoc.blockedUsers)
+            ? currentUserDoc.blockedUsers
+            : [];
+
+        const unseenCount = mcNotificationsList.filter(
+          (item) => item.seen !== true && !blocked.includes(item.senderUid)
+        ).length;
+
+        if (unseenCount <= 0) {
+          badgeEl.classList.remove("visible");
+          badgeEl.textContent = "";
+        } else {
+          badgeEl.classList.add("visible");
+          badgeEl.textContent = unseenCount > 9 ? "9+" : String(unseenCount);
+        }
+      }
+
+      function mcRenderNotifications() {
+        const container = document.getElementById("notif-list-container");
+        if (!container) return;
+
+        const blocked =
+          currentUserDoc && Array.isArray(currentUserDoc.blockedUsers)
+            ? currentUserDoc.blockedUsers
+            : [];
+
+        const visibleItems = mcNotificationsList.filter(
+          (item) => !blocked.includes(item.senderUid)
+        );
+
+        mcUpdateNotifBadge();
+
+        if (visibleItems.length === 0) {
+          container.innerHTML =
+            '<div class="notif-empty">No notifications yet.</div>';
+          return;
+        }
+
+        let html = "";
+        visibleItems.forEach((item) => {
+          const isUnread = item.read !== true;
+          const isHigh = item.priority === "high";
+          const initial = mcEsc(
+            (item.senderName || "M").charAt(0).toUpperCase()
+          );
+          const avatarHTML = item.senderAvatarUrl
+            ? `<img src="${item.senderAvatarUrl}" alt="${mcEsc(
+                item.senderName
+              )}">`
+            : initial;
+
+          html += `
+            <div
+              class="notif-item ${isUnread ? "unread" : ""} ${
+            isHigh ? "high-priority" : ""
+          }"
+              onclick="mcHandleNotificationClick('${item.id}')"
+            >
+              <div class="notif-avatar-wrap">
+                <div class="notif-avatar">${avatarHTML}</div>
+                ${mcNotifTypeBadgeHTML(item.type)}
+              </div>
+              <div class="notif-content">
+                <div class="notif-top-row">
+                  <div class="notif-title">${mcEsc(item.title)}</div>
+                  <div class="notif-time">${mcFormatNotifTime(
+                    item.createdAt
+                  )}</div>
+                </div>
+                <div class="notif-body">${mcEsc(item.body)}</div>
+              </div>
+              ${isUnread ? '<span class="notif-unread-dot"></span>' : ""}
+            </div>
+          `;
+        });
+
+        container.innerHTML = html;
+      }
+
+      async function mcMarkVisibleNotificationsSeen() {
+        if (!currentUser) return;
+        const unseen = mcNotificationsList.filter((item) => item.seen !== true);
+        if (unseen.length === 0) return;
+
+        try {
+          const batch = db.batch();
+          const colRef = db
+            .collection("users")
+            .doc(currentUser.uid)
+            .collection("notifications");
+
+          unseen.forEach((item) => {
+            batch.update(colRef.doc(item.id), { seen: true });
+          });
+          await batch.commit();
+        } catch (err) {
+          console.error("Failed to mark notifications seen:", err);
+        }
+      }
+
+      window.mcListenToNotifications = function (uid) {
+        if (!uid) return;
+        if (mcNotifUnsub) mcNotifUnsub();
+
+        mcNotifInitialLoad = true;
+        mcNotifTimestamps = {};
+
+        mcNotifUnsub = db
+          .collection("users")
+          .doc(uid)
+          .collection("notifications")
+          .orderBy("createdAt", "desc")
+          .limit(30)
+          .onSnapshot(
+            (snapshot) => {
+              const blocked =
+                currentUserDoc && Array.isArray(currentUserDoc.blockedUsers)
+                  ? currentUserDoc.blockedUsers
+                  : [];
+              const chatOpen = document
+                .getElementById("chat-modal")
+                .classList.contains("active");
+              const notifOpen = document
+                .getElementById("notif-modal")
+                .classList.contains("active");
+
+              let shouldChime = false;
+              const autoSilenceBatch = db.batch();
+              let hasAutoSilence = false;
+
+              snapshot.docChanges().forEach((change) => {
+                if (change.type !== "added" && change.type !== "modified") {
+                  return;
+                }
+                const data = change.doc.data();
+                const docId = change.doc.id;
+                const tsMs =
+                  data.createdAt &&
+                  typeof data.createdAt.toMillis === "function"
+                    ? data.createdAt.toMillis()
+                    : 0;
+                const prevTsMs = mcNotifTimestamps[docId] || 0;
+                const isFreshEvent =
+                  change.type === "added" || (tsMs > 0 && tsMs !== prevTsMs);
+                mcNotifTimestamps[docId] = tsMs;
+
+                if (blocked.includes(data.senderUid)) return;
+
+                if (
+                  data.type === "message" &&
+                  chatOpen &&
+                  currentActiveChatId &&
+                  data.targetId === currentActiveChatId &&
+                  (data.seen !== true || data.read !== true)
+                ) {
+                  autoSilenceBatch.update(change.doc.ref, {
+                    seen: true,
+                    read: true,
+                  });
+                  hasAutoSilence = true;
+                  return;
+                }
+
+                if (notifOpen && data.seen !== true) {
+                  autoSilenceBatch.update(change.doc.ref, { seen: true });
+                  hasAutoSilence = true;
+                }
+
+                if (!mcNotifInitialLoad && isFreshEvent && data.seen !== true) {
+                  shouldChime = true;
+                }
+              });
+
+              if (hasAutoSilence) {
+                autoSilenceBatch.commit().catch(() => {});
+              }
+
+              mcNotificationsList = [];
+              mcNotificationsMap = {};
+              snapshot.forEach((doc) => {
+                const entry = { id: doc.id, ...doc.data() };
+                mcNotificationsList.push(entry);
+                mcNotificationsMap[doc.id] = entry;
+              });
+
+              mcRenderNotifications();
+
+              if (shouldChime && typeof triggerNewMessageAlert === "function") {
+                triggerNewMessageAlert();
+              }
+
+              mcNotifInitialLoad = false;
+            },
+            (err) => {
+              console.error("Notifications listener error:", err);
+            }
+          );
+      };
+
+      window.mcHandleNotificationClick = function (notifId) {
+        const item = mcNotificationsMap[notifId];
+        if (!item || !currentUser) return;
+
+        const notifModalEl = document.getElementById("notif-modal");
+        if (notifModalEl) notifModalEl.classList.remove("active");
+
+        if (item.read !== true || item.seen !== true) {
+          db.collection("users")
+            .doc(currentUser.uid)
+            .collection("notifications")
+            .doc(notifId)
+            .update({ seen: true, read: true })
+            .catch(() => {});
+        }
+
+        if (item.type === "message") {
+          const otherUid = item.extraUid || item.senderUid;
+          if (item.targetId && otherUid) {
+            openChatModal(item.targetId, otherUid);
+          }
+          return;
+        }
+
+        if (
+          item.type === "call_request" ||
+          item.type === "call_update" ||
+          item.type === "call_completed"
+        ) {
+          openUserProfile();
+          const helperTab = document.querySelector(
+            '.upm-tab[data-target="tab-helper"]'
+          );
+          if (helperTab) helperTab.click();
+          setTimeout(() => {
+            const targetEl = document.getElementById(
+              item.type === "call_request"
+                ? "mc-helper-calls-list"
+                : "mc-booked-calls-section"
+            );
+            if (targetEl) {
+              targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+          }, 150);
+          return;
+        }
+
+        if (item.type === "tip" || item.type === "friend") {
+          openFriendModal(item.targetId || item.senderUid);
+          return;
+        }
+
+        if (item.type === "comment") {
+          const postCard = document.querySelector(
+            `.post-card[data-id="${item.targetId}"]`
+          );
+          if (postCard) {
+            postCard.scrollIntoView({ behavior: "smooth", block: "center" });
+            const commentsSec = document.getElementById(
+              `comments-section-${item.targetId}`
+            );
+            if (commentsSec && commentsSec.style.display !== "block") {
+              if (typeof toggleComments === "function") {
+                toggleComments(item.targetId);
+              }
+            }
+          } else {
+            showCustomAlert(
+              "That post is no longer in the latest feed window."
+            );
+          }
+          return;
+        }
+
+        if (item.type === "marketplace_paused") {
+          if (typeof syncMarketplaceUserAvatar === "function") {
+            syncMarketplaceUserAvatar();
+          }
+          document
+            .getElementById("marketplace-main-modal")
+            .classList.add("active");
+          if (typeof mpOpenCreatorModal === "function") {
+            mpOpenCreatorModal();
+            setTimeout(() => {
+              const myGrid = document.getElementById("mp-my-products-grid");
+              if (myGrid) {
+                myGrid.scrollIntoView({ behavior: "smooth", block: "start" });
+              }
+            }, 250);
+          }
+        }
+      };
+
+      const notifToggleBtn = document.getElementById("notif-toggle");
+      const notifModalEl = document.getElementById("notif-modal");
+
+      if (notifToggleBtn && notifModalEl) {
+        notifToggleBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const willOpen = !notifModalEl.classList.contains("active");
+          notifModalEl.classList.toggle("active", willOpen);
+          inboxModal.classList.remove("active");
+          walletModal.classList.remove("active");
+          searchModal.classList.remove("active");
+          if (willOpen) {
+            mcMarkVisibleNotificationsSeen();
+          }
+        });
+
+        notifModalEl.addEventListener("click", (e) => e.stopPropagation());
+
+        [inboxToggleBtn, walletToggleBtn, searchToggleBtn].forEach((btn) => {
+          if (btn) {
+            btn.addEventListener("click", () => {
+              notifModalEl.classList.remove("active");
+            });
+          }
+        });
+
+        document.addEventListener("click", (e) => {
+          if (
+            notifModalEl.classList.contains("active") &&
+            !notifModalEl.contains(e.target)
+          ) {
+            notifModalEl.classList.remove("active");
+          }
+          if (
+            inboxModal.classList.contains("active") &&
+            !inboxModal.contains(e.target)
+          ) {
+            inboxModal.classList.remove("active");
+          }
+        });
+      }
+
+      document
+        .getElementById("notif-mark-all-btn")
+        .addEventListener("click", async () => {
+          if (!currentUser) return;
+          const unread = mcNotificationsList.filter(
+            (item) => item.read !== true || item.seen !== true
+          );
+          if (unread.length === 0) return;
+
+          try {
+            const batch = db.batch();
+            const colRef = db
+              .collection("users")
+              .doc(currentUser.uid)
+              .collection("notifications");
+            unread.forEach((item) => {
+              batch.update(colRef.doc(item.id), { seen: true, read: true });
+            });
+            await batch.commit();
+          } catch (err) {
+            console.error("Failed to mark all notifications read:", err);
+          }
+        });
+
+      document
+        .getElementById("notif-clear-all-btn")
+        .addEventListener("click", () => {
+          if (!currentUser || mcNotificationsList.length === 0) return;
+          showCustomConfirm(
+            "Clear all notifications from your tray?",
+            async () => {
+              try {
+                const batch = db.batch();
+                const colRef = db
+                  .collection("users")
+                  .doc(currentUser.uid)
+                  .collection("notifications");
+                mcNotificationsList.forEach((item) => {
+                  batch.delete(colRef.doc(item.id));
+                });
+                await batch.commit();
+              } catch (err) {
+                console.error("Failed to clear notifications:", err);
+                showCustomAlert("Could not clear notifications.");
+              }
+            }
+          );
+        });
 
       // Register Service Worker for PWA Offline Caching
       if ("serviceWorker" in navigator) {
